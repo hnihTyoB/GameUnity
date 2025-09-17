@@ -1,0 +1,69 @@
+# ========== Unity ==========
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+Obj/
+Packages/com.unity.package-manager-ui/
+Assets/AssetStoreTools*
+
+# Ignore generated files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.VC.opendb
+
+# Cache
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Crash reports
+sysinfo.txt
+
+# ========== Visual Studio ==========
+.vs/
+*.dbmdl
+*.bak
+*.backup
+*.BLOB
+*.ncb
+*.sdf
+*.sqlite
+*.log
+*.vscode
+
+# ========== OS ==========
+# Windows
+[Dd]esktop.ini
+[Tt]humbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Mac
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+
+# ========== Rider ==========
+.idea/
+*.iml

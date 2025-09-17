@@ -1,0 +1,20 @@
+# Handle line endings automatically
+* text=auto
+
+# C# and shader files → always use LF
+*.cs text eol=lf
+*.shader text eol=lf
+*.cginc text eol=lf
+
+# Batch / PowerShell / Windows scripts → CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Git merge for Unity YAML
+*.unity merge=unityyamlmerge eol=lf
+*.prefab merge=unityyamlmerge eol=lf
+*.meta merge=unityyamlmerge eol=lf
+*.mat merge=unityyamlmerge eol=lf
+*.anim merge=unityyamlmerge eol=lf
+*.controller merge=unityyamlmerge eol=lf
