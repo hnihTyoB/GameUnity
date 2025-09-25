@@ -1,6 +1,6 @@
 Nhánh main này đã làm xong Part 10. 
 
-Có thể chỉ xem qua Part 11, 12, 13, 14 ,15 rồi lấy code trong nhánh hnihT để làm tiếp từ Part 16.
+Có thể chỉ xem qua Part 11, 12, 13, 14 ,15 ,16, 17 rồi lấy code trong nhánh hnihT để làm tiếp từ Part 18.
 
 Asset và Code thì trong mô tả mỗi video đêu có nha
 
