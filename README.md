@@ -1,6 +1,6 @@
-Nhánh main này đã làm xong Part 10. 
+Nhánh main này đã làm xong Part 10. Phàn tiếp theo là làm map 
 
-Có thể chỉ xem qua Part 11 đến 26 rồi lấy code trong nhánh hnihT để làm tiếp từ Part 27.
+Có thể chỉ xem qua rồi lấy code trong nhánh hnihT để làm tiếp.
 
 Asset và Code thì trong mô tả mỗi video đêu có
 
