@@ -1,4 +1,4 @@
-Nhánh main này đã làm xong Part 10. Phàn tiếp theo là làm map 
+Nhánh main này đã làm xong Part 10. Phần tiếp theo là làm map 
 
 Có thể chỉ xem qua rồi lấy code trong nhánh hnihT để làm tiếp.
 
