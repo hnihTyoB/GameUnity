@@ -7387,6 +7387,7 @@ GameObject:
   - component: {fileID: 1081694846}
   - component: {fileID: 1081694848}
   - component: {fileID: 1081694847}
+  - component: {fileID: 1081694849}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7596,7 +7597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccb50d1f399c03144ab96c2b44c5a113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Flash
-  whiteFlashMat: {fileID: 0}
+  whiteFlashMat: {fileID: 2100000, guid: 15e77cba997e057498859f5f4d9fe0df, type: 2}
   restoreDefaultMatTime: 0.2
 --- !u!114 &1081694848
 MonoBehaviour:
@@ -7610,6 +7611,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdda168b9f8610b459ba226d7026de38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 3
+  knockBackThrustAmount: 10
+  damageRecoveryTime: 1
+--- !u!114 &1081694849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081694839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce9d52cc92da9b5499023e751df9813e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Knockback
+  knockBackTime: 0.2
 --- !u!1001 &1081794280
 PrefabInstance:
   m_ObjectHideFlags: 0
