@@ -5336,6 +5336,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ghost (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5059053435867829122, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.879128
@@ -5489,6 +5493,10 @@ PrefabInstance:
     - target: {fileID: 5059053435867829122, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_Name
       value: Ghost (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5059053435867829122, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19164,6 +19172,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ghost
       objectReference: {fileID: 0}
+    - target: {fileID: 5059053435867829122, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.741467
@@ -20895,6 +20907,10 @@ PrefabInstance:
     - target: {fileID: 5059053435867829122, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_Name
       value: Ghost (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5059053435867829122, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36739,13 +36755,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ghost
       objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: angleSpread
+      value: 359
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: bulletMoveSpeed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: projectilesPerBurst
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 2.31
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3.73
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.z
