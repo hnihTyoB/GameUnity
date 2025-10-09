@@ -36732,16 +36732,40 @@ PrefabInstance:
       value: Ghost
       objectReference: {fileID: 0}
     - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
-      propertyPath: angleSpread
-      value: 359
+      propertyPath: stagger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
-      propertyPath: bulletMoveSpeed
+      propertyPath: restTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: oscillate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: burstCount
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: angleSpread
+      value: 165
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: bulletMoveSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: startingDistance
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
+      propertyPath: timeBetweenBursts
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284490636473797468, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: projectilesPerBurst
-      value: 40
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.x
