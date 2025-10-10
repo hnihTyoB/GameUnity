@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 6163409809864856243}
   - component: {fileID: 7709666766450314765}
   - component: {fileID: 5009673197074616720}
+  - component: {fileID: 4105429051572679116}
   m_Layer: 0
   m_Name: Blue Slime
   m_TagString: Untagged
@@ -57,6 +58,11 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -78,6 +84,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -100,6 +107,7 @@ CapsuleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7731043112639989783}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -123,13 +131,14 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0.03891349, y: -0.09338987}
   m_Size: {x: 0.8403053, y: 0.8714359}
   m_Direction: 0
 --- !u!50 &364429058250751695
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -140,8 +149,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -166,6 +175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 096769c36fcf1a145b8b2de9f39ab03e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roamChangeDirFloat: 2
+  attackRange: 0
+  enemyType: {fileID: 0}
+  attackCooldown: 2
+  stopMovingWhileAttacking: 0
 --- !u!114 &7436596714888296608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,7 +195,7 @@ MonoBehaviour:
   moveSpeed: 2
 --- !u!95 &7255572879978296507
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -195,6 +209,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -214,6 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 3
   deathVFXPrefab: {fileID: 8418466689459067724, guid: 0f35f58801ba5c04ca84af25c2e6faf2, type: 3}
+  knockBackThrust: 15
 --- !u!114 &7709666766450314765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,3 +257,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whiteFlashMat: {fileID: 2100000, guid: 15e77cba997e057498859f5f4d9fe0df, type: 2}
   restoreDefaultMatTime: 0.2
+--- !u!114 &4105429051572679116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7731043112639989783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5fa6dc54a401b941833e507a1a859ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickUpSpawner
+  goldCoin: {fileID: 3915329945633383826, guid: b4994ca5fb0d73a4f86abf7a5220f160, type: 3}
+  healthGlobe: {fileID: 3915329945633383826, guid: 20ee2f60b2b77b04085952b5f6dc6e92, type: 3}
+  staminaGlobe: {fileID: 3915329945633383826, guid: 11dcebb4360d90a4289a92e228cb814d, type: 3}
