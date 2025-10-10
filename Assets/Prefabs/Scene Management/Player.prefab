@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 924597118328553768}
   - component: {fileID: 3298246628157712058}
   - component: {fileID: 8550009880852064466}
+  - component: {fileID: 1335139884282527443}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -608,3 +609,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Knockback
   knockBackTime: 0.2
+--- !u!114 &1335139884282527443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8569663956554290265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 568a85641d67f8248a49d5a5fa003a6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Stamina
+  fullStaminaImage: {fileID: 21300000, guid: cfd91b768f267834dadbe656a23c279a, type: 3}
+  emptyStaminaImage: {fileID: 21300000, guid: 59622242849e8514783dda818187d06f, type: 3}
+  timeBetweenStaminaRefresh: 3

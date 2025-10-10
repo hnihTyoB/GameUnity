@@ -5076,6 +5076,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3442346258230719582, guid: c181afba38783b9458a973b3a97b1da7, type: 3}
   m_PrefabInstance: {fileID: 860675737}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &883271521 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8569663956554290265, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
+  m_PrefabInstance: {fileID: 1927652555}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &886359646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36271,13 +36276,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8569663956554290265, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1927652566}
   m_SourcePrefab: {fileID: 100100000, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
 --- !u!4 &1927652556 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7430134789605278867, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
   m_PrefabInstance: {fileID: 1927652555}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1927652566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883271521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 568a85641d67f8248a49d5a5fa003a6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Stamina
+  fullStaminaImage: {fileID: 21300000, guid: cfd91b768f267834dadbe656a23c279a, type: 3}
+  emptyStaminaImage: {fileID: 21300000, guid: 59622242849e8514783dda818187d06f, type: 3}
+  timeBetweenStaminaRefresh: 3
 --- !u!1001 &1948994963
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36817,7 +36840,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5059053435867829122, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 1932010640cf1254bab2757a289accc2, type: 3}
       propertyPath: m_LocalPosition.x

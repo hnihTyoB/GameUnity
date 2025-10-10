@@ -1,6 +1,6 @@
 Phiên bản Unity 6
 
-Làm xong Part 43 rồi
+Làm xong Part 44 rồi
 
 Day 01 19/09/2025 08:00 - 11:00
 
