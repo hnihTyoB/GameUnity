@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class PlayerHealth : Singleton<PlayerHealth>
 {
+    public bool isDead { get; private set; }
     [SerializeField] private int maxHealth = 3;
     [SerializeField] private float knockBackThrustAmount = 10f;
     [SerializeField] private float damageRecoveryTime = 1f;
@@ -13,6 +15,10 @@ public class PlayerHealth : Singleton<PlayerHealth>
     private Knockback knockback;
     private Flash flash;
     const string HEALTH_SLIDER_TEXT = "Health Slider";
+
+    const string TOWN_TEXT = "Scene1";
+    readonly int DEATH_HASH = Animator.StringToHash("Death");
+
     protected override void Awake()
     {
         base.Awake();
@@ -22,7 +28,7 @@ public class PlayerHealth : Singleton<PlayerHealth>
     }
     private void Start()
     {
-        // isDead = false;
+        isDead = false;
         currentHealth = maxHealth;
 
         UpdateHealthSlider();
@@ -56,16 +62,24 @@ public class PlayerHealth : Singleton<PlayerHealth>
         UpdateHealthSlider();
         CheckIfPlayerDeath();
     }
-    private void CheckIfPlayerDeath() {
-        if (currentHealth <= 0) {
-            // isDead = true;
-            // Destroy(ActiveWeapon.Instance.gameObject);
+    private void CheckIfPlayerDeath()
+    {
+        if (currentHealth <= 0 && !isDead)
+        {
+            isDead = true;
+            Destroy(ActiveWeapon.Instance.gameObject);
             currentHealth = 0;
-            Debug.Log("Player is dead");
-            // GetComponent<Animator>().SetTrigger(DEATH_HASH);
-            // StartCoroutine(DeathLoadSceneRoutine());
+            // Debug.Log("Player is dead");
+            GetComponent<Animator>().SetTrigger(DEATH_HASH);
+            StartCoroutine(DeathLoadSceneRoutine());
         }
     }
+    private IEnumerator DeathLoadSceneRoutine()
+    {
+        yield return new WaitForSeconds(damageRecoveryTime);
+        canTakeDamage = true;
+    }
+
     private IEnumerator DamageRecoveryRoutine()
     {
         yield return new WaitForSeconds(damageRecoveryTime);
