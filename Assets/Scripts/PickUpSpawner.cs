@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class PickUpSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject goldCoin, healthGlobe, staminaGlobe;
+    [SerializeField] private GameObject goldCoin, battery, staminaGlobe;
 
     public void DropItems() {
         int randomNum = Random.Range(1, 5);
 
         if (randomNum == 1) {
-            Instantiate(healthGlobe, transform.position, Quaternion.identity); 
+            Instantiate(battery, transform.position, Quaternion.identity); 
         } 
 
         if (randomNum == 2) {

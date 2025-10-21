@@ -62,6 +62,13 @@ public class FlashlightCone : MonoBehaviour, IWeapon
 
     public void Attack()
     {
+        // Check battery before toggling light
+        if (BatteryManager.Instance != null && !BatteryManager.Instance.HasEnoughBattery(1))
+        {
+            Debug.Log("Not enough battery to use flashlight!");
+            return;
+        }
+        
         // Toggle light ON/OFF when "attack"
         ToggleLight();
     }
@@ -74,6 +81,19 @@ public class FlashlightCone : MonoBehaviour, IWeapon
         if (flashlightLight != null)
         {
             flashlightLight.enabled = isLightOn;
+        }
+        
+        // Start/stop battery drain based on light state
+        if (BatteryManager.Instance != null)
+        {
+            if (isLightOn)
+            {
+                BatteryManager.Instance.StartBatteryDrain();
+            }
+            else
+            {
+                BatteryManager.Instance.StopBatteryDrain();
+            }
         }
         
         // Play animation if exists
@@ -130,6 +150,13 @@ public class FlashlightCone : MonoBehaviour, IWeapon
         {
             flashlightLight.enabled = false;
         }
+        
+        // Stop battery drain when unequipped
+        if (BatteryManager.Instance != null)
+        {
+            BatteryManager.Instance.StopBatteryDrain();
+        }
+        
         isLightOn = false;
     }
 

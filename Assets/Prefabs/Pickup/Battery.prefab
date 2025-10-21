@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8771918601491366803}
   - component: {fileID: 6134502399092420274}
   - component: {fileID: 1457830061286649840}
+  - component: {fileID: -5352155014344843017}
   m_Layer: 0
   m_Name: Battery
   m_TagString: Untagged
@@ -181,3 +182,22 @@ MonoBehaviour:
     m_RotationOrder: 4
   heightY: 1.5
   popDuration: 1
+--- !u!114 &-5352155014344843017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5324252162424979328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 142e9ec7ba734f64a99624bef5c8f409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Battery
+  batteryAmount: 1
+  pickupRange: 1.5
+  moveSpeed: 2
+  pickupEffect: {fileID: 0}
+  pickupSound: {fileID: 0}
+  bobHeight: 0.3
+  bobSpeed: 2

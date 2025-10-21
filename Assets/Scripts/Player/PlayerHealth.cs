@@ -14,7 +14,7 @@ public class PlayerHealth : Singleton<PlayerHealth>
     private bool canTakeDamage = true;
     private Knockback knockback;
     private Flash flash;
-    const string HEALTH_SLIDER_TEXT = "Health Slider";
+    const string HEALTH_SLIDER_TEXT = "Battery Slider";
 
     const string TOWN_TEXT = "Scene1";
     readonly int DEATH_HASH = Animator.StringToHash("Death");
@@ -68,9 +68,10 @@ public class PlayerHealth : Singleton<PlayerHealth>
     }
     public void HealPlayer()
     {
-        if (currentHealth < maxHealth) {
-            currentHealth += 1;
-            UpdateHealthSlider();
+        // This method is kept for compatibility but now uses battery system
+        if (BatteryManager.Instance != null)
+        {
+            BatteryManager.Instance.AddBattery(1);
         }
     }
     public void TakeDamage(int damageAmount, Transform hitTransform)
