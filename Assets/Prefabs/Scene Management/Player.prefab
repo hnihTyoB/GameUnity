@@ -640,7 +640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlowDebuff
   slowPercentage: 0.4
   slowDuration: 2.5
-  slowAuraEffect: {fileID: 4795743862603354299, guid: d253f0ab0312e8f48955da593b997b5c, type: 3}
+  slowAuraEffectPrefab: {fileID: 4795743862603354299, guid: d253f0ab0312e8f48955da593b997b5c, type: 3}
 --- !u!114 &1234567890123456789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,5 +656,5 @@ MonoBehaviour:
   visionDuration: 2.5
   vignettePerStack: 0.08
   maxVignette: 0.4
-  isolationAuraEffect: {fileID: 4795743862603354299, guid: 1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e, type: 3}
+  isolationAuraEffectPrefab: {fileID: 0}
   postProcessVolume: {fileID: 0}
