@@ -39,7 +39,31 @@ public class PlayerHealth : Singleton<PlayerHealth>
 
         if (enemy)
         {
-            TakeDamage(1, other.transform);
+            // Check if enemy is non-damaging (for non-violent game design)
+            NonDamagingEnemy nonDamaging = other.gameObject.GetComponent<NonDamagingEnemy>();
+            if (nonDamaging == null)
+            {
+                // Only take damage if enemy doesn't have NonDamagingEnemy component
+                TakeDamage(1, other.transform);
+            }
+        }
+    }
+    
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        // Handle trigger-based enemies (like Shadow Ghost)
+        EnemyAI enemy = other.gameObject.GetComponent<EnemyAI>();
+
+        if (enemy)
+        {
+            // Check if enemy is non-damaging
+            NonDamagingEnemy nonDamaging = other.gameObject.GetComponent<NonDamagingEnemy>();
+            if (nonDamaging == null)
+            {
+                // Only take damage if enemy doesn't have NonDamagingEnemy component
+                TakeDamage(1, other.transform);
+            }
+            // If has NonDamagingEnemy, do nothing (no damage, no knockback)
         }
     }
     public void HealPlayer()

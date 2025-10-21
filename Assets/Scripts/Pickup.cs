@@ -8,6 +8,10 @@ public class Pickup : MonoBehaviour
         GoldCoin,
         StaminaGlobe,
         HealthGlobe,
+        LightFragment,
+        Battery,
+        CourageFragment,
+        ShieldFragment,
     }
     [SerializeField] private PickUpType pickUpType;
     [SerializeField] private float pickUpDistance = 5f;
@@ -86,6 +90,26 @@ public class Pickup : MonoBehaviour
                 break;
             case PickUpType.StaminaGlobe:
                 Stamina.Instance.RefreshStamina();
+                break;
+            case PickUpType.LightFragment:
+                // Restore stamina (represents mental energy)
+                Stamina.Instance.RefreshStamina();
+                // Could also give bonus effect in future
+                break;
+            case PickUpType.Battery:
+                // Extend flashlight duration
+                // TODO: Implement flashlight system if not exists
+                Stamina.Instance.RefreshStamina(); // Temporary - use stamina as placeholder
+                break;
+            case PickUpType.CourageFragment:
+                // Give courage to face bullying
+                Stamina.Instance.RefreshStamina(); // Restore mental energy
+                // TODO: Could add temporary courage buff
+                break;
+            case PickUpType.ShieldFragment:
+                // Give protection against bullying
+                PlayerHealth.Instance.HealPlayer(); // Restore health
+                // TODO: Could add temporary shield buff
                 break;
         }
     }

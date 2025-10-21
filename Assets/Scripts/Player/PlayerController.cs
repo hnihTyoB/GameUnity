@@ -20,6 +20,10 @@ public class PlayerController : Singleton<PlayerController>
     private float startingMoveSpeed;
     private bool facingLeft = false;
     private bool isDashing = false;
+    
+    // Slow effect variables
+    private bool isSlowedByDebuff = false;
+    private float slowMultiplier = 1f;
 
     protected override void Awake()
     {
@@ -72,7 +76,8 @@ public class PlayerController : Singleton<PlayerController>
     private void Move()
     {
         if (knockback.GettingKnockedBack || PlayerHealth.Instance.isDead) { return; }
-        rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
+        float currentSpeed = moveSpeed * slowMultiplier;
+        rb.MovePosition(rb.position + movement * (currentSpeed * Time.fixedDeltaTime));
     }
 
     private void AdjustPlayerFacingDirection()
@@ -112,4 +117,21 @@ public class PlayerController : Singleton<PlayerController>
         isDashing = false;
     }
 
+    // Slow Effect Methods
+    public void ApplySlowEffect(float slowPercentage)
+    {
+        isSlowedByDebuff = true;
+        slowMultiplier = 1f - slowPercentage; // 40% slow = 0.6 multiplier
+    }
+
+    public void RemoveSlowEffect()
+    {
+        isSlowedByDebuff = false;
+        slowMultiplier = 1f;
+    }
+
+    public bool IsSlowed()
+    {
+        return isSlowedByDebuff;
+    }
 }
