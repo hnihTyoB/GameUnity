@@ -10,9 +10,10 @@ public class FlashlightEffect : MonoBehaviour
 {
     [Header("Flashlight Settings")]
     [SerializeField] private FlashlightCone flashlightCone; // Reference to flashlight
-    [SerializeField] private float detectionRange = 10f; // Max range to detect enemies
     [SerializeField] private float detectionAngle = 45f; // Cone angle for detection
     [SerializeField] private LayerMask enemyLayer; // Layer for enemies
+    
+    private float detectionRange; // Auto-synced with flashlight cone length
     
     [Header("Effect Timings")]
     [SerializeField] private float slowTime = 0.5f; // Time until slow effect (instant)
@@ -65,6 +66,12 @@ public class FlashlightEffect : MonoBehaviour
         {
             flashlightCone = GetComponent<FlashlightCone>();
         }
+        
+        // Initialize detection range from flashlight cone
+        if (flashlightCone != null)
+        {
+            detectionRange = flashlightCone.GetConeLength();
+        }
     }
     
     private void Update()
@@ -72,6 +79,8 @@ public class FlashlightEffect : MonoBehaviour
         if (flashlightCone != null)
         {
             isFlashlightOn = flashlightCone.IsLightOn();
+            // Sync detection range with actual flashlight cone length
+            detectionRange = flashlightCone.GetConeLength();
         }
         
         if (isFlashlightOn)

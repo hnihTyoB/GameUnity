@@ -148,6 +148,17 @@ public class FlashlightCone : MonoBehaviour, IWeapon
         return isLightOn;
     }
 
+    // Get actual cone length for shadow detection
+    public float GetConeLength()
+    {
+        return coneLength;
+    }
+
+    public float GetConeWidth()
+    {
+        return coneWidth;
+    }
+
     private void OnDisable()
     {
         // Turn off light when weapon is unequipped
