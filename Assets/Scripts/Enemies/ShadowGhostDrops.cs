@@ -16,33 +16,15 @@ public class ShadowGhostDrops : MonoBehaviour
     {
         Vector3 dropPosition = transform.position;
         
-        // Check for Light Fragment drop (25%)
-        float lightFragmentRoll = Random.Range(0f, 100f);
-        if (lightFragmentRoll <= lightFragmentDropRate && lightFragmentPrefab != null)
-        {
-            Instantiate(lightFragmentPrefab, dropPosition, Quaternion.identity);
-            return; // Drop only one type of special item
-        }
-        
-        // Check for Battery drop (5%)
-        float batteryRoll = Random.Range(0f, 100f);
-        if (batteryRoll <= batteryDropRate && batteryPrefab != null)
+        // Shadow now ONLY drops battery (100% chance)
+        if (batteryPrefab != null)
         {
             Instantiate(batteryPrefab, dropPosition, Quaternion.identity);
-            return; // Drop only one type of special item
+            Debug.Log($"Shadow dropped battery at {dropPosition}");
         }
-        
-        // Otherwise, chance to drop gold coins (50%)
-        float goldRoll = Random.Range(0f, 100f);
-        if (goldRoll <= goldCoinDropRate && goldCoinPrefab != null)
+        else
         {
-            int randomAmountOfGold = Random.Range(1, 3);
-            
-            for (int i = 0; i < randomAmountOfGold; i++)
-            {
-                Vector3 offset = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0);
-                Instantiate(goldCoinPrefab, dropPosition + offset, Quaternion.identity);
-            }
+            Debug.LogWarning("ShadowGhostDrops: Battery prefab is not assigned!");
         }
     }
 }

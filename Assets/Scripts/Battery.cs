@@ -84,10 +84,17 @@ public class Battery : MonoBehaviour
     
     private void PickupBattery()
     {
+        Debug.Log($"Battery pickup triggered! Amount: {batteryAmount}");
+        
         // Add battery to player
         if (BatteryManager.Instance != null)
         {
             BatteryManager.Instance.AddBattery(batteryAmount);
+            Debug.Log($"Battery added to BatteryManager");
+        }
+        else
+        {
+            Debug.LogError("BatteryManager.Instance is NULL! Cannot add battery!");
         }
         
         // Play pickup effects

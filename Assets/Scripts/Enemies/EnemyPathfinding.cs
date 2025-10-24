@@ -12,6 +12,8 @@ public class EnemyPathFinding : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private float currentSpeed;
     private float baseSpeed;
+    private float speedMultiplier = 1f; // For flashlight slow effect
+    private bool isMovementEnabled = true; // For flashlight stun effect
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -23,8 +25,8 @@ public class EnemyPathFinding : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (knockback.GettingKnockedBack) { return; }
-        rb.MovePosition(rb.position + moveDir * (currentSpeed * Time.fixedDeltaTime));
+        if (knockback.GettingKnockedBack || !isMovementEnabled) { return; }
+        rb.MovePosition(rb.position + moveDir * (currentSpeed * speedMultiplier * Time.fixedDeltaTime));
         if (moveDir.x < 0) { spriteRenderer.flipX = true; }
         else if (moveDir.x > 0) { spriteRenderer.flipX = false; }
     }
@@ -32,10 +34,6 @@ public class EnemyPathFinding : MonoBehaviour
     public void MoveTo(Vector2 targetPosition)
     {
         moveDir = targetPosition;
-    }
-    public void StopMoving()
-    {
-        moveDir = Vector3.zero;
     }
     
     public void SetSpeed(float speed)
@@ -46,5 +44,30 @@ public class EnemyPathFinding : MonoBehaviour
     public void ResetSpeed()
     {
         currentSpeed = baseSpeed;
+    }
+    
+    /// <summary>
+    /// Set speed multiplier for effects like flashlight slow
+    /// </summary>
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        speedMultiplier = multiplier;
+    }
+    
+    /// <summary>
+    /// Stop enemy movement completely (for stun)
+    /// </summary>
+    public void StopMoving()
+    {
+        isMovementEnabled = false;
+        moveDir = Vector2.zero;
+    }
+    
+    /// <summary>
+    /// Resume enemy movement (after stun)
+    /// </summary>
+    public void ResumeMoving()
+    {
+        isMovementEnabled = true;
     }
 }

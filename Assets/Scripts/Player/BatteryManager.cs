@@ -58,12 +58,13 @@ public class BatteryManager : Singleton<BatteryManager>
     /// <summary>
     /// Add battery power to player
     /// </summary>
-    public void AddBattery(int amount)
+    public void AddBattery(float amount)
     {
+        float oldBattery = currentBattery;
         currentBattery = Mathf.Min(currentBattery + amount, maxBattery);
         UpdateBatterySlider();
         
-        Debug.Log($"Battery added: +{amount}. Current: {currentBattery}/{maxBattery}");
+        Debug.Log($"Battery added: +{amount}. Changed from {oldBattery:F1} to {currentBattery:F1}/{maxBattery}");
     }
     
     /// <summary>
@@ -291,5 +292,13 @@ public class BatteryManager : Singleton<BatteryManager>
     {
         currentBattery = Mathf.Clamp(amount, 0f, maxBattery);
         UpdateBatterySlider();
+    }
+    
+    /// <summary>
+    /// Set drain rate dynamically (for flashlight effects)
+    /// </summary>
+    public void SetDrainRate(float newRate)
+    {
+        batteryDrainRate = newRate;
     }
 }

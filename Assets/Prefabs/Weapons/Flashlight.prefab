@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6173617201060994475}
   - component: {fileID: 368451564880765799}
   - component: {fileID: 2353283232628166363}
+  - component: {fileID: 6477882821379414841}
   m_Layer: 0
   m_Name: Flashlight
   m_TagString: Untagged
@@ -133,6 +134,37 @@ MonoBehaviour:
   coneLength: 8
   coneWidth: 4
   toggleSound: {fileID: 0}
+--- !u!114 &6477882821379414841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186248320317356279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d94ef31194f3f74baaeeaf400ad72df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightEffect
+  flashlightCone: {fileID: 2353283232628166363}
+  detectionRange: 10
+  detectionAngle: 45
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  slowTime: 0.5
+  stunTime: 2
+  killTime: 7
+  cooldownTime: 4.5
+  slowMultiplier: 0.5
+  stunDuration: 2.5
+  normalDrainRate: 0.2
+  slowDrainRate: 0.4
+  stunDrainRate: 0.7
+  killDrainRate: 0.55
+  slowGlowPrefab: {fileID: 4990605502975473211, guid: 72ca6e5206b7c41479460851dd54dcc9, type: 3}
+  stunGlowPrefab: {fileID: 4202624629589180675, guid: 9b1e0fa693544de40b06e66b9981bdf2, type: 3}
+  killGlowPrefab: {fileID: 8141770021561952539, guid: 28b9a85b5b13a9840856d75da98bb478, type: 3}
 --- !u!1 &5038120995400518579
 GameObject:
   m_ObjectHideFlags: 0

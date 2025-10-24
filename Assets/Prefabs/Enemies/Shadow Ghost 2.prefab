@@ -23,7 +23,8 @@ GameObject:
   - component: {fileID: -3531077328418882116}
   - component: {fileID: 7891234567890123456}
   - component: {fileID: 2}
-  m_Layer: 0
+  - component: {fileID: 3338656040834225379}
+  m_Layer: 8
   m_Name: Shadow Ghost 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +273,7 @@ MonoBehaviour:
   blockSpeed: 0.8
   dashSpeed: 4.5
   dashDuration: 1
-  smokeEffect: {fileID: 6590090166868315771, guid: 70996bfb8b0c92b43b79f1dc31d1418b, type: 3}
+  smokeEffect: {fileID: 6590090166868315771, guid: 1fc4dcee15e69d24e85de0acae1ece8f, type: 3}
   spriteRenderer: {fileID: 8373002765886680992}
   shadowColor: {r: 0.8000001, g: 0.20000002, b: 0.20000002, a: 1}
   blockEffect: {fileID: 0}
@@ -306,7 +307,7 @@ MonoBehaviour:
   goldCoinPrefab: {fileID: 3915329945633383826, guid: b4994ca5fb0d73a4f86abf7a5220f160, type: 3}
   lightFragmentDropRate: 25
   batteryDropRate: 5
-  goldCoinDropRate: 50
+  goldCoinDropRate: 0
 --- !u!114 &7891234567890123456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +334,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PushBackEnemy
   pushBackForce: 100
   pushBackCooldown: 0.3
+--- !u!114 &3338656040834225379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059053435867829122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5fa6dc54a401b941833e507a1a859ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickUpSpawner
+  goldCoin: {fileID: 0}
+  battery: {fileID: 5324252162424979328, guid: c29eef891bda8e24daf546b19699ba3d, type: 3}
+  staminaGlobe: {fileID: 0}
 --- !u!1 &7119020765384140683
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,7 +359,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6900653738753723563}
   - component: {fileID: 2065438683829252139}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shadows_Sheet_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

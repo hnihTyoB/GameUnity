@@ -62,11 +62,14 @@ public class FlashlightCone : MonoBehaviour, IWeapon
 
     public void Attack()
     {
-        // Check battery before toggling light
-        if (BatteryManager.Instance != null && !BatteryManager.Instance.HasEnoughBattery(1))
+        // If trying to turn ON, check battery
+        if (!isLightOn)
         {
-            Debug.Log("Not enough battery to use flashlight!");
-            return;
+            if (BatteryManager.Instance != null && !BatteryManager.Instance.HasEnoughBattery(0.1f))
+            {
+                Debug.Log("Not enough battery to use flashlight!");
+                return;
+            }
         }
         
         // Toggle light ON/OFF when "attack"
@@ -76,6 +79,8 @@ public class FlashlightCone : MonoBehaviour, IWeapon
     private void ToggleLight()
     {
         isLightOn = !isLightOn;
+        
+        Debug.Log($"Flashlight toggled: {(isLightOn ? "ON" : "OFF")}");
         
         // Toggle light state
         if (flashlightLight != null)

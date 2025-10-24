@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 8243276346978343299}
   - component: {fileID: -3531077328418882116}
   - component: {fileID: 7891234567890123456}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shadow Ghost 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -321,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6900653738753723563}
   - component: {fileID: 2065438683829252139}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shadows_Sheet_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

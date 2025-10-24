@@ -97,9 +97,18 @@ public class Pickup : MonoBehaviour
                 // Could also give bonus effect in future
                 break;
             case PickUpType.Battery:
-                // Extend flashlight duration
-                // TODO: Implement flashlight system if not exists
-                Stamina.Instance.RefreshStamina(); // Temporary - use stamina as placeholder
+                // Add battery to BatteryManager
+                if (BatteryManager.Instance != null)
+                {
+                    BatteryManager.Instance.AddBattery(1f);
+                    Debug.Log("Battery picked up (via Pickup.cs) - added to BatteryManager");
+                }
+                else
+                {
+                    Debug.LogWarning("BatteryManager not found! Battery pickup failed.");
+                    // Fallback to stamina
+                    Stamina.Instance.RefreshStamina();
+                }
                 break;
             case PickUpType.CourageFragment:
                 // Give courage to face bullying

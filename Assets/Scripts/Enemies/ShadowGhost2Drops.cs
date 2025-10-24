@@ -29,22 +29,15 @@ public class ShadowGhost2Drops : MonoBehaviour
     
     private void SpawnDrops()
     {
-        // Spawn Light Fragment (25%)
-        if (lightFragmentPrefab != null && Random.Range(0, 100) < lightFragmentDropRate)
-        {
-            SpawnItem(lightFragmentPrefab);
-        }
-        
-        // Spawn Battery (5%)
-        if (batteryPrefab != null && Random.Range(0, 100) < batteryDropRate)
+        // Shadow Ghost 2 now ONLY drops battery (100% chance)
+        if (batteryPrefab != null)
         {
             SpawnItem(batteryPrefab);
+            Debug.Log($"Shadow Ghost 2 dropped battery");
         }
-        
-        // Spawn Gold Coin (50%)
-        if (goldCoinPrefab != null && Random.Range(0, 100) < goldCoinDropRate)
+        else
         {
-            SpawnItem(goldCoinPrefab);
+            Debug.LogWarning("ShadowGhost2Drops: Battery prefab is not assigned!");
         }
     }
     
