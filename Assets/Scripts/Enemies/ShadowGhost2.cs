@@ -209,27 +209,27 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
             yield return null;
         }
         
-        // After dash, start blocking if target is close and is Player
-        if (lockedTarget != null)
+    // After dash, start blocking if target is close and is Player
+    if (lockedTarget != null)
+    {
+        float distanceToTarget = Vector2.Distance(transform.position, lockedTarget.position);
+        // Only block if target is Player (don't block for Victim)
+        if (distanceToTarget <= blockRange && canBlock && lockedTarget.CompareTag("Player"))
         {
-            float distanceToTarget = Vector2.Distance(transform.position, lockedTarget.position);
-            // Only block if target is Player (don't block for Victim)
-            if (distanceToTarget <= blockRange && canBlock && lockedTarget.CompareTag("Player"))
-            {
-                StartBlocking();
-            }
+            StartBlocking();
         }
-        
-        // Reset speed
-        if (enemyPathfinding != null)
-        {
-            enemyPathfinding.ResetSpeed();
-            enemyPathfinding.StopMoving();
-        }
-        
-        isDashing = false;
-        lockedTarget = null; // Clear locked target
     }
+    
+    // Reset speed after dash
+    // Don't call StopMoving() - let EnemyAI handle movement
+    if (enemyPathfinding != null)
+    {
+        enemyPathfinding.ResetSpeed();
+    }
+    
+    isDashing = false;
+    lockedTarget = null; // Clear locked target
+}
     
     private void OnDestroy()
     {
@@ -253,44 +253,15 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Apply slow effect when colliding with player
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (SlowDebuff.Instance != null)
-            {
-                SlowDebuff.Instance.ApplySlow();
-            }
-        }
-        // Apply slow effect when colliding with victim
-        else if (collision.gameObject.CompareTag("Victim"))
-        {
-            Victim victim = collision.gameObject.GetComponent<Victim>();
-            if (victim != null)
-            {
-                victim.ApplySlow();
-            }
-        }
+        // Shadow Ghost 2 ONLY pushes back, does NOT apply slow
+        // Push back effect is handled by physics (rigidbody collision)
+        // No additional debuff needed
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        // Continuously check for slow application when in contact with player
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (SlowDebuff.Instance != null)
-            {
-                SlowDebuff.Instance.ApplySlow();
-            }
-        }
-        // Continuously check for slow application when in contact with victim
-        else if (collision.gameObject.CompareTag("Victim"))
-        {
-            Victim victim = collision.gameObject.GetComponent<Victim>();
-            if (victim != null)
-            {
-                victim.ApplySlow();
-            }
-        }
+        // Shadow Ghost 2 ONLY pushes back, does NOT apply slow
+        // No debuff on continuous contact
     }
     
     // Public methods for other systems

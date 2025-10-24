@@ -16,17 +16,28 @@ public class EnemyGlowEffect : MonoBehaviour
     private Color originalColor;
     private Material glowMaterial;
     
-    private void Start()
+    private void Awake()
     {
-        // Get parent enemy's sprite renderer
+        // CRITICAL: Get and save original color in Awake (before Start modifies it)
         enemySprite = GetComponentInParent<SpriteRenderer>();
         
         if (enemySprite != null)
         {
+            // Save ORIGINAL color BEFORE any modifications
             originalColor = enemySprite.color;
-            Debug.Log($"EnemyGlowEffect: Saved original color for {enemySprite.gameObject.name}: {originalColor}");
-            
-            // Create glow material if needed
+            Debug.Log($"[GLOW] Saved ORIGINAL color for {enemySprite.gameObject.name}: {originalColor}");
+        }
+        else
+        {
+            Debug.LogError("[GLOW] Could not find parent SpriteRenderer!");
+        }
+    }
+    
+    private void Start()
+    {
+        // Now apply glow effects (originalColor already saved in Awake)
+        if (enemySprite != null)
+        {
             if (enablePulse)
             {
                 StartCoroutine(PulseGlow());
@@ -35,10 +46,6 @@ public class EnemyGlowEffect : MonoBehaviour
             {
                 ApplyStaticGlow();
             }
-        }
-        else
-        {
-            Debug.LogError("EnemyGlowEffect: Could not find parent SpriteRenderer!");
         }
     }
     
@@ -65,26 +72,40 @@ public class EnemyGlowEffect : MonoBehaviour
     
     private void OnDestroy()
     {
-        // Stop all coroutines first
+        // Stop all coroutines IMMEDIATELY
         StopAllCoroutines();
         
         // Restore original color when glow is removed
         if (enemySprite != null)
         {
-            Debug.Log($"Restoring color for {enemySprite.gameObject.name} from {enemySprite.color} to {originalColor}");
+            Debug.Log($"[GLOW] Restoring {enemySprite.gameObject.name} from CURRENT={enemySprite.color} to ORIGINAL={originalColor}");
             enemySprite.color = originalColor;
+            
+            // Verify restoration
+            if (enemySprite.color != originalColor)
+            {
+                Debug.LogError($"[GLOW] ❌ COLOR RESTORE FAILED! Expected {originalColor} but got {enemySprite.color}");
+            }
+            else
+            {
+                Debug.Log($"[GLOW] ✅ Color successfully restored to {originalColor}");
+            }
         }
         else
         {
-            Debug.LogWarning("EnemyGlowEffect.OnDestroy: enemySprite is null!");
+            Debug.LogWarning("[GLOW] OnDestroy: enemySprite is null!");
         }
     }
     
     private void OnDisable()
     {
+        // Stop coroutines when disabled too
+        StopAllCoroutines();
+        
         // Also restore when disabled (safety)
         if (enemySprite != null)
         {
+            Debug.Log($"[GLOW] OnDisable: Restoring {enemySprite.gameObject.name} to {originalColor}");
             enemySprite.color = originalColor;
         }
     }

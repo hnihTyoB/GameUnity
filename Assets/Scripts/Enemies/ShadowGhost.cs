@@ -138,20 +138,20 @@ public class ShadowGhost : MonoBehaviour, IEnemy
                 ApplySlowToTarget();
             }
             
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        
-        // Reset speed and stop moving after dash
-        if (enemyPathfinding != null)
-        {
-            enemyPathfinding.ResetSpeed();
-            enemyPathfinding.StopMoving();
-        }
-        
-        isDashing = false;
-        lockedTarget = null; // Clear locked target
+        elapsedTime += Time.deltaTime;
+        yield return null;
     }
+    
+    // Reset speed after dash
+    // Don't call StopMoving() - let EnemyAI handle movement
+    if (enemyPathfinding != null)
+    {
+        enemyPathfinding.ResetSpeed();
+    }
+    
+    isDashing = false;
+    lockedTarget = null; // Clear locked target
+}
 
     private void ApplySlowToTarget()
     {

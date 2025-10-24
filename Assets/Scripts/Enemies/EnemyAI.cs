@@ -77,8 +77,16 @@ public class EnemyAI : MonoBehaviour
         {
             currentTarget = null;
             state = State.Roaming;
+            return; // Exit early if switching to Roaming
         }
 
+        // Continue moving towards target while in Attacking state (unless stopping)
+        if (!stopMovingWhileAttacking && currentTarget != null) {
+            Vector2 directionToTarget = (currentTarget.position - transform.position).normalized;
+            enemyPathfinding.MoveTo(directionToTarget);
+        }
+
+        // Execute attack when ready
         if (attackRange != 0 && canAttack && currentTarget != null) {
 
             canAttack = false;
@@ -87,8 +95,6 @@ public class EnemyAI : MonoBehaviour
 
             if (stopMovingWhileAttacking) {
                 enemyPathfinding.StopMoving();
-            } else {
-                enemyPathfinding.MoveTo(roamPosition);
             }
 
             StartCoroutine(AttackCooldownRoutine());

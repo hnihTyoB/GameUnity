@@ -22,6 +22,7 @@ public class FlashlightEffect : MonoBehaviour
     
     [Header("Effect Strengths")]
     [SerializeField] private float slowMultiplier = 0.5f; // Slow to 50% speed
+    [SerializeField] private float slowDuration = 3.0f; // Slow persists for 3 seconds after light stops
     [SerializeField] private float stunDuration = 2.5f; // Stun for 2.5 seconds
     
     [Header("Battery Costs")]
@@ -46,6 +47,8 @@ public class FlashlightEffect : MonoBehaviour
         public bool isStunned = false;
         public GameObject currentGlow = null;
         public Coroutine stunCoroutine = null;
+        public Coroutine slowDurationCoroutine = null; // NEW: Track slow duration
+        public bool isSlowPersisting = false; // NEW: Flag for when slow is persisting (not actively being applied)
     }
     
     private enum ExposureState
@@ -77,7 +80,9 @@ public class FlashlightEffect : MonoBehaviour
         }
         else
         {
-            ClearAllEffects();
+            // NEW: Don't clear ALL effects immediately
+            // Let persisting slow effects continue via their coroutines
+            ClearActiveEffects(); // Only clear non-persisting effects
         }
         
         // Update cooldowns
@@ -108,11 +113,18 @@ public class FlashlightEffect : MonoBehaviour
         List<EnemyAI> toRemove = new List<EnemyAI>();
         foreach (var kvp in exposedShadows)
         {
+            // Skip if currently in persisting slow state (don't remove yet)
+            if (kvp.Value.isSlowPersisting && !currentlyExposed.Contains(kvp.Key))
+            {
+                Debug.Log($"[DETECT] {kvp.Key.name} is persisting slow - SKIPPING removal (coroutine will handle it)");
+                continue; // Let the coroutine handle cleanup
+            }
+            
             if (!currentlyExposed.Contains(kvp.Key) || kvp.Key == null)
             {
                 if (kvp.Key != null)
                 {
-                    Debug.Log($"{kvp.Key.name} is no longer in flashlight cone - removing effects");
+                    Debug.Log($"[DETECT] {kvp.Key.name} is no longer in flashlight cone - removing effects");
                     RemoveShadowEffects(kvp.Key);
                 }
                 toRemove.Add(kvp.Key);
@@ -121,6 +133,7 @@ public class FlashlightEffect : MonoBehaviour
         
         foreach (var enemy in toRemove)
         {
+            Debug.Log($"[DETECT] Removing {enemy?.name ?? "null"} from exposedShadows dictionary");
             exposedShadows.Remove(enemy);
         }
         
@@ -149,6 +162,19 @@ public class FlashlightEffect : MonoBehaviour
         }
         
         ShadowExposureData data = exposedShadows[enemy];
+        
+        // NEW: If re-shining on enemy during persisting slow, cancel the duration coroutine
+        if (data.isSlowPersisting)
+        {
+            Debug.Log($"{enemy.name} re-exposed during slow persist - resuming progression");
+            if (data.slowDurationCoroutine != null)
+            {
+                StopCoroutine(data.slowDurationCoroutine);
+                data.slowDurationCoroutine = null;
+            }
+            data.isSlowPersisting = false;
+            // Keep exposureTime and continue progression toward stun!
+        }
         
         // Don't process if on cooldown
         if (data.cooldownTimer > 0f)
@@ -367,6 +393,76 @@ public class FlashlightEffect : MonoBehaviour
         }
     }
     
+    private IEnumerator SlowDurationRoutine(EnemyAI enemy, ShadowExposureData data)
+    {
+        if (enemy == null)
+        {
+            Debug.LogWarning("SlowDurationRoutine: enemy is null at start!");
+            yield break;
+        }
+        
+        Debug.Log($"[SLOW PERSIST] {enemy.name} slow effect persisting for {slowDuration} seconds (glow stays)");
+        
+        // Keep slow effect active (speed multiplier already applied)
+        // Keep glow active (visual feedback)
+        
+        // Wait for duration
+        yield return new WaitForSeconds(slowDuration);
+        
+        Debug.Log($"[SLOW PERSIST] {slowDuration} seconds elapsed for {enemy.name}");
+        
+        // Now actually remove everything
+        if (enemy == null)
+        {
+            Debug.LogWarning($"[SLOW PERSIST] Enemy became null during wait!");
+            yield break;
+        }
+        
+        if (!exposedShadows.ContainsKey(enemy))
+        {
+            Debug.LogWarning($"[SLOW PERSIST] {enemy.name} no longer in exposedShadows dictionary!");
+            yield break;
+        }
+        
+        Debug.Log($"[SLOW PERSIST] {enemy.name} slow duration expired - REMOVING ALL EFFECTS NOW");
+        
+        // Remove visual effects FIRST
+        if (data.currentGlow != null)
+        {
+            Debug.Log($"[SLOW PERSIST] Destroying glow: {data.currentGlow.name}");
+            Destroy(data.currentGlow);
+            data.currentGlow = null;
+        }
+        else
+        {
+            Debug.LogWarning($"[SLOW PERSIST] No glow to remove for {enemy.name}!");
+        }
+        
+        // Reset speed to normal
+        EnemyPathFinding pathfinding = enemy.GetComponent<EnemyPathFinding>();
+        if (pathfinding != null)
+        {
+            Debug.Log($"[SLOW PERSIST] Resetting {enemy.name} speed to 1.0 (normal)");
+            pathfinding.SetSpeedMultiplier(1f);
+            pathfinding.ResumeMoving();
+        }
+        else
+        {
+            Debug.LogError($"[SLOW PERSIST] {enemy.name} has no EnemyPathFinding component!");
+        }
+        
+        // Reset state
+        data.exposureTime = 0f;
+        data.currentState = ExposureState.None;
+        data.isSlowPersisting = false;
+        data.slowDurationCoroutine = null;
+        
+        // Remove from dictionary
+        exposedShadows.Remove(enemy);
+        
+        Debug.Log($"[SLOW PERSIST] ✅ {enemy.name} FULLY RECOVERED from slow - speed should be NORMAL now!");
+    }
+    
     private void RemoveShadowEffects(EnemyAI enemy)
     {
         if (enemy == null || !exposedShadows.ContainsKey(enemy)) return;
@@ -375,8 +471,15 @@ public class FlashlightEffect : MonoBehaviour
         
         Debug.Log($"Removing effects from {enemy.name}, current state: {data.currentState}");
         
-        // Remove visual effects
-        RemoveVisualEffect(data);
+        // NEW: Handle SLOW effect - persist for duration
+        if (data.currentState == ExposureState.Slow && !data.isSlowPersisting)
+        {
+            Debug.Log($"{enemy.name} SLOW effect will persist for {slowDuration} seconds");
+            data.isSlowPersisting = true;
+            data.slowDurationCoroutine = StartCoroutine(SlowDurationRoutine(enemy, data));
+            // Don't reset state yet - let the coroutine handle it
+            return;
+        }
         
         // Stop stun coroutine
         if (data.stunCoroutine != null)
@@ -384,6 +487,16 @@ public class FlashlightEffect : MonoBehaviour
             StopCoroutine(data.stunCoroutine);
             data.stunCoroutine = null;
         }
+        
+        // Stop slow duration coroutine if active
+        if (data.slowDurationCoroutine != null)
+        {
+            StopCoroutine(data.slowDurationCoroutine);
+            data.slowDurationCoroutine = null;
+        }
+        
+        // Remove visual effects
+        RemoveVisualEffect(data);
         
         // Reset enemy speed - ALWAYS reset to 1.0 (100% speed)
         EnemyPathFinding pathfinding = enemy.GetComponent<EnemyPathFinding>();
@@ -405,9 +518,10 @@ public class FlashlightEffect : MonoBehaviour
             data.isStunned = false;
         }
         
-        // Reset exposure time when no longer in light
+        // NEW: Reset exposure time (KILL COUNTDOWN RESETS!)
         data.exposureTime = 0f;
         data.currentState = ExposureState.None;
+        data.isSlowPersisting = false;
         
         Debug.Log($"Effects removed from {enemy.name}, speed should be normal now");
     }
@@ -426,9 +540,59 @@ public class FlashlightEffect : MonoBehaviour
         }
     }
     
+    private void ClearActiveEffects()
+    {
+        // NEW: Only clear effects that are NOT in persisting slow state
+        Debug.Log($"[CLEAR] Clearing ACTIVE effects (skipping persisting slows). Total shadows: {exposedShadows.Count}");
+        
+        List<EnemyAI> enemiesToClear = new List<EnemyAI>();
+        
+        foreach (var kvp in exposedShadows)
+        {
+            // Skip enemies with persisting slow (let their coroutine finish)
+            if (kvp.Value.isSlowPersisting)
+            {
+                Debug.Log($"[CLEAR] SKIPPING {kvp.Key.name} - slow is persisting (coroutine active)");
+                continue;
+            }
+            
+            // Only clear non-persisting effects
+            enemiesToClear.Add(kvp.Key);
+        }
+        
+        foreach (var enemy in enemiesToClear)
+        {
+            if (enemy != null)
+            {
+                Debug.Log($"[CLEAR] Removing effects from {enemy.name}");
+                RemoveShadowEffects(enemy);
+                
+                // Only remove from dictionary if NOT persisting (RemoveShadowEffects may have started persist coroutine)
+                if (exposedShadows.ContainsKey(enemy) && !exposedShadows[enemy].isSlowPersisting)
+                {
+                    Debug.Log($"[CLEAR] Removing {enemy.name} from dictionary");
+                    exposedShadows.Remove(enemy);
+                }
+                else if (exposedShadows.ContainsKey(enemy) && exposedShadows[enemy].isSlowPersisting)
+                {
+                    Debug.Log($"[CLEAR] KEEPING {enemy.name} in dictionary (now persisting)");
+                }
+            }
+        }
+        
+        Debug.Log($"[CLEAR] Active effects cleared. Remaining shadows (persisting): {exposedShadows.Count}");
+        
+        // Reset battery drain to normal
+        if (BatteryManager.Instance != null)
+        {
+            BatteryManager.Instance.SetDrainRate(normalDrainRate);
+        }
+    }
+    
     private void ClearAllEffects()
     {
-        Debug.Log($"Clearing all effects. Total shadows: {exposedShadows.Count}");
+        // FORCED CLEAR: Remove everything (used on disable/destroy)
+        Debug.Log($"[CLEAR ALL] FORCE clearing ALL effects. Total shadows: {exposedShadows.Count}");
         
         List<EnemyAI> enemiesToClear = new List<EnemyAI>(exposedShadows.Keys);
         
@@ -436,13 +600,22 @@ public class FlashlightEffect : MonoBehaviour
         {
             if (enemy != null)
             {
+                ShadowExposureData data = exposedShadows[enemy];
+                
+                // Stop slow duration coroutine if active
+                if (data.slowDurationCoroutine != null)
+                {
+                    StopCoroutine(data.slowDurationCoroutine);
+                    data.slowDurationCoroutine = null;
+                }
+                
                 RemoveShadowEffects(enemy);
             }
         }
         
         exposedShadows.Clear();
         
-        Debug.Log("All effects cleared");
+        Debug.Log("[CLEAR ALL] All effects FORCE cleared");
         
         // Reset battery drain to normal
         if (BatteryManager.Instance != null)
