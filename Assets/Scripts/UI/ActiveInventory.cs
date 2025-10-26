@@ -30,7 +30,16 @@ public class ActiveInventory : Singleton<ActiveInventory>
 
     private void ToggleActiveSlot(int numValue)
     {
-        ToggleActiveHighlight(numValue - 1);
+        // Only allow slot 1 (Flashlight) and slot 2 (Shield)
+        // Block all other weapon slots
+        if (numValue == 1 || numValue == 2)
+        {
+            ToggleActiveHighlight(numValue - 1);
+        }
+        else
+        {
+            Debug.Log($"ActiveInventory: Weapon slot {numValue} is disabled. Only Flashlight (1) and Shield (2) are available.");
+        }
     }
     private void ToggleActiveHighlight(int indexNum)
     {
@@ -42,7 +51,19 @@ public class ActiveInventory : Singleton<ActiveInventory>
         }
 
         this.transform.GetChild(indexNum).GetChild(0).gameObject.SetActive(true);
-        ChangeActiveWeapon();
+        
+        // Check if slot has weapon before changing
+        Transform childTransform = transform.GetChild(indexNum);
+        InventorySlot slotComponent = childTransform.GetComponentInChildren<InventorySlot>();
+        
+        if (slotComponent != null && slotComponent.GetWeaponInfo() != null)
+        {
+            ChangeActiveWeapon();
+        }
+        else
+        {
+            Debug.LogWarning($"ActiveInventory: Slot {indexNum} has no weapon assigned. Cannot equip.");
+        }
     }
 
     private void ChangeActiveWeapon()
@@ -55,13 +76,30 @@ public class ActiveInventory : Singleton<ActiveInventory>
 
         Transform childTransform = transform.GetChild(activeSlotIndexNum);
         InventorySlot inventorySlot = childTransform.GetComponentInChildren<InventorySlot>();
-        WeaponInfo weaponInfo = inventorySlot.GetWeaponInfo();
-        GameObject weaponToSpawn = weaponInfo.weaponPrefab;
         
-        if (weaponInfo == null) {
+        if (inventorySlot == null)
+        {
+            Debug.LogError($"ActiveInventory: No InventorySlot found in child {activeSlotIndexNum}");
             ActiveWeapon.Instance.WeaponNull();
             return;
         }
+        
+        WeaponInfo weaponInfo = inventorySlot.GetWeaponInfo();
+        
+        if (weaponInfo == null) {
+            Debug.LogError($"ActiveInventory: WeaponInfo is null in slot {activeSlotIndexNum}");
+            ActiveWeapon.Instance.WeaponNull();
+            return;
+        }
+        
+        if (weaponInfo.weaponPrefab == null)
+        {
+            Debug.LogError($"ActiveInventory: weaponPrefab is null for weapon in slot {activeSlotIndexNum}");
+            ActiveWeapon.Instance.WeaponNull();
+            return;
+        }
+        
+        GameObject weaponToSpawn = weaponInfo.weaponPrefab;
 
         GameObject newWeapon = Instantiate(weaponToSpawn, ActiveWeapon.Instance.transform);
 

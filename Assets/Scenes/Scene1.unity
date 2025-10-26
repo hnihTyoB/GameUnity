@@ -6693,7 +6693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cf2f5e42c770fb499def323d6ff4791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponInfo: {fileID: 11400000, guid: 26d6cbc02660bc040b4580b3732b6719, type: 2}
+  weaponInfo: {fileID: 11400000, guid: ec61a65ce672beb41a36e1e0f9babbad, type: 2}
 --- !u!114 &1111622834
 MonoBehaviour:
   m_ObjectHideFlags: 0
