@@ -32,7 +32,7 @@ public class ActiveInventory : Singleton<ActiveInventory>
     {
         // Only allow slot 1 (Flashlight) and slot 2 (Shield)
         // Block all other weapon slots
-        if (numValue == 1 || numValue == 2)
+        if (numValue == 1 || numValue == 2 || numValue == 3)
         {
             ToggleActiveHighlight(numValue - 1);
         }
