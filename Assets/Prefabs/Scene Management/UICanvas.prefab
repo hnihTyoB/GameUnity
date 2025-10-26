@@ -1035,7 +1035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9101928044425965263}
   m_Layer: 5
-  m_Name: Gold Coin Container
+  m_Name: Victim Rescue Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1860,7 +1860,7 @@ GameObject:
   - component: {fileID: 7831802871108193056}
   - component: {fileID: 4531141826824973254}
   m_Layer: 5
-  m_Name: Gold Amount Text
+  m_Name: Rescue Amount Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2237,7 +2237,7 @@ GameObject:
   - component: {fileID: 3612658514670744959}
   - component: {fileID: 5288028160536469963}
   m_Layer: 5
-  m_Name: Gold Coin Image
+  m_Name: Rescue Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2313,6 +2313,7 @@ GameObject:
   - component: {fileID: 489216502027180257}
   - component: {fileID: 8311667294670935618}
   - component: {fileID: 6365205658207214313}
+  - component: {fileID: 1234567890123456789}
   m_Layer: 5
   m_Name: UICanvas
   m_TagString: Untagged
@@ -2421,6 +2422,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeScreen: {fileID: 5744035063498603483}
   fadeSpeed: 1
+--- !u!114 &1234567890123456789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7904662691201285299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8052750975912004333
 GameObject:
   m_ObjectHideFlags: 0

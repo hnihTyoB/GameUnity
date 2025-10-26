@@ -39,9 +39,14 @@ public class RescueManager : Singleton<RescueManager>
     private void UpdateUI()
     {
         // Update UI display
+        Debug.Log($"RescueManager: UpdateUI called, victimsRescued={victimsRescued}, RescueUI.Instance={RescueUI.Instance != null}");
         if (RescueUI.Instance != null)
         {
             RescueUI.Instance.UpdateRescueCount(victimsRescued);
+        }
+        else
+        {
+            Debug.LogError("RescueManager: RescueUI.Instance is NULL!");
         }
     }
 
