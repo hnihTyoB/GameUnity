@@ -23,7 +23,12 @@ public class Stamina : Singleton<Stamina>
 
     private void Start()
     {
-        staminaContainer = GameObject.Find(STAMINA_CONTAINER_TEXT).transform;
+        GameObject staminaContainerObj = GameObject.Find(STAMINA_CONTAINER_TEXT);
+        if (staminaContainerObj != null)
+        {
+            staminaContainer = staminaContainerObj.transform;
+        }
+        // Stamina system is optional - no error if container not found
     }
     public void UseStamina() {
         CurrentStamina--;
@@ -47,6 +52,12 @@ public class Stamina : Singleton<Stamina>
     }
 
     private void UpdateStaminaImages() {
+        if (staminaContainer == null)
+        {
+            // Stamina system is disabled - skip update
+            return;
+        }
+        
         for (int i = 0; i < maxStamina; i++)
         {
             if (i <= CurrentStamina - 1) {
