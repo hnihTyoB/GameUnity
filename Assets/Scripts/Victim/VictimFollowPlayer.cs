@@ -67,25 +67,42 @@ public class VictimFollowPlayer : MonoBehaviour
             return;
         }
         
-        // Check if other victims are blocking our path
-        bool isBlocked = CheckForOtherVictims();
-        
-        if (isBlocked)
-        {
-            // Stop if blocked by other victims
-            rb.linearVelocity = Vector2.zero;
-            
-            if (animator != null)
-            {
-                animator.SetFloat("moveX", 0);
-                animator.SetFloat("moveY", 0);
-            }
-            return;
-        }
-        
         // Follow player
         Vector2 direction = (playerTransform.position - transform.position).normalized;
-        rb.MovePosition(rb.position + direction * (followSpeed * Time.fixedDeltaTime));
+        
+        // Check if there's a victim very close in front blocking direct path
+        Victim blockingVictim = GetVictimBlockingPath(direction);
+        
+        if (blockingVictim != null)
+        {
+            // Follow the blocking victim instead of player (train-like behavior)
+            Vector2 victimDirection = (blockingVictim.transform.position - transform.position).normalized;
+            float distanceToVictim = Vector2.Distance(transform.position, blockingVictim.transform.position);
+            
+            // Keep some distance from the victim in front
+            if (distanceToVictim > 0.8f)
+            {
+                rb.MovePosition(rb.position + victimDirection * (followSpeed * 0.8f * Time.fixedDeltaTime));
+                direction = victimDirection; // Use this for animation
+            }
+            else
+            {
+                // Too close to victim, stop
+                rb.linearVelocity = Vector2.zero;
+                
+                if (animator != null)
+                {
+                    animator.SetFloat("moveX", 0);
+                    animator.SetFloat("moveY", 0);
+                }
+                return;
+            }
+        }
+        else
+        {
+            // No blocking victim, follow player directly
+            rb.MovePosition(rb.position + direction * (followSpeed * Time.fixedDeltaTime));
+        }
         
         // Flip sprite based on direction
         if (direction.x < 0)
@@ -105,10 +122,18 @@ public class VictimFollowPlayer : MonoBehaviour
         }
     }
     
-    private bool CheckForOtherVictims()
+    /// <summary>
+    /// Check if there's a victim blocking our direct path to player
+    /// Returns the closest victim in front of us (train-like following)
+    /// </summary>
+    private Victim GetVictimBlockingPath(Vector2 directionToPlayer)
     {
-        // Check if there are other rescued victims too close to us
-        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(transform.position, 0.8f);
+        // Cast a small circle in front to detect victims
+        Vector2 checkPosition = (Vector2)transform.position + directionToPlayer * 0.6f;
+        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(checkPosition, 0.7f);
+        
+        Victim closestVictim = null;
+        float closestDistance = float.MaxValue;
         
         foreach (Collider2D col in nearbyColliders)
         {
@@ -117,12 +142,21 @@ public class VictimFollowPlayer : MonoBehaviour
             Victim otherVictim = col.GetComponent<Victim>();
             if (otherVictim != null && otherVictim.IsRescued())
             {
-                // Another rescued victim is too close → stop moving
-                return true;
+                // Check if this victim is between us and player
+                float distanceToVictim = Vector2.Distance(transform.position, otherVictim.transform.position);
+                float victimDistanceToPlayer = Vector2.Distance(otherVictim.transform.position, playerTransform.position);
+                float ourDistanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+                
+                // Only consider if victim is closer to player than we are
+                if (victimDistanceToPlayer < ourDistanceToPlayer && distanceToVictim < closestDistance)
+                {
+                    closestVictim = otherVictim;
+                    closestDistance = distanceToVictim;
+                }
             }
         }
         
-        return false;
+        return closestVictim;
     }
 }
 

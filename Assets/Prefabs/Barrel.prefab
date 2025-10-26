@@ -155,6 +155,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5fa6dc54a401b941833e507a1a859ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickUpSpawner
-  goldCoin: {fileID: 3915329945633383826, guid: b4994ca5fb0d73a4f86abf7a5220f160, type: 3}
+  goldCoin: {fileID: 0}
   battery: {fileID: 5324252162424979328, guid: c29eef891bda8e24daf546b19699ba3d, type: 3}
-  staminaGlobe: {fileID: 3915329945633383826, guid: 11dcebb4360d90a4289a92e228cb814d, type: 3}
+  staminaGlobe: {fileID: 0}

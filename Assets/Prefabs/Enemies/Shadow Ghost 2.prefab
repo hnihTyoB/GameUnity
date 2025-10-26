@@ -304,7 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShadowGhostDrops
   lightFragmentPrefab: {fileID: 2181414707853746678, guid: 2b062c39e87351f4b9079ebc577f9788, type: 3}
   batteryPrefab: {fileID: 5324252162424979328, guid: c29eef891bda8e24daf546b19699ba3d, type: 3}
-  goldCoinPrefab: {fileID: 3915329945633383826, guid: b4994ca5fb0d73a4f86abf7a5220f160, type: 3}
+  goldCoinPrefab: {fileID: 0}
   lightFragmentDropRate: 25
   batteryDropRate: 5
   goldCoinDropRate: 0
