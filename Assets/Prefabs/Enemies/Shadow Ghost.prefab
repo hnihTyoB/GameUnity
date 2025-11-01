@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: -3531077328418882116}
   - component: {fileID: 7891234567890123456}
   - component: {fileID: 6753348244745102376}
+  - component: {fileID: 1234567890123456789}
   m_Layer: 8
   m_Name: Shadow Ghost
   m_TagString: Untagged
@@ -327,6 +328,19 @@ MonoBehaviour:
   goldCoin: {fileID: 0}
   battery: {fileID: 5324252162424979328, guid: c29eef891bda8e24daf546b19699ba3d, type: 3}
   staminaGlobe: {fileID: 0}
+--- !u!114 &1234567890123456789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059053435867829122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce9d52cc92da9b5499023e751df9813e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Knockback
+  knockBackTime: 0.2
 --- !u!1 &7119020765384140683
 GameObject:
   m_ObjectHideFlags: 0

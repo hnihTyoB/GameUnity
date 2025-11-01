@@ -3,19 +3,33 @@ using UnityEngine;
 /// <summary>
 /// Shield weapon - protective barrier around player
 /// Blocks damage and provides defense
+/// Knocks back enemies on contact
 /// </summary>
 public class Shield : MonoBehaviour, IWeapon
 {
     [Header("Shield Settings")]
     [SerializeField] private WeaponInfo weaponInfo;
+    [SerializeField] private float knockBackThrust = 18f; // Lực đẩy enemy
+    [SerializeField] private float knockBackCooldown = 0.3f; // Cooldown giữa các lần đẩy
     
     private SpriteRenderer spriteRenderer;
     private bool isActive = true;
     private Vector3 fixedLocalPosition = new Vector3(0, 0.2f, 0); // Center of player
+    private CircleCollider2D shieldCollider;
+    private float lastKnockBackTime = -999f;
     
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        shieldCollider = GetComponent<CircleCollider2D>();
+        
+        // Ensure collider exists and is set as trigger
+        if (shieldCollider == null)
+        {
+            shieldCollider = gameObject.AddComponent<CircleCollider2D>();
+        }
+        shieldCollider.isTrigger = true;
+        shieldCollider.radius = 0.5f; // Adjust based on shield sprite size
     }
     
     private void Start()
@@ -102,6 +116,49 @@ public class Shield : MonoBehaviour, IWeapon
     {
         Debug.Log("Shield blocked damage!");
         // Add visual/audio feedback here
+    }
+    
+    /// <summary>
+    /// Detect collision with enemies and knock them back
+    /// </summary>
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        // Check if cooldown has passed
+        if (Time.time < lastKnockBackTime + knockBackCooldown)
+        {
+            return;
+        }
+        
+        // Check if the colliding object is an enemy
+        EnemyAI enemy = other.GetComponent<EnemyAI>();
+        if (enemy != null)
+        {
+            // Get enemy's knockback component
+            Knockback enemyKnockback = other.GetComponent<Knockback>();
+            if (enemyKnockback != null)
+            {
+                // Knock back the enemy away from shield/player
+                enemyKnockback.GetKnockedBack(transform, knockBackThrust);
+                
+                // Optional: Add flash effect if enemy has it
+                Flash enemyFlash = other.GetComponent<Flash>();
+                if (enemyFlash != null)
+                {
+                    StartCoroutine(enemyFlash.FlashRoutine());
+                }
+                
+                lastKnockBackTime = Time.time;
+                Debug.Log($"Shield knocked back enemy: {other.name}");
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Also handle OnTriggerEnter2D for immediate response
+    /// </summary>
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        OnTriggerStay2D(other);
     }
 }
 
