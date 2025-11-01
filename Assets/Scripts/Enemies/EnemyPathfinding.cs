@@ -70,4 +70,20 @@ public class EnemyPathFinding : MonoBehaviour
     {
         isMovementEnabled = true;
     }
+    
+    /// <summary>
+    /// Get current move speed
+    /// </summary>
+    public float GetMoveSpeed()
+    {
+        return currentSpeed;
+    }
+    
+    /// <summary>
+    /// Get base move speed
+    /// </summary>
+    public float GetBaseSpeed()
+    {
+        return baseSpeed;
+    }
 }

@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 7891234567890123456}
   - component: {fileID: 2}
   - component: {fileID: 3338656040834225379}
+  - component: {fileID: 8884825114076326261}
   m_Layer: 8
   m_Name: Shadow Ghost 2
   m_TagString: Untagged
@@ -349,6 +350,23 @@ MonoBehaviour:
   goldCoin: {fileID: 0}
   battery: {fileID: 5324252162424979328, guid: c29eef891bda8e24daf546b19699ba3d, type: 3}
   staminaGlobe: {fileID: 0}
+--- !u!114 &8884825114076326261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059053435867829122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f4a8b2c1d3e5f6a7b8c9d0e1f2a3b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFearBehavior
+  fleeSpeedMultiplier: 1.5
+  fearCheckInterval: 0.2
+  minFleeDistance: 3
+  showFearEffect: 1
+  fearColor: {r: 0.8, g: 0.8, b: 1, a: 1}
 --- !u!1 &7119020765384140683
 GameObject:
   m_ObjectHideFlags: 0

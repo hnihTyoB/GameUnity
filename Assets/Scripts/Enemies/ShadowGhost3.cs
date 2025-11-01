@@ -20,6 +20,7 @@ public class ShadowGhost3 : MonoBehaviour, IEnemy
     private Collider2D myCollider;
     private ParticleSystem spawnedSmoke; // Track spawned smoke
     private Transform lockedTarget; // Store target at start of attack
+    private LightFearBehavior lightFear; // Fear of light behavior
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class ShadowGhost3 : MonoBehaviour, IEnemy
         enemyAI = GetComponent<EnemyAI>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         myCollider = GetComponent<Collider2D>();
+        lightFear = GetComponent<LightFearBehavior>();
         
         // Apply shadow color (purple)
         if (spriteRenderer != null)
@@ -75,6 +77,12 @@ public class ShadowGhost3 : MonoBehaviour, IEnemy
 
     public void Attack()
     {
+        // Cannot attack if fleeing from light
+        if (lightFear != null && lightFear.IsFleeing())
+        {
+            return;
+        }
+        
         if (!isDashing)
         {
             // Lock target at the start of attack

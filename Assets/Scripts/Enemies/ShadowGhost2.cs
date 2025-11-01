@@ -38,12 +38,14 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     private Coroutine dashCoroutine;
     private ParticleSystem spawnedSmoke;
     private Transform lockedTarget; // Store target at start of attack
+    private LightFearBehavior lightFear; // Fear of light behavior
     
     private void Awake()
     {
         enemyPathfinding = GetComponent<EnemyPathFinding>();
         enemyAI = GetComponent<EnemyAI>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        lightFear = GetComponent<LightFearBehavior>();
         
         // Apply shadow color
         if (spriteRenderer != null)
@@ -147,6 +149,12 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     
     public void Attack()
     {
+        // Cannot attack if fleeing from light
+        if (lightFear != null && lightFear.IsFleeing())
+        {
+            return;
+        }
+        
         // Shadow Ghost 2 dashes towards target first, then blocks
         if (!isDashing && !isBlocking)
         {

@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 8243276346978343299}
   - component: {fileID: -3531077328418882116}
   - component: {fileID: 7891234567890123456}
+  - component: {fileID: 4211338198424859342}
+  - component: {fileID: 4520978014420950045}
   m_Layer: 8
   m_Name: Shadow Ghost 3
   m_TagString: Untagged
@@ -298,7 +300,7 @@ MonoBehaviour:
   goldCoinPrefab: {fileID: 0}
   lightFragmentDropRate: 25
   batteryDropRate: 5
-  goldCoinDropRate: 50
+  goldCoinDropRate: 0
 --- !u!114 &7891234567890123456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,6 +313,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1699bbbf07da4191ae551dd4977cc601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NonDamagingEnemy
+--- !u!114 &4211338198424859342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059053435867829122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5fa6dc54a401b941833e507a1a859ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PickUpSpawner
+  goldCoin: {fileID: 0}
+  battery: {fileID: 5324252162424979328, guid: c29eef891bda8e24daf546b19699ba3d, type: 3}
+  staminaGlobe: {fileID: 0}
+--- !u!114 &4520978014420950045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5059053435867829122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f4a8b2c1d3e5f6a7b8c9d0e1f2a3b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFearBehavior
+  fleeSpeedMultiplier: 1.5
+  fearCheckInterval: 0.2
+  minFleeDistance: 3
+  showFearEffect: 1
+  fearColor: {r: 0.8, g: 0.8, b: 1, a: 1}
 --- !u!1 &7119020765384140683
 GameObject:
   m_ObjectHideFlags: 0
