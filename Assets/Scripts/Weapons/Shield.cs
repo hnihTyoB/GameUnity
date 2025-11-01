@@ -177,6 +177,27 @@ public class Shield : MonoBehaviour, IWeapon
     }
     
     /// <summary>
+    /// Called when weapon is unequipped (switched to another weapon)
+    /// Shield persists and stays visible if still active
+    /// </summary>
+    public void OnWeaponUnequipped()
+    {
+        // Shield stays visible and active - doesn't hide when switching weapons
+        // It will only disappear when its 5s duration ends
+        Debug.Log($"Shield: Unequipped but still visible - Active: {isActive}, Cooldown: {isOnCooldown}");
+    }
+    
+    /// <summary>
+    /// Called when weapon is re-equipped (switched back to shield)
+    /// Shield is already there, just update reference
+    /// </summary>
+    public void OnWeaponEquipped()
+    {
+        // Shield was never hidden, so nothing to do here
+        Debug.Log($"Shield: Re-equipped - Active: {isActive}, Cooldown: {isOnCooldown}");
+    }
+    
+    /// <summary>
     /// Check if shield is currently on cooldown
     /// </summary>
     public bool IsOnCooldown()

@@ -96,9 +96,23 @@ public class ActiveInventory : Singleton<ActiveInventory>
     private void ChangeActiveWeapon()
     {
         // Debug.Log(transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>().GetWeaponInfo().weaponPrefab.name);
+        
+        // Handle current weapon before switching
         if (ActiveWeapon.Instance.CurrentActiveWeapon != null)
         {
-            Destroy(ActiveWeapon.Instance.CurrentActiveWeapon.gameObject);
+            // Check if current weapon is Shield - don't destroy it, just hide it
+            Shield currentShield = ActiveWeapon.Instance.CurrentActiveWeapon.GetComponent<Shield>();
+            if (currentShield != null)
+            {
+                // Shield persists - just hide sprite (cooldown continues in background)
+                currentShield.OnWeaponUnequipped();
+                Debug.Log("ActiveInventory: Shield unequipped (hidden, cooldown continues)");
+            }
+            else
+            {
+                // Other weapons can be destroyed normally
+                Destroy(ActiveWeapon.Instance.CurrentActiveWeapon.gameObject);
+            }
         }
 
         Transform childTransform = transform.GetChild(activeSlotIndexNum);
@@ -127,7 +141,19 @@ public class ActiveInventory : Singleton<ActiveInventory>
         }
         
         GameObject weaponToSpawn = weaponInfo.weaponPrefab;
+        
+        // Check if we're equipping Shield and it already exists
+        Shield existingShield = FindObjectOfType<Shield>();
+        if (weaponToSpawn.GetComponent<Shield>() != null && existingShield != null)
+        {
+            // Shield already exists - just show it again
+            existingShield.OnWeaponEquipped();
+            ActiveWeapon.Instance.NewWeapon(existingShield.GetComponent<MonoBehaviour>());
+            Debug.Log("ActiveInventory: Shield re-equipped (shown again)");
+            return;
+        }
 
+        // Spawn new weapon normally
         GameObject newWeapon = Instantiate(weaponToSpawn, ActiveWeapon.Instance.transform);
 
         // ActiveWeapon.Instance.transform.rotation = Quaternion.Euler(0, 0, 0);

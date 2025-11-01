@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 54cc629181e3f26458b1e2c31bf6bd0d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -147,7 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlashlightEffect
   flashlightCone: {fileID: 2353283232628166363}
-  detectionRange: 10
   detectionAngle: 45
   enemyLayer:
     serializedVersion: 2
@@ -157,6 +156,7 @@ MonoBehaviour:
   killTime: 7
   cooldownTime: 4.5
   slowMultiplier: 0.5
+  slowDuration: 3
   stunDuration: 2.5
   normalDrainRate: 0.2
   slowDrainRate: 0.4
