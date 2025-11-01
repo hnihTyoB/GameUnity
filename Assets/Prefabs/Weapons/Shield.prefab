@@ -107,6 +107,8 @@ MonoBehaviour:
   weaponInfo: {fileID: 11400000, guid: ec61a65ce672beb41a36e1e0f9babbad, type: 2}
   knockBackThrust: 18
   knockBackCooldown: 0.3
+  shieldDuration: 5
+  shieldCooldown: 15
 --- !u!58 &5678901234567890127
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -34,11 +34,38 @@ public class ActiveInventory : Singleton<ActiveInventory>
         // Block all other weapon slots
         if (numValue == 1 || numValue == 2 || numValue == 3)
         {
-            ToggleActiveHighlight(numValue - 1);
+            // Check if pressing the same slot again (to activate skill like Shield)
+            if (activeSlotIndexNum == numValue - 1)
+            {
+                // Player pressed the same slot - try to activate weapon skill
+                TryActivateWeaponSkill();
+            }
+            else
+            {
+                // Switch to different slot
+                ToggleActiveHighlight(numValue - 1);
+            }
         }
         else
         {
             Debug.Log($"ActiveInventory: Weapon slot {numValue} is disabled. Only Flashlight (1) and Shield (2) are available.");
+        }
+    }
+    
+    /// <summary>
+    /// Try to activate active weapon's skill (e.g., Shield activation)
+    /// </summary>
+    private void TryActivateWeaponSkill()
+    {
+        if (ActiveWeapon.Instance.CurrentActiveWeapon != null)
+        {
+            // Try to cast to IWeapon and call Attack
+            IWeapon weapon = ActiveWeapon.Instance.CurrentActiveWeapon as IWeapon;
+            if (weapon != null)
+            {
+                weapon.Attack();
+                Debug.Log($"ActiveInventory: Activated weapon skill for slot {activeSlotIndexNum}");
+            }
         }
     }
     private void ToggleActiveHighlight(int indexNum)

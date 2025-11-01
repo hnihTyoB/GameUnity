@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// Shield weapon - protective barrier around player
 /// Blocks damage and provides defense
 /// Knocks back enemies on contact
+/// Has activation cooldown
 /// </summary>
 public class Shield : MonoBehaviour, IWeapon
 {
@@ -12,11 +14,20 @@ public class Shield : MonoBehaviour, IWeapon
     [SerializeField] private float knockBackThrust = 18f; // Lực đẩy enemy
     [SerializeField] private float knockBackCooldown = 0.3f; // Cooldown giữa các lần đẩy
     
+    [Header("Shield Activation")]
+    [SerializeField] private float shieldDuration = 5f; // Thời gian shield hoạt động
+    [SerializeField] private float shieldCooldown = 15f; // Thời gian hồi của shield
+    
     private SpriteRenderer spriteRenderer;
-    private bool isActive = true;
+    private bool isActive = false; // Shield starts inactive
     private Vector3 fixedLocalPosition = new Vector3(0, 0.2f, 0); // Center of player
     private CircleCollider2D shieldCollider;
     private float lastKnockBackTime = -999f;
+    
+    // Cooldown tracking
+    private bool isOnCooldown = false;
+    private float cooldownEndTime = 0f;
+    private Coroutine activeShieldCoroutine = null;
     
     private void Awake()
     {
@@ -54,6 +65,46 @@ public class Shield : MonoBehaviour, IWeapon
             spriteRenderer.flipX = false;
             spriteRenderer.flipY = false;
         }
+        
+        // Shield starts inactive, waiting for player to activate
+        SetActive(false);
+    }
+    
+    /// <summary>
+    /// Activate shield when player uses attack button
+    /// Shield will stay active for duration, then go on cooldown
+    /// </summary>
+    private IEnumerator ActivateShieldRoutine()
+    {
+        // Activate shield and start cooldown immediately
+        SetActive(true);
+        isOnCooldown = true;
+        cooldownEndTime = Time.time + shieldCooldown;
+        
+        // Notify UI to start cooldown display immediately
+        ShieldManager.Instance?.OnShieldCooldownStarted(shieldCooldown);
+        ShieldManager.Instance?.OnShieldActivated();
+        
+        Debug.Log("Shield: Activated!");
+        
+        // Shield stays active for duration
+        yield return new WaitForSeconds(shieldDuration);
+        
+        // Deactivate shield (but cooldown continues)
+        SetActive(false);
+        Debug.Log("Shield: Deactivated - Cooldown continues");
+        
+        // Wait for remaining cooldown time
+        float remainingCooldown = shieldCooldown - shieldDuration;
+        if (remainingCooldown > 0)
+        {
+            yield return new WaitForSeconds(remainingCooldown);
+        }
+        
+        // Cooldown finished
+        isOnCooldown = false;
+        activeShieldCoroutine = null;
+        Debug.Log("Shield: Ready to use again!");
     }
     
     private void LateUpdate()
@@ -96,8 +147,18 @@ public class Shield : MonoBehaviour, IWeapon
     
     public void Attack()
     {
-        // Shield doesn't attack, it defends
-        // This method is required by IWeapon interface but not used
+        // When player presses slot key again (e.g., press "2" twice), activate shield
+        // But only if not already on cooldown
+        if (!isOnCooldown && activeShieldCoroutine == null)
+        {
+            activeShieldCoroutine = StartCoroutine(ActivateShieldRoutine());
+            Debug.Log("Shield: Activating via slot key press!");
+        }
+        else if (isOnCooldown)
+        {
+            float remaining = GetRemainingCooldown();
+            Debug.Log($"Shield on cooldown! {remaining:F1}s remaining");
+        }
     }
     
     /// <summary>
@@ -107,6 +168,29 @@ public class Shield : MonoBehaviour, IWeapon
     {
         isActive = active;
         spriteRenderer.enabled = active;
+        
+        // Also enable/disable collider
+        if (shieldCollider != null)
+        {
+            shieldCollider.enabled = active;
+        }
+    }
+    
+    /// <summary>
+    /// Check if shield is currently on cooldown
+    /// </summary>
+    public bool IsOnCooldown()
+    {
+        return isOnCooldown;
+    }
+    
+    /// <summary>
+    /// Get remaining cooldown time
+    /// </summary>
+    public float GetRemainingCooldown()
+    {
+        if (!isOnCooldown) return 0f;
+        return Mathf.Max(0f, cooldownEndTime - Time.time);
     }
     
     /// <summary>
