@@ -9,6 +9,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private MonoBehaviour enemyType;
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private bool stopMovingWhileAttacking = false;
+    [SerializeField] private float preferredAttackDistance = 0f; // 0 = move to target, >0 = keep this distance
 
     private bool canAttack = true;
     private enum State
@@ -63,8 +64,14 @@ public class EnemyAI : MonoBehaviour
         }
 
         // Check if target is in attack range
-        if (currentTarget != null && Vector2.Distance(transform.position, currentTarget.position) < attackRange) {
-            state = State.Attacking;
+        if (currentTarget != null)
+        {
+            float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
+            if (distanceToTarget < attackRange)
+            {
+                Debug.Log($"{gameObject.name}: Roaming → Attacking. Distance={distanceToTarget:F2}");
+                state = State.Attacking;
+            }
         }
 
         if (timeRoaming > roamChangeDirFloat) {
@@ -73,8 +80,22 @@ public class EnemyAI : MonoBehaviour
     }
     private void Attacking() {
         // Check if target is still valid and in range
-        if (currentTarget == null || Vector2.Distance(transform.position, currentTarget.position) > attackRange)
+        float distanceToTarget = currentTarget != null ? Vector2.Distance(transform.position, currentTarget.position) : float.MaxValue;
+        
+        if (currentTarget == null || distanceToTarget > attackRange)
         {
+            Debug.Log($"{gameObject.name}: Target out of range ({distanceToTarget:F2} > {attackRange}). Switching to Roaming.");
+            
+            // Cancel any ongoing attack animation
+            Animator animator = GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.ResetTrigger("Attack");
+                // Force back to idle/move state
+                animator.SetFloat("moveX", 0);
+                animator.SetFloat("moveY", 0);
+            }
+            
             currentTarget = null;
             state = State.Roaming;
             return; // Exit early if switching to Roaming
@@ -82,22 +103,54 @@ public class EnemyAI : MonoBehaviour
 
         // Continue moving towards target while in Attacking state (unless stopping)
         if (!stopMovingWhileAttacking && currentTarget != null) {
-            Vector2 directionToTarget = (currentTarget.position - transform.position).normalized;
-            enemyPathfinding.MoveTo(directionToTarget);
+            // If preferredAttackDistance is set, maintain that distance
+            if (preferredAttackDistance > 0f)
+            {
+                float tolerance = 0.5f; // Tolerance to prevent jittering
+                
+                // Too far - move closer
+                if (distanceToTarget > preferredAttackDistance + tolerance)
+                {
+                    Vector2 directionToTarget = (currentTarget.position - transform.position).normalized;
+                    enemyPathfinding.MoveTo(directionToTarget);
+                }
+                // Close enough - stop moving (don't retreat even if player gets closer)
+                else
+                {
+                    enemyPathfinding.MoveTo(Vector2.zero);
+                }
+            }
+            else
+            {
+                // No preferred distance, move directly towards target (original behavior)
+                Vector2 directionToTarget = (currentTarget.position - transform.position).normalized;
+                enemyPathfinding.MoveTo(directionToTarget);
+            }
         }
 
-        // Execute attack when ready
+        // Execute attack when ready - but check distance again before attacking
         if (attackRange != 0 && canAttack && currentTarget != null) {
+            // RECALCULATE distance right before attacking (player might have moved)
+            float currentDistance = Vector2.Distance(transform.position, currentTarget.position);
+            
+            // Only attack if target is STILL in range
+            if (currentDistance <= attackRange)
+            {
+                Debug.Log($"{gameObject.name}: Attacking! Distance={currentDistance:F2}");
+                canAttack = false;
+                LockTarget(); // Lock target when starting attack
+                (enemyType as IEnemy).Attack();
 
-            canAttack = false;
-            LockTarget(); // Lock target when starting attack
-            (enemyType as IEnemy).Attack();
+                if (stopMovingWhileAttacking) {
+                    enemyPathfinding.StopMoving();
+                }
 
-            if (stopMovingWhileAttacking) {
-                enemyPathfinding.StopMoving();
+                StartCoroutine(AttackCooldownRoutine());
             }
-
-            StartCoroutine(AttackCooldownRoutine());
+            else
+            {
+                Debug.Log($"{gameObject.name}: Attack cancelled - target moved out of range ({currentDistance:F2} > {attackRange})");
+            }
         }
     }
     private IEnumerator AttackCooldownRoutine() {

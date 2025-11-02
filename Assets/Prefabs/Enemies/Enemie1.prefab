@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 4612165883669161982}
   - component: {fileID: 6052187126618840929}
   - component: {fileID: 8728459088141780678}
+  - component: {fileID: 7043739637221435933}
   m_Layer: 0
   m_Name: Enemie1
   m_TagString: Untagged
@@ -125,7 +126,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6334175504496108782}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.33, y: 3.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -272,6 +273,7 @@ MonoBehaviour:
   enemyType: {fileID: 8728459088141780678}
   attackCooldown: 2
   stopMovingWhileAttacking: 0
+  preferredAttackDistance: 3.5
 --- !u!114 &466184165332450789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,3 +379,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grape
   grapeProjectilePrefab: {fileID: 3571541685186189723, guid: a0132e8576cb0ab4893114dae4b2cc2a, type: 3}
+  maxAttackRange: 5
+--- !u!114 &7043739637221435933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334175504496108782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1699bbbf07da4191ae551dd4977cc601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NonDamagingEnemy
