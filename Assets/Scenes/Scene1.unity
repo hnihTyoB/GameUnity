@@ -4210,11 +4210,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8106189968497574061, guid: 09af8fbf5f732174d8188cfe2fa60a1c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.48
+      value: -2.53
       objectReference: {fileID: 0}
     - target: {fileID: 8106189968497574061, guid: 09af8fbf5f732174d8188cfe2fa60a1c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.44
+      value: 3.51
       objectReference: {fileID: 0}
     - target: {fileID: 8106189968497574061, guid: 09af8fbf5f732174d8188cfe2fa60a1c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -21575,14 +21575,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1234567890123456789, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
-      propertyPath: isolationAuraEffectPrefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1335139884282527443, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7430134789605278867, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.26

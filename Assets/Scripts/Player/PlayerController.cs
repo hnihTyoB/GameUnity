@@ -24,6 +24,12 @@ public class PlayerController : Singleton<PlayerController>
     // Slow effect variables
     private bool isSlowedByDebuff = false;
     private float slowMultiplier = 1f;
+    
+    // Stun effect variables
+    private bool isStunned = false;
+    private Coroutine stunCoroutine;
+    [SerializeField] private Color stunColor = new Color(0.8f, 0f, 1f, 1f); // Bright purple for stun
+    private Color originalColor;
 
     protected override void Awake()
     {
@@ -34,6 +40,9 @@ public class PlayerController : Singleton<PlayerController>
         myAnimator = GetComponent<Animator>();
         mySpriteRender = GetComponent<SpriteRenderer>();
         knockback = GetComponent<Knockback>();
+        
+        // Save original sprite color
+        originalColor = mySpriteRender.color;
     }
     private void Start()
     {
@@ -75,7 +84,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Move()
     {
-        if (knockback.GettingKnockedBack || PlayerHealth.Instance.isDead) { return; }
+        if (knockback.GettingKnockedBack || PlayerHealth.Instance.isDead || isStunned) { return; }
         float currentSpeed = moveSpeed * slowMultiplier;
         rb.MovePosition(rb.position + movement * (currentSpeed * Time.fixedDeltaTime));
     }
@@ -133,5 +142,51 @@ public class PlayerController : Singleton<PlayerController>
     public bool IsSlowed()
     {
         return isSlowedByDebuff;
+    }
+
+    // Stun Effect Methods
+    public void ApplyStun(float stunDuration)
+    {
+        // If already stunned, don't re-apply (prevents spam)
+        if (isStunned) { return; }
+        
+        // Stop any existing stun coroutine
+        if (stunCoroutine != null)
+        {
+            StopCoroutine(stunCoroutine);
+        }
+        
+        stunCoroutine = StartCoroutine(StunRoutine(stunDuration));
+    }
+
+    private IEnumerator StunRoutine(float duration)
+    {
+        isStunned = true;
+        
+        // Blinking effect during stun - faster and more visible
+        float elapsed = 0f;
+        float blinkInterval = 0.12f; // Faster blink for more noticeable effect
+        bool isStunColorActive = true;
+        
+        while (elapsed < duration)
+        {
+            // Toggle between bright stun color and white for maximum visibility
+            mySpriteRender.color = isStunColorActive ? stunColor : Color.white;
+            isStunColorActive = !isStunColorActive;
+            
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
+        
+        // Restore original color at the end
+        mySpriteRender.color = originalColor;
+        
+        isStunned = false;
+        stunCoroutine = null;
+    }
+
+    public bool IsStunned()
+    {
+        return isStunned;
     }
 }

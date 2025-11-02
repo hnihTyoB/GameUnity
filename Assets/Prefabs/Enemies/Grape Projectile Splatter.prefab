@@ -155,3 +155,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e977ee4247265044d893ae80b6bf8b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GrapeLandSplatter
+  stunDuration: 0.8
