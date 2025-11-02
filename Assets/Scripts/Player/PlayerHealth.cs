@@ -46,6 +46,11 @@ public class PlayerHealth : Singleton<PlayerHealth>
                 // Only take damage if enemy doesn't have NonDamagingEnemy component
                 TakeDamage(1, other.transform);
             }
+            else
+            {
+                // NonDamagingEnemy: apply knockback but no damage
+                ApplyKnockbackOnly(other.transform);
+            }
         }
     }
     
@@ -63,7 +68,11 @@ public class PlayerHealth : Singleton<PlayerHealth>
                 // Only take damage if enemy doesn't have NonDamagingEnemy component
                 TakeDamage(1, other.transform);
             }
-            // If has NonDamagingEnemy, do nothing (no damage, no knockback)
+            else
+            {
+                // NonDamagingEnemy: apply knockback but no damage
+                ApplyKnockbackOnly(other.transform);
+            }
         }
     }
     public void HealPlayer()
@@ -110,12 +119,30 @@ public class PlayerHealth : Singleton<PlayerHealth>
         yield return new WaitForSeconds(damageRecoveryTime);
         canTakeDamage = true;
     }
+
+    private void ApplyKnockbackOnly(Transform hitTransform)
+    {
+        if (!canTakeDamage) { return; }
+
+        // Apply knockback and visual effects but no damage
+        knockback.GetKnockedBack(hitTransform, knockBackThrustAmount);
+        StartCoroutine(flash.FlashRoutine());
+        canTakeDamage = false;
+        StartCoroutine(DamageRecoveryRoutine());
+    }
+
     private void UpdateHealthSlider() {
         if (healthSlider == null) {
-            healthSlider = GameObject.Find(HEALTH_SLIDER_TEXT).GetComponent<Slider>();
+            GameObject sliderObject = GameObject.Find(HEALTH_SLIDER_TEXT);
+            if (sliderObject != null) {
+                healthSlider = sliderObject.GetComponent<Slider>();
+            }
         }
 
-        healthSlider.maxValue = maxHealth;
-        healthSlider.value = currentHealth;
+        // Only update slider if it exists
+        if (healthSlider != null) {
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = currentHealth;
+        }
     }
 }

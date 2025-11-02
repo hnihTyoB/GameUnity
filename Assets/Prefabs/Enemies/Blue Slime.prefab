@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 7709666766450314765}
   - component: {fileID: 5009673197074616720}
   - component: {fileID: 4105429051572679116}
+  - component: {fileID: 8888888888888888888}
   m_Layer: 0
   m_Name: Blue Slime
   m_TagString: Untagged
@@ -272,3 +273,15 @@ MonoBehaviour:
   goldCoin: {fileID: 0}
   battery: {fileID: 5324252162424979328, guid: c29eef891bda8e24daf546b19699ba3d, type: 3}
   staminaGlobe: {fileID: 3915329945633383826, guid: 11dcebb4360d90a4289a92e228cb814d, type: 3}
+--- !u!114 &8888888888888888888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7731043112639989783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1699bbbf07da4191ae551dd4977cc601, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier:
