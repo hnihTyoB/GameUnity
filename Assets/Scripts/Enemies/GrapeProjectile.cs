@@ -8,13 +8,18 @@ public class GrapeProjectile : MonoBehaviour
     [SerializeField] private float heightY = 3f;
     [SerializeField] private GameObject grapeProjectileShadow;
     [SerializeField] private GameObject splatterPrefab;
+    [SerializeField] private float playerTargetOffsetY = -0.5f; // Adjust this to change where projectile aims
 
     private void Start()
     {
         GameObject grapeShadow =
         Instantiate(grapeProjectileShadow, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
 
+        // Get player position and adjust aim position with offset
         Vector3 playerPos = PlayerController.Instance.transform.position;
+        // Apply Y offset to adjust where projectile aims (negative = lower, positive = higher)
+        playerPos += new Vector3(0, playerTargetOffsetY, 0);
+        
         Vector3 grapeShadowStartPosition = grapeShadow.transform.position;
 
         StartCoroutine(ProjectileCurveRoutine(transform.position, playerPos));

@@ -196,3 +196,4 @@ MonoBehaviour:
   heightY: 5.5
   grapeProjectileShadow: {fileID: 7228038065657917163, guid: 831ba4624269eb1419824b02ce9155fc, type: 3}
   splatterPrefab: {fileID: 3254469375066705148, guid: b86153a955ec36d40bf384de4d12aec3, type: 3}
+  playerTargetOffsetY: -0.5
