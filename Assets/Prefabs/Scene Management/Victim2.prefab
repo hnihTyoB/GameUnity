@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 1234567890987654321}
   - component: {fileID: 1944587677153995989}
   m_Layer: 0
-  m_Name: Victim
+  m_Name: Victim2
   m_TagString: Victim
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -490,7 +490,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -75224854, guid: 478a100d121726e43b8030f7be703933, type: 3}
+  m_Sprite: {fileID: 3816972917940477855, guid: 37962eabdd11ae446ba6b72e1b7971ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -538,7 +538,7 @@ Animator:
   m_GameObject: {fileID: 8569663956554290265}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c4caf944f35cec74baa4846532eb2f22, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7854cfaf16c2b8843a5d7c1c77d76dc8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
