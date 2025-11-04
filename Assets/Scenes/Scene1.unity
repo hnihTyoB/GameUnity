@@ -4077,6 +4077,67 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &44816901
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 44816903}
+  - component: {fileID: 44816902}
+  m_Layer: 0
+  m_Name: Shadow Spawn Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &44816902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44816901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08b874debfc7ce0418876cf9d41d3890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShadowSpawnManager
+  shadowGhost1Prefab: {fileID: 1240774364}
+  shadowGhost2Prefab: {fileID: 1549363681}
+  shadowGhost3Prefab: {fileID: 1476270027}
+  maxShadowsInScene: 10
+  spawnInterval: 15
+  initialSpawnDelay: 5
+  autoSpawn: 1
+  shadowGhost1Weight: 30
+  shadowGhost2Weight: 60
+  shadowGhost3Weight: 10
+  spawnZones:
+  - {fileID: 288259822}
+  - {fileID: 449405656}
+  - {fileID: 266114227}
+  - {fileID: 1408964411}
+  - {fileID: 1242115755}
+  showDebugLogs: 1
+--- !u!4 &44816903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44816901}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216065388}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &47468099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4444,6 +4505,108 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8106189968497574061, guid: 09af8fbf5f732174d8188cfe2fa60a1c, type: 3}
   m_PrefabInstance: {fileID: 251576815}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &266114225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 266114226}
+  - component: {fileID: 266114227}
+  m_Layer: 0
+  m_Name: Shadow Spawn Zone 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &266114226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266114225}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 20.6558, y: -9.44379, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216065388}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &266114227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266114225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf40a4560f414144fb1a2ca726ba9a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShadowSpawnZone
+  zoneSize: {x: 10, y: 10}
+  gizmoColor: {r: 0.5, g: 0, b: 0.5, a: 0.3}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1536
+  minDistanceFromPlayer: 5
+  spawnCheckRadius: 0.5
+--- !u!1 &288259821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 288259823}
+  - component: {fileID: 288259822}
+  m_Layer: 0
+  m_Name: Shadow Spawn Zone 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &288259822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288259821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf40a4560f414144fb1a2ca726ba9a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShadowSpawnZone
+  zoneSize: {x: 10, y: 10}
+  gizmoColor: {r: 0.5, g: 0, b: 0.5, a: 0.3}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1536
+  minDistanceFromPlayer: 5
+  spawnCheckRadius: 0.5
+--- !u!4 &288259823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288259821}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.1558, y: -0.44379, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216065388}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &366222998
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4754,6 +4917,57 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3442346258230719582, guid: c181afba38783b9458a973b3a97b1da7, type: 3}
   m_PrefabInstance: {fileID: 439340804}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &449405654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 449405655}
+  - component: {fileID: 449405656}
+  m_Layer: 0
+  m_Name: Shadow Spawn Zone 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &449405655
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449405654}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 20.6558, y: 7.55621, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216065388}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &449405656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 449405654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf40a4560f414144fb1a2ca726ba9a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShadowSpawnZone
+  zoneSize: {x: 10, y: 10}
+  gizmoColor: {r: 0.5, g: 0, b: 0.5, a: 0.3}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1536
+  minDistanceFromPlayer: 5
+  spawnCheckRadius: 0.5
 --- !u!1001 &473415572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5171,11 +5385,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 5f9536889d81aec47b5435a563d25bd9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.4000654
+      value: 12.69
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 5f9536889d81aec47b5435a563d25bd9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.882677
+      value: -5.28
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 5f9536889d81aec47b5435a563d25bd9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6329,7 +6543,7 @@ GameObject:
   - component: {fileID: 1150037434}
   - component: {fileID: 1150037433}
   - component: {fileID: 1150037436}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15868,11 +16082,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 45847831d42f4a4ba0c98263b8cb5366, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.19
+      value: -4.71
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 45847831d42f4a4ba0c98263b8cb5366, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.04
+      value: 10.07
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 45847831d42f4a4ba0c98263b8cb5366, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16035,6 +16249,43 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7430134789605278867, guid: 8fe57feaa4c4e564382adce128be8109, type: 3}
   m_PrefabInstance: {fileID: 1205735306}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1216065387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1216065388}
+  m_Layer: 0
+  m_Name: Shadow Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1216065388
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216065387}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.6558, y: 0.44379, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 288259823}
+  - {fileID: 449405655}
+  - {fileID: 266114226}
+  - {fileID: 1408964410}
+  - {fileID: 1242115754}
+  - {fileID: 44816903}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1221921443
 GameObject:
   m_ObjectHideFlags: 0
@@ -20057,6 +20308,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parallaxOffset: -0.25
+--- !u!1 &1240774364 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5059053435867829122, guid: 45847831d42f4a4ba0c98263b8cb5366, type: 3}
+  m_PrefabInstance: {fileID: 1194365661}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1242115753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1242115754}
+  - component: {fileID: 1242115755}
+  m_Layer: 0
+  m_Name: Shadow Spawn Zone 5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1242115754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242115753}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.3442, y: 7.55621, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216065388}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1242115755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242115753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf40a4560f414144fb1a2ca726ba9a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShadowSpawnZone
+  zoneSize: {x: 10, y: 10}
+  gizmoColor: {r: 0.5, g: 0, b: 0.5, a: 0.3}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1536
+  minDistanceFromPlayer: 5
+  spawnCheckRadius: 0.5
 --- !u!1001 &1253465717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20672,6 +20979,57 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd551337f7b0dad44a90c75c7e06ba85, type: 3}
+--- !u!1 &1408964409
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1408964410}
+  - component: {fileID: 1408964411}
+  m_Layer: 0
+  m_Name: Shadow Spawn Zone 4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1408964410
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408964409}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.3442, y: -9.44379, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216065388}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1408964411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408964409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf40a4560f414144fb1a2ca726ba9a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShadowSpawnZone
+  zoneSize: {x: 10, y: 10}
+  gizmoColor: {r: 0.5, g: 0, b: 0.5, a: 0.3}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1536
+  minDistanceFromPlayer: 5
+  spawnCheckRadius: 0.5
 --- !u!1001 &1412639821
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20857,6 +21215,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3442346258230719582, guid: e9c467754bb038649a7f30c0effaf608, type: 3}
   m_PrefabInstance: {fileID: 1440739619}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1476270027 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5059053435867829122, guid: 5f9536889d81aec47b5435a563d25bd9, type: 3}
+  m_PrefabInstance: {fileID: 630513435}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1495043651
 GameObject:
@@ -21049,6 +21412,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2217388800643175603, guid: d9008a2b00e727b469de0ca6b76a8497, type: 3}
   m_PrefabInstance: {fileID: 1516189909}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1549363681 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5059053435867829122, guid: 4ae510f420e0a474d8bff8e17aa76250, type: 3}
+  m_PrefabInstance: {fileID: 1824029221}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1568632678
 PrefabInstance:
@@ -21793,11 +22161,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7430134789605278867, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.26
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 7430134789605278867, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.85
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7430134789605278867, guid: 402a88a0748014a4f9def6537b8e936e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -21960,11 +22328,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 4ae510f420e0a474d8bff8e17aa76250, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.97
+      value: -11.09
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 4ae510f420e0a474d8bff8e17aa76250, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.08
+      value: -7.26
       objectReference: {fileID: 0}
     - target: {fileID: 8807202352807883753, guid: 4ae510f420e0a474d8bff8e17aa76250, type: 3}
       propertyPath: m_LocalPosition.z
@@ -43387,3 +43755,4 @@ SceneRoots:
   - {fileID: 1617266210}
   - {fileID: 1781878757}
   - {fileID: 1221921445}
+  - {fileID: 1216065388}
