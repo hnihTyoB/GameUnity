@@ -39,34 +39,62 @@ public class PlayerHealth : Singleton<PlayerHealth>
 
         if (enemy)
         {
+            // Check if enemy is Shadow Ghost (auto-detect via script components)
+            bool isShadow = other.gameObject.GetComponent<ShadowGhost>() != null ||
+                           other.gameObject.GetComponent<ShadowGhost2>() != null ||
+                           other.gameObject.GetComponent<ShadowGhost3>() != null;
+            
+            if (isShadow)
+            {
+                // Shadow: no damage, no knockback - chỉ slow effect
+                return;
+            }
+            
             // Check if enemy is non-damaging (for non-violent game design)
             NonDamagingEnemy nonDamaging = other.gameObject.GetComponent<NonDamagingEnemy>();
             if (nonDamaging == null)
             {
-                // Only take damage if enemy doesn't have NonDamagingEnemy component
+                // Normal enemy: damage + knockback
                 TakeDamage(1, other.transform);
             }
-            // else: NonDamagingEnemy (Shadow Ghost) - no damage, no knockback
-            // Shadow Ghost handles its own slow effect in ShadowGhost.cs
+            else
+            {
+                // NonDamagingEnemy (not Shadow): no damage, but HAS knockback
+                ApplyKnockbackOnly(other.transform);
+            }
         }
     }
     
     private void OnTriggerStay2D(Collider2D other)
     {
-        // Handle trigger-based enemies (like Shadow Ghost)
+        // Handle trigger-based enemies
         EnemyAI enemy = other.gameObject.GetComponent<EnemyAI>();
 
         if (enemy)
         {
+            // Check if enemy is Shadow Ghost (auto-detect via script components)
+            bool isShadow = other.gameObject.GetComponent<ShadowGhost>() != null ||
+                           other.gameObject.GetComponent<ShadowGhost2>() != null ||
+                           other.gameObject.GetComponent<ShadowGhost3>() != null;
+            
+            if (isShadow)
+            {
+                // Shadow: no damage, no knockback - chỉ slow effect
+                return;
+            }
+            
             // Check if enemy is non-damaging
             NonDamagingEnemy nonDamaging = other.gameObject.GetComponent<NonDamagingEnemy>();
             if (nonDamaging == null)
             {
-                // Only take damage if enemy doesn't have NonDamagingEnemy component
+                // Normal enemy: damage + knockback
                 TakeDamage(1, other.transform);
             }
-            // else: NonDamagingEnemy (Shadow Ghost) - no damage, no knockback
-            // Shadow Ghost handles its own slow effect in ShadowGhost.cs
+            else
+            {
+                // NonDamagingEnemy (not Shadow): no damage, but HAS knockback
+                ApplyKnockbackOnly(other.transform);
+            }
         }
     }
     public void HealPlayer()
@@ -114,10 +142,9 @@ public class PlayerHealth : Singleton<PlayerHealth>
         canTakeDamage = true;
     }
 
-    // REMOVED: ApplyKnockbackOnly() is no longer used
-    // Shadow Ghosts (NonDamagingEnemy) handle their own slow effect without knockback
-    // Keep this commented in case needed for other mechanics in the future
-    /*
+    /// <summary>
+    /// Apply knockback without damage (for NonDamagingEnemy that are not Shadow)
+    /// </summary>
     private void ApplyKnockbackOnly(Transform hitTransform)
     {
         if (!canTakeDamage) { return; }
@@ -128,7 +155,6 @@ public class PlayerHealth : Singleton<PlayerHealth>
         canTakeDamage = false;
         StartCoroutine(DamageRecoveryRoutine());
     }
-    */
 
     private void UpdateHealthSlider() {
         if (healthSlider == null) {
