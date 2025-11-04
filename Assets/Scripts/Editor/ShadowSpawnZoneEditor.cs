@@ -21,18 +21,49 @@ public class ShadowSpawnZoneEditor : Editor
         EditorGUILayout.Space(10);
         EditorGUILayout.LabelField("Zone Tools", EditorStyles.boldLabel);
         
+        // Validate Setup button (QUAN TRỌNG!)
+        GUI.backgroundColor = Color.yellow;
+        if (GUILayout.Button("✓ Validate Zone Setup", GUILayout.Height(35)))
+        {
+            string errorMessage;
+            bool isValid = zone.ValidateSetup(out errorMessage);
+            
+            Debug.Log(errorMessage);
+            
+            if (isValid)
+            {
+                EditorUtility.DisplayDialog("Setup Validation", errorMessage, "OK");
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Setup Issues Found!", errorMessage, "Fix It");
+            }
+        }
+        GUI.backgroundColor = Color.white;
+        
+        EditorGUILayout.Space(5);
+        
         // Test Valid Position button
         if (GUILayout.Button("Test Get Valid Position", GUILayout.Height(30)))
         {
             Vector2 validPos = zone.GetRandomValidPosition();
-            Debug.Log($"✓ Valid position: {validPos}");
             
-            // Highlight vị trí trong Scene view
-            if (SceneView.lastActiveSceneView != null)
+            if (validPos != Vector2.zero)
             {
-                SceneView.lastActiveSceneView.ShowNotification(
-                    new GUIContent($"Valid Position: {validPos}"), 
-                    2f);
+                Debug.Log($"✓ Valid position: {validPos}");
+                
+                // Highlight vị trí trong Scene view
+                if (SceneView.lastActiveSceneView != null)
+                {
+                    SceneView.lastActiveSceneView.ShowNotification(
+                        new GUIContent($"Valid Position: {validPos}"), 
+                        2f);
+                }
+            }
+            else
+            {
+                Debug.LogError("❌ Không tìm được vị trí hợp lệ!");
+                EditorUtility.DisplayDialog("Error", "Không tìm được vị trí hợp lệ! Check Obstacle Layer và zone position.", "OK");
             }
         }
         

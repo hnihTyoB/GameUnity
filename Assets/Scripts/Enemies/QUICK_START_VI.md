@@ -67,7 +67,7 @@
 | **Zone Size** | (10, 10) | Kích thước vùng spawn |
 | **Obstacle Layer** | Ground, Wall | Layers cần tránh |
 | **Min Distance From Player** | 5 | Không spawn gần player |
-| **Spawn Check Radius** | 0.5 | Bán kính check va chạm |
+| **Spawn Check Radius** | 1.0 - 1.5 | Bán kính check va chạm (shadow ~0.84) |
 
 ---
 
@@ -109,7 +109,8 @@
 ### ❌ Shadow spawn vào tường?
 1. ✅ Set Obstacle Layer trong Spawn Zone
 2. ✅ Đảm bảo tường có đúng Layer
-3. ✅ Tăng Spawn Check Radius
+3. ✅ **Tăng Spawn Check Radius lên 1.0 hoặc 1.5**
+4. ✅ Verify tường có Collider2D
 
 ### ❌ Shadow spawn quá gần player?
 1. ✅ Tăng Min Distance From Player

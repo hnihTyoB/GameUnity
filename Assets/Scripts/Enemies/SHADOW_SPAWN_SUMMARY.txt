@@ -76,7 +76,7 @@ Shadow Spawn Zone:
   • Zone Size: (10, 10)
   • Obstacle Layer: Ground, Wall, Obstacle
   • Min Distance From Player: 5
-  • Spawn Check Radius: 0.5
+  • Spawn Check Radius: 1.0 - 1.5 (shadow collider ~0.84)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

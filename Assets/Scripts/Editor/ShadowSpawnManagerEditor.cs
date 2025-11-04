@@ -78,6 +78,42 @@ public class ShadowSpawnManagerEditor : Editor
             EditorGUILayout.HelpBox("Runtime controls chỉ khả dụng khi đang Play mode.", MessageType.Info);
         }
         
+        // Validation Tools
+        EditorGUILayout.Space(10);
+        EditorGUILayout.LabelField("Validation", EditorStyles.boldLabel);
+        
+        GUI.backgroundColor = Color.cyan;
+        if (GUILayout.Button("Validate All Spawn Zones", GUILayout.Height(30)))
+        {
+            ShadowSpawnZone[] zones = FindObjectsOfType<ShadowSpawnZone>();
+            
+            if (zones.Length == 0)
+            {
+                EditorUtility.DisplayDialog("No Zones Found", "Không tìm thấy ShadowSpawnZone nào trong scene!", "OK");
+            }
+            else
+            {
+                Debug.Log($"=== Validating {zones.Length} Spawn Zones ===");
+                int validZones = 0;
+                int invalidZones = 0;
+                
+                foreach (ShadowSpawnZone zone in zones)
+                {
+                    string errorMessage;
+                    bool isValid = zone.ValidateSetup(out errorMessage);
+                    
+                    Debug.Log(errorMessage);
+                    
+                    if (isValid) validZones++;
+                    else invalidZones++;
+                }
+                
+                string summary = $"Validation Complete!\n\n✓ Valid Zones: {validZones}\n❌ Invalid Zones: {invalidZones}\n\nCheck Console for details.";
+                EditorUtility.DisplayDialog("Validation Results", summary, "OK");
+            }
+        }
+        GUI.backgroundColor = Color.white;
+        
         // Setup Guide
         EditorGUILayout.Space(10);
         EditorGUILayout.LabelField("Quick Setup Guide", EditorStyles.boldLabel);
@@ -87,7 +123,8 @@ public class ShadowSpawnManagerEditor : Editor
             "3. Adjust Shadow Type Weights\n" +
             "4. Tạo ShadowSpawnZone objects trong scene\n" +
             "5. Assign Spawn Zones hoặc để trống (auto find)\n" +
-            "6. Check Auto Spawn để tự động spawn", 
+            "6. Check Auto Spawn để tự động spawn\n" +
+            "7. ⚠️ CLICK 'Validate All Spawn Zones' để kiểm tra setup!", 
             MessageType.None);
     }
 }

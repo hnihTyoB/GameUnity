@@ -269,11 +269,17 @@ void CleanupDestroyedShadows()
 
 ## Troubleshooting Common Issues
 
-### Issue: Shadows spawn vào tường
+### Issue: Shadows spawn vào tường hoặc sát tường quá
+**Nguyên nhân:**
+- Spawn Check Radius quá nhỏ (< 1.0)
+- Shadow collider (~0.84 units) lớn hơn check radius
+- Tường chưa có Layer hoặc Collider
+
 **Solution:**
+- **Tăng Spawn Check Radius lên 1.0 hoặc 1.5** (quan trọng nhất!)
 - Kiểm tra Obstacle Layer mask trong ShadowSpawnZone
 - Đảm bảo tường có đúng layer
-- Tăng Spawn Check Radius
+- Verify tường có Collider2D component
 
 ### Issue: Không spawn được shadow nào
 **Solution:**

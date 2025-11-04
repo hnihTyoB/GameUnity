@@ -148,12 +148,36 @@ public class ShadowSpawnManager : MonoBehaviour
         // Lấy vị trí spawn hợp lệ
         Vector2 spawnPosition = randomZone.GetRandomValidPosition();
         
+        // KIỂM TRA: Nếu position == Vector2.zero, zone không tìm được vị trí hợp lệ
+        if (spawnPosition == Vector2.zero || spawnPosition.magnitude < 0.1f)
+        {
+            Debug.LogWarning($"ShadowSpawnManager: Zone '{randomZone.name}' không tìm được vị trí hợp lệ. SKIP spawn lần này.");
+            return null; // Không spawn, return null
+        }
+        
         // Chọn loại shadow dựa trên weights
         GameObject shadowPrefab = GetRandomShadowPrefab();
         
         if (shadowPrefab == null)
         {
             Debug.LogError("ShadowSpawnManager: Không có shadow prefab nào được assign!");
+            return null;
+        }
+        
+        // DOUBLE CHECK: Kiểm tra lại vị trí trước khi spawn (safety)
+        // Dùng chính Obstacle Layer và Spawn Check Radius từ zone
+        LayerMask obstacleLayer = randomZone.GetObstacleLayer();
+        float checkRadius = randomZone.GetSpawnCheckRadius();
+        
+        // Double check collision trước khi spawn
+        Collider2D blockingCollider = Physics2D.OverlapCircle(spawnPosition, checkRadius, obstacleLayer);
+        
+        if (blockingCollider != null)
+        {
+            if (showDebugLogs)
+            {
+                Debug.LogWarning($"ShadowSpawnManager: Vị trí không an toàn - có obstacle. Skip spawn.");
+            }
             return null;
         }
         
@@ -166,7 +190,7 @@ public class ShadowSpawnManager : MonoBehaviour
         
         if (showDebugLogs)
         {
-            Debug.Log($"ShadowSpawnManager: Spawned {spawnedShadow.name} tại {spawnPosition} (Zone: {randomZone.name}). Active shadows: {activeShadows.Count}/{maxShadowsInScene}");
+            Debug.Log($"✓ ShadowSpawnManager: Spawned {spawnedShadow.name} tại {spawnPosition} (Zone: {randomZone.name}). Active shadows: {activeShadows.Count}/{maxShadowsInScene}");
         }
         
         return spawnedShadow;
@@ -289,6 +313,28 @@ public class ShadowSpawnManager : MonoBehaviour
     {
         // Cleanup khi manager bị destroy
         StopSpawning();
+    }
+    
+    /// <summary>
+    /// Helper method để convert LayerMask thành tên layers (for debug)
+    /// </summary>
+    private string GetLayerMaskNames(LayerMask layerMask)
+    {
+        List<string> layerNames = new List<string>();
+        
+        for (int i = 0; i < 32; i++)
+        {
+            if ((layerMask.value & (1 << i)) != 0)
+            {
+                string layerName = LayerMask.LayerToName(i);
+                if (!string.IsNullOrEmpty(layerName))
+                {
+                    layerNames.Add(layerName);
+                }
+            }
+        }
+        
+        return layerNames.Count > 0 ? string.Join(", ", layerNames) : "NONE";
     }
 }
 

@@ -46,11 +46,8 @@ public class PlayerHealth : Singleton<PlayerHealth>
                 // Only take damage if enemy doesn't have NonDamagingEnemy component
                 TakeDamage(1, other.transform);
             }
-            else
-            {
-                // NonDamagingEnemy: apply knockback but no damage
-                ApplyKnockbackOnly(other.transform);
-            }
+            // else: NonDamagingEnemy (Shadow Ghost) - no damage, no knockback
+            // Shadow Ghost handles its own slow effect in ShadowGhost.cs
         }
     }
     
@@ -68,11 +65,8 @@ public class PlayerHealth : Singleton<PlayerHealth>
                 // Only take damage if enemy doesn't have NonDamagingEnemy component
                 TakeDamage(1, other.transform);
             }
-            else
-            {
-                // NonDamagingEnemy: apply knockback but no damage
-                ApplyKnockbackOnly(other.transform);
-            }
+            // else: NonDamagingEnemy (Shadow Ghost) - no damage, no knockback
+            // Shadow Ghost handles its own slow effect in ShadowGhost.cs
         }
     }
     public void HealPlayer()
@@ -120,6 +114,10 @@ public class PlayerHealth : Singleton<PlayerHealth>
         canTakeDamage = true;
     }
 
+    // REMOVED: ApplyKnockbackOnly() is no longer used
+    // Shadow Ghosts (NonDamagingEnemy) handle their own slow effect without knockback
+    // Keep this commented in case needed for other mechanics in the future
+    /*
     private void ApplyKnockbackOnly(Transform hitTransform)
     {
         if (!canTakeDamage) { return; }
@@ -130,6 +128,7 @@ public class PlayerHealth : Singleton<PlayerHealth>
         canTakeDamage = false;
         StartCoroutine(DamageRecoveryRoutine());
     }
+    */
 
     private void UpdateHealthSlider() {
         if (healthSlider == null) {

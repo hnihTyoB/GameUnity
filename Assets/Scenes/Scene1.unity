@@ -4555,7 +4555,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   minDistanceFromPlayer: 5
-  spawnCheckRadius: 0.5
+  spawnCheckRadius: 1
 --- !u!1 &288259821
 GameObject:
   m_ObjectHideFlags: 0
@@ -4591,7 +4591,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   minDistanceFromPlayer: 5
-  spawnCheckRadius: 0.5
+  spawnCheckRadius: 1
 --- !u!4 &288259823
 Transform:
   m_ObjectHideFlags: 0
@@ -4967,7 +4967,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   minDistanceFromPlayer: 5
-  spawnCheckRadius: 0.5
+  spawnCheckRadius: 1
 --- !u!1001 &473415572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20363,7 +20363,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   minDistanceFromPlayer: 5
-  spawnCheckRadius: 0.5
+  spawnCheckRadius: 1
 --- !u!1001 &1253465717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21029,7 +21029,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   minDistanceFromPlayer: 5
-  spawnCheckRadius: 0.5
+  spawnCheckRadius: 1
 --- !u!1001 &1412639821
 PrefabInstance:
   m_ObjectHideFlags: 0

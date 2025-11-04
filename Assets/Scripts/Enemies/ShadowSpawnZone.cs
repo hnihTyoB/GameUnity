@@ -13,14 +13,14 @@ public class ShadowSpawnZone : MonoBehaviour
     [Header("Spawn Restrictions")]
     [SerializeField] private LayerMask obstacleLayer; // Layers to avoid (walls, obstacles)
     [SerializeField] private float minDistanceFromPlayer = 5f; // Khoảng cách tối thiểu từ player
-    [SerializeField] private float spawnCheckRadius = 0.5f; // Bán kính kiểm tra vị trí spawn
+    [SerializeField] private float spawnCheckRadius = 1.0f; // Bán kính kiểm tra vị trí spawn (shadow collider ~0.84, nên dùng 1.0-1.5)
     
     /// <summary>
     /// Lấy một vị trí ngẫu nhiên hợp lệ trong zone
     /// </summary>
     public Vector2 GetRandomValidPosition()
     {
-        int maxAttempts = 30; // Số lần thử tối đa để tránh vòng lặp vô hạn
+        int maxAttempts = 50; // Tăng số lần thử lên 50
         
         for (int i = 0; i < maxAttempts; i++)
         {
@@ -32,9 +32,9 @@ public class ShadowSpawnZone : MonoBehaviour
             }
         }
         
-        // Nếu không tìm được vị trí hợp lệ, trả về center của zone (fallback)
-        Debug.LogWarning($"ShadowSpawnZone '{name}': Không tìm được vị trí hợp lệ sau {maxAttempts} lần thử. Sử dụng center.");
-        return (Vector2)transform.position;
+        // Nếu không tìm được vị trí hợp lệ, trả về Vector2.zero và skip spawn
+        Debug.LogWarning($"ShadowSpawnZone '{name}': Không tìm được vị trí hợp lệ. Zone có thể quá chật.");
+        return Vector2.zero;
     }
     
     /// <summary>
@@ -102,6 +102,7 @@ public class ShadowSpawnZone : MonoBehaviour
         // Vẽ viền
         Gizmos.color = new Color(gizmoColor.r, gizmoColor.g, gizmoColor.b, 1f);
         Gizmos.DrawWireCube(transform.position, new Vector3(zoneSize.x, zoneSize.y, 0.1f));
+        
     }
     
     /// <summary>
@@ -130,6 +131,71 @@ public class ShadowSpawnZone : MonoBehaviour
     public float GetMinDistanceFromPlayer()
     {
         return minDistanceFromPlayer;
+    }
+    
+    public LayerMask GetObstacleLayer()
+    {
+        return obstacleLayer;
+    }
+    
+    public float GetSpawnCheckRadius()
+    {
+        return spawnCheckRadius;
+    }
+    
+    /// <summary>
+    /// Validate zone setup (gọi từ Editor hoặc runtime để check)
+    /// </summary>
+    public bool ValidateSetup(out string errorMessage)
+    {
+        errorMessage = "";
+        
+        // Check 1: Obstacle Layer có được set không
+        if (obstacleLayer.value == 0)
+        {
+            errorMessage = $"⚠️ Zone '{name}': Obstacle Layer chưa được set! Hãy chọn layers cần tránh (Ground, Wall, v.v.)";
+            return false;
+        }
+        
+        // Check 2: Zone size hợp lý không
+        if (zoneSize.x < 2f || zoneSize.y < 2f)
+        {
+            errorMessage = $"⚠️ Zone '{name}': Zone size quá nhỏ ({zoneSize}). Nên ít nhất 5x5.";
+            return false;
+        }
+        
+        // Check 3: Spawn check radius hợp lý không
+        if (spawnCheckRadius < 0.8f)
+        {
+            errorMessage = $"⚠️ Zone '{name}': Spawn Check Radius quá nhỏ ({spawnCheckRadius}). Shadow collider ~0.84, nên dùng 1.0-1.5.";
+            return false;
+        }
+        
+        // Check 4: Test vài vị trí xem có tìm được không
+        int validPositions = 0;
+        for (int i = 0; i < 10; i++)
+        {
+            Vector2 testPos = GetRandomPositionInZone();
+            if (IsPositionValid(testPos))
+            {
+                validPositions++;
+            }
+        }
+        
+        if (validPositions == 0)
+        {
+            errorMessage = $"❌ Zone '{name}': KHÔNG tìm được vị trí hợp lệ nào! Zone có thể bị block hoàn toàn hoặc setup sai.";
+            return false;
+        }
+        
+        if (validPositions < 3)
+        {
+            errorMessage = $"⚠️ Zone '{name}': Chỉ tìm được {validPositions}/10 vị trí hợp lệ. Zone có thể quá chật.";
+            return false;
+        }
+        
+        errorMessage = $"✓ Zone '{name}': Setup OK! Tìm được {validPositions}/10 vị trí hợp lệ.";
+        return true;
     }
 }
 
