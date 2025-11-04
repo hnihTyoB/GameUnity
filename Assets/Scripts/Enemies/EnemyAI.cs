@@ -69,7 +69,7 @@ public class EnemyAI : MonoBehaviour
             float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
             if (distanceToTarget < attackRange)
             {
-                Debug.Log($"{gameObject.name}: Roaming → Attacking. Distance={distanceToTarget:F2}");
+                // Debug.Log($"{gameObject.name}: Roaming → Attacking. Distance={distanceToTarget:F2}");
                 state = State.Attacking;
             }
         }
@@ -84,7 +84,7 @@ public class EnemyAI : MonoBehaviour
         
         if (currentTarget == null || distanceToTarget > attackRange)
         {
-            Debug.Log($"{gameObject.name}: Target out of range ({distanceToTarget:F2} > {attackRange}). Switching to Roaming.");
+            // Debug.Log($"{gameObject.name}: Target out of range ({distanceToTarget:F2} > {attackRange}). Switching to Roaming.");
             
             // Cancel any ongoing attack animation
             Animator animator = GetComponent<Animator>();
@@ -136,7 +136,7 @@ public class EnemyAI : MonoBehaviour
             // Only attack if target is STILL in range
             if (currentDistance <= attackRange)
             {
-                Debug.Log($"{gameObject.name}: Attacking! Distance={currentDistance:F2}");
+                // Debug.Log($"{gameObject.name}: Attacking! Distance={currentDistance:F2}");
                 canAttack = false;
                 LockTarget(); // Lock target when starting attack
                 (enemyType as IEnemy).Attack();
@@ -149,7 +149,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                Debug.Log($"{gameObject.name}: Attack cancelled - target moved out of range ({currentDistance:F2} > {attackRange})");
+                // Debug.Log($"{gameObject.name}: Attack cancelled - target moved out of range ({currentDistance:F2} > {attackRange})");
             }
         }
     }

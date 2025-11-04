@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class ShadowGhost3 : MonoBehaviour, IEnemy
 {
+    [Header("Movement Settings")]
+    [SerializeField] private float normalSpeed = 2.5f; // Faster than other shadows
+    
     [Header("Attack Settings")]
-    [SerializeField] private float dashSpeed = 4.5f; // Same as Shadow Ghost 1 & 2
+    [SerializeField] private float dashSpeed = 4.5f;
     [SerializeField] private float dashDuration = 1.0f;
-    [SerializeField] private float visionReductionRange = 1.5f; // Range to apply vision debuff
+    [SerializeField] private float visionReductionRange = 1.5f;
     
     [Header("Visual Effects")]
     [SerializeField] private ParticleSystem smokeEffect;
@@ -42,6 +45,12 @@ public class ShadowGhost3 : MonoBehaviour, IEnemy
 
     private void Start()
     {
+        // SET NORMAL SPEED vào EnemyPathFinding (CRITICAL!)
+        if (enemyPathfinding != null)
+        {
+            enemyPathfinding.SetSpeed(normalSpeed);
+        }
+        
         // Only spawn smoke once
         if (smokeEffect != null && spawnedSmoke == null)
         {

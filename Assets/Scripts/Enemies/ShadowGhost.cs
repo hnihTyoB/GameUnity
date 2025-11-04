@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class ShadowGhost : MonoBehaviour, IEnemy
 {
+    [Header("Movement Settings")]
+    [SerializeField] private float normalSpeed = 2f;
+    
     [Header("Attack Settings")]
-    [SerializeField] private float dashSpeed = 4.5f; // Giảm để player có thể thoát
-    [SerializeField] private float dashDuration = 1.0f; // Giảm thời gian dash
-    [SerializeField] private float slowEffectRange = 1.5f; // Range áp dụng slow
+    [SerializeField] private float dashSpeed = 4.5f;
+    [SerializeField] private float dashDuration = 1.0f;
+    [SerializeField] private float slowEffectRange = 1.5f;
     
     [Header("Visual Effects")]
     [SerializeField] private ParticleSystem smokeEffect;
@@ -42,6 +45,12 @@ public class ShadowGhost : MonoBehaviour, IEnemy
 
     private void Start()
     {
+        // SET NORMAL SPEED vào EnemyPathFinding (CRITICAL!)
+        if (enemyPathfinding != null)
+        {
+            enemyPathfinding.SetSpeed(normalSpeed);
+        }
+        
         // Only spawn smoke once
         if (smokeEffect != null && spawnedSmoke == null)
         {
@@ -53,13 +62,13 @@ public class ShadowGhost : MonoBehaviour, IEnemy
             // Configure smoke to be subtle
             var main = spawnedSmoke.main;
             main.loop = true;
-            main.startSize = 0.3f; // Nhỏ hơn
-            main.startSpeed = 0.5f; // Chậm hơn
-            main.maxParticles = 20; // Giới hạn số particles
+            main.startSize = 0.3f;
+            main.startSpeed = 0.5f;
+            main.maxParticles = 20;
             
             // Reduce emission rate
             var emission = spawnedSmoke.emission;
-            emission.rateOverTime = 5f; // Chỉ 5 particles/giây
+            emission.rateOverTime = 5f;
             
             spawnedSmoke.Play();
         }

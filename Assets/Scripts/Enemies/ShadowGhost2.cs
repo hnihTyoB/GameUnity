@@ -56,6 +56,12 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     
     private void Start()
     {
+        // SET NORMAL SPEED vào EnemyPathFinding (CRITICAL!)
+        if (enemyPathfinding != null)
+        {
+            enemyPathfinding.SetSpeed(normalSpeed);
+        }
+        
         // Spawn smoke effect
         if (smokeEffect != null && spawnedSmoke == null)
         {
