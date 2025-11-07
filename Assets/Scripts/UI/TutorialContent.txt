@@ -1,0 +1,41 @@
+=== LIGHT OF KINDNESS ===
+Hướng Dẫn Chơi Game
+
+MỤC TIÊU:
+• Giải cứu các nạn nhân bị bắt giữ
+• Tiêu diệt quái vật và sống sót
+• Thu thập vàng và vật phẩm
+
+ĐIỀU KHIỂN:
+• WASD hoặc Phím mũi tên: Di chuyển
+• Chuột: Nhắm và tấn công
+• Số 1-3: Chọn vũ khí/công cụ
+  - 1: Đèn pin (chiếu sáng)
+  - 2: Khiên (phòng thủ)
+  - 3: Vũ khí tấn công
+• Space: Lăn né (dash)
+
+VŨ KHÍ & CÔNG CỤ:
+• Đèn Pin: Chiếu sáng khu vực tối
+• Khiên: Kích hoạt để bảo vệ
+• Kiếm, Cung, Gậy: Tấn công kẻ địch
+
+CHỈ SỐ:
+• Máu (Trái tim): Sinh lực của bạn
+• Stamina (Màu xanh): Năng lượng
+• Pin (Battery): Năng lượng đèn pin
+
+VẬT PHẨM:
+• Trái tim: Hồi máu
+• Đồng xu vàng: Thu thập điểm
+• Vũ khí: Nâng cấp sức mạnh
+
+MẸO CHƠI:
+✓ Dùng đèn pin để thấy rõ trong bóng tối
+✓ Khiên giúp bạn chặn đòn tấn công
+✓ Né tránh khi hết stamina
+✓ Thu thập vàng để nâng cấp
+✓ Giải cứu nạn nhân để hoàn thành màn
+
+Chúc bạn may mắn!
+
