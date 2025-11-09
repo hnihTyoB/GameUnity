@@ -66,8 +66,15 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator LoadGameScene()
     {
-        // Có thể thêm fade effect ở đây nếu cần
-        yield return new WaitForSeconds(0.1f);
+        // Fade to black trước khi chuyển scene
+        if (UIFade.Instance != null)
+        {
+            UIFade.Instance.FadeToBlack();
+        }
+        
+        // Đợi fade animation hoàn thành
+        yield return new WaitForSeconds(1f);
+        
         SceneManager.LoadScene(firstSceneName);
     }
 
