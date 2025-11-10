@@ -6,7 +6,7 @@ public class GrapeLandSplatter : MonoBehaviour
 {
     [SerializeField] private float stunDuration = 0.8f; // Stun duration in seconds
     private SpriteFade spriteFade;
-    private bool hasHitPlayer = false; // Prevent multiple hits
+    private bool hasHitTarget = false; // Prevent multiple hits
 
     private void Awake() {
         spriteFade = GetComponent<SpriteFade>();
@@ -19,18 +19,31 @@ public class GrapeLandSplatter : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        // Only hit player once
-        if (hasHitPlayer) { return; }
+        // Only hit target once
+        if (hasHitTarget) { return; }
         
+        // Check if hit player
         PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
         if (playerController != null)
         {
-            hasHitPlayer = true;
-            // Apply stun instead of damage
+            hasHitTarget = true;
+            // Apply stun to player
             playerController.ApplyStun(stunDuration);
             
-            // Optional: Add visual/audio feedback here
+            // Visual/audio feedback
             ScreenShakeManager.Instance?.ShakeScreen();
+            return;
+        }
+        
+        // Check if hit victim
+        Victim victim = other.gameObject.GetComponent<Victim>();
+        if (victim != null && !victim.IsRescued())
+        {
+            hasHitTarget = true;
+            // Apply slow to victim (victims don't have stun, only slow)
+            victim.ApplySlow();
+            
+            // No screen shake for victim hits (only player hits shake screen)
         }
     }
 

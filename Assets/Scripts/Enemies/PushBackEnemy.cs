@@ -15,23 +15,24 @@ public class PushBackEnemy : MonoBehaviour
     
     private void OnCollisionStay2D(Collision2D collision)
     {
-        // Check if colliding with player
-        if (collision.gameObject.CompareTag("Player") && Time.time >= lastPushBackTime + pushBackCooldown)
+        // Check if colliding with player or victim
+        if ((collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Victim")) 
+            && Time.time >= lastPushBackTime + pushBackCooldown)
         {
-            // Get player's Rigidbody2D
-            Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
+            // Get Rigidbody2D from player or victim
+            Rigidbody2D targetRb = collision.gameObject.GetComponent<Rigidbody2D>();
             
-            if (playerRb != null)
+            if (targetRb != null)
             {
                 // Calculate push direction (away from this enemy)
                 Vector2 pushDirection = (collision.transform.position - transform.position).normalized;
                 
-                // Apply force directly to player
-                playerRb.AddForce(pushDirection * pushBackForce, ForceMode2D.Impulse);
+                // Apply force directly to target
+                targetRb.AddForce(pushDirection * pushBackForce, ForceMode2D.Impulse);
                 
                 lastPushBackTime = Time.time;
                 
-                Debug.Log($"PushBackEnemy: Pushed player with force {pushBackForce}");
+                Debug.Log($"PushBackEnemy: Pushed {collision.gameObject.name} with force {pushBackForce}");
             }
         }
     }

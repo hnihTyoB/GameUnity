@@ -17,6 +17,11 @@ public class Shooter : MonoBehaviour, IEnemy
     [SerializeField] private bool oscillate;
 
     private bool isShooting = false;
+    private EnemyAI enemyAI;
+
+    private void Awake() {
+        enemyAI = GetComponent<EnemyAI>();
+    }
 
     private void OnValidate() {
         if (oscillate) { stagger = true; }
@@ -91,7 +96,19 @@ public class Shooter : MonoBehaviour, IEnemy
     }
     private void TargetConeOfInfluence(out float startAngle, out float currentAngle, out float angleStep, out float endAngle)
     {
-        Vector2 targetDirection = PlayerController.Instance.transform.position - transform.position;
+        // Get current target from EnemyAI (can be Player or Victim)
+        Transform currentTarget = enemyAI != null ? enemyAI.GetCurrentTarget() : null;
+        
+        // Fallback to Player if no target is set
+        if (currentTarget == null && PlayerController.Instance != null)
+        {
+            currentTarget = PlayerController.Instance.transform;
+        }
+        
+        Vector2 targetDirection = currentTarget != null ? 
+            (Vector2)(currentTarget.position - transform.position) : 
+            Vector2.right;
+            
         float targetAngle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
         startAngle = targetAngle;
         endAngle = targetAngle;

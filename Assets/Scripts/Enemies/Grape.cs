@@ -22,27 +22,35 @@ public class Grape : MonoBehaviour, IEnemy
     public void Attack() {
         myAnimator.SetTrigger(ATTACK_HASH);
 
-        if (transform.position.x - PlayerController.Instance.transform.position.x < 0) {
-            spriteRenderer.flipX = false;
-        } else {
-            spriteRenderer.flipX = true;
+        // Get current target from EnemyAI (can be Player or Victim)
+        Transform currentTarget = enemyAI.GetCurrentTarget();
+        if (currentTarget != null)
+        {
+            if (transform.position.x - currentTarget.position.x < 0) {
+                spriteRenderer.flipX = false;
+            } else {
+                spriteRenderer.flipX = true;
+            }
         }
     }
 
     public void SpawnProjectileAnimEvent() {
-        // Check if player is still in range before spawning projectile
-        if (PlayerController.Instance != null)
+        // Get current target from EnemyAI (can be Player or Victim)
+        Transform currentTarget = enemyAI.GetCurrentTarget();
+        
+        if (currentTarget != null)
         {
-            float distanceToPlayer = Vector2.Distance(transform.position, PlayerController.Instance.transform.position);
+            float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
             
-            if (distanceToPlayer <= maxAttackRange)
+            if (distanceToTarget <= maxAttackRange)
             {
-                Debug.Log($"{gameObject.name}: Spawning projectile. Distance={distanceToPlayer:F2}");
-                Instantiate(grapeProjectilePrefab, transform.position, Quaternion.identity);
-            }
-            else
-            {
-                Debug.Log($"{gameObject.name}: Projectile spawn CANCELLED - player too far ({distanceToPlayer:F2} > {maxAttackRange})");
+                // Spawn projectile and set its target
+                GameObject projectile = Instantiate(grapeProjectilePrefab, transform.position, Quaternion.identity);
+                GrapeProjectile grapeProj = projectile.GetComponent<GrapeProjectile>();
+                if (grapeProj != null)
+                {
+                    grapeProj.SetTarget(currentTarget.position);
+                }
             }
         }
     }

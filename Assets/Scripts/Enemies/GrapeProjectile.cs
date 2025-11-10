@@ -8,22 +8,51 @@ public class GrapeProjectile : MonoBehaviour
     [SerializeField] private float heightY = 3f;
     [SerializeField] private GameObject grapeProjectileShadow;
     [SerializeField] private GameObject splatterPrefab;
-    [SerializeField] private float playerTargetOffsetY = -0.5f; // Adjust this to change where projectile aims
+    [SerializeField] private float targetOffsetY = -0.5f; // Adjust this to change where projectile aims
+
+    private Vector3 targetPosition;
+    private bool hasTarget = false;
+
+    /// <summary>
+    /// Set target position for the projectile (called by Grape.cs)
+    /// </summary>
+    public void SetTarget(Vector3 target)
+    {
+        targetPosition = target;
+        hasTarget = true;
+    }
 
     private void Start()
     {
         GameObject grapeShadow =
         Instantiate(grapeProjectileShadow, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
 
-        // Get player position and adjust aim position with offset
-        Vector3 playerPos = PlayerController.Instance.transform.position;
+        // Use set target position, or fallback to player position if not set
+        Vector3 targetPos;
+        if (hasTarget)
+        {
+            targetPos = targetPosition;
+        }
+        else if (PlayerController.Instance != null)
+        {
+            // Fallback to player if no target was set (backward compatibility)
+            targetPos = PlayerController.Instance.transform.position;
+        }
+        else
+        {
+            // No valid target, destroy projectile
+            Destroy(grapeShadow);
+            Destroy(gameObject);
+            return;
+        }
+        
         // Apply Y offset to adjust where projectile aims (negative = lower, positive = higher)
-        playerPos += new Vector3(0, playerTargetOffsetY, 0);
+        targetPos += new Vector3(0, targetOffsetY, 0);
         
         Vector3 grapeShadowStartPosition = grapeShadow.transform.position;
 
-        StartCoroutine(ProjectileCurveRoutine(transform.position, playerPos));
-        StartCoroutine(MoveGrapeShadowRoutine(grapeShadow, grapeShadowStartPosition, playerPos));
+        StartCoroutine(ProjectileCurveRoutine(transform.position, targetPos));
+        StartCoroutine(MoveGrapeShadowRoutine(grapeShadow, grapeShadowStartPosition, targetPos));
     }
     private IEnumerator ProjectileCurveRoutine(Vector3 startPosition, Vector3 endPosition)
     {
