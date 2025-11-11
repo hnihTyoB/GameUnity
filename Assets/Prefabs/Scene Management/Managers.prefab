@@ -1,5 +1,55 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &376860764490003729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3716810164100226530}
+  - component: {fileID: 1350687151502007509}
+  m_Layer: 0
+  m_Name: SFX Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3716810164100226530
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376860764490003729}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8774908605815746164}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1350687151502007509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376860764490003729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8e4e39346f3f649b2b0f965b8ea1bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SFXManager
+  flashLightSound: {fileID: 8300000, guid: 628fe1f2b6a82d64e821745db07bf7e7, type: 3}
+  shieldSound: {fileID: 8300000, guid: 6a37c4ef7d0f58a44a3e6a8045013b5b, type: 3}
+  hitSound: {fileID: 8300000, guid: f1c145907264aec4c96f53d9e55c0d8c, type: 3}
+  flashLightSource: {fileID: 0}
+  shieldSource: {fileID: 0}
+  oneShotSource: {fileID: 0}
 --- !u!1 &1931866357255479772
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,6 +130,7 @@ Transform:
   - {fileID: 484322277640394138}
   - {fileID: 5863343642361567796}
   - {fileID: 7972999621697829943}
+  - {fileID: 3716810164100226530}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4980126201551259130

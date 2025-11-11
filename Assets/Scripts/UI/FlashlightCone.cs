@@ -107,7 +107,20 @@ public class FlashlightCone : MonoBehaviour, IWeapon
             myAnimator.SetTrigger(TOGGLE_HASH);
         }
         
-        // Play toggle sound
+        // Play/stop flashlight loop sound
+        if (SFXManager.Instance != null)
+        {
+            if (isLightOn)
+            {
+                SFXManager.Instance.PlayFlashlightSound();
+            }
+            else
+            {
+                SFXManager.Instance.StopFlashlightSound();
+            }
+        }
+        
+        // Play toggle sound (one-shot) if exists
         if (audioSource != null && toggleSound != null)
         {
             audioSource.PlayOneShot(toggleSound);
@@ -171,6 +184,12 @@ public class FlashlightCone : MonoBehaviour, IWeapon
         if (BatteryManager.Instance != null)
         {
             BatteryManager.Instance.StopBatteryDrain();
+        }
+        
+        // Stop flashlight sound when unequipped
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.StopFlashlightSound();
         }
         
         isLightOn = false;

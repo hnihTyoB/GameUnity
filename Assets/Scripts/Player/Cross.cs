@@ -39,6 +39,9 @@ public class Cross : MonoBehaviour, IWeapon
         weaponCollider.gameObject.SetActive(true);
         slashAnim = Instantiate(slashAnimPrefab, slashAnimSpawnPoint.position, Quaternion.identity);
         slashAnim.transform.parent = this.transform.parent;
+        
+        // Play hit sound
+        PlayHitSoundSafe();
     }
 
     public void DoneAttackingAnimEvent()
@@ -79,6 +82,39 @@ public class Cross : MonoBehaviour, IWeapon
         {
             ActiveWeapon.Instance.transform.rotation = Quaternion.Euler(0, 0, angle);
             weaponCollider.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
+    
+    /// <summary>
+    /// Safely play hit sound - creates SFXManager if it doesn't exist
+    /// </summary>
+    private void PlayHitSoundSafe()
+    {
+        // Try to get SFXManager instance
+        SFXManager sfxManager = SFXManager.Instance;
+        
+        // If not found, try to find in scene
+        if (sfxManager == null)
+        {
+            sfxManager = FindObjectOfType<SFXManager>();
+        }
+        
+        // If still not found, create one
+        if (sfxManager == null)
+        {
+            GameObject sfxManagerObj = new GameObject("SFX Manager (Auto-Created)");
+            sfxManager = sfxManagerObj.AddComponent<SFXManager>();
+            Debug.LogWarning("Cross: SFXManager not found! Created automatically. Please assign hit.wav in Inspector for proper setup.");
+        }
+        
+        // Play sound
+        if (sfxManager != null)
+        {
+            sfxManager.PlayHitSound();
+        }
+        else
+        {
+            Debug.LogError("Cross: Failed to create or find SFXManager! Hit sound will not play.");
         }
     }
 }

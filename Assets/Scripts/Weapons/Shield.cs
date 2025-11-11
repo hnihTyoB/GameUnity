@@ -85,6 +85,12 @@ public class Shield : MonoBehaviour, IWeapon
         ShieldManager.Instance?.OnShieldCooldownStarted(shieldCooldown);
         ShieldManager.Instance?.OnShieldActivated();
         
+        // Play shield loop sound
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.PlayShieldSound();
+        }
+        
         Debug.Log("Shield: Activated!");
         
         // Shield stays active for duration
@@ -92,6 +98,13 @@ public class Shield : MonoBehaviour, IWeapon
         
         // Deactivate shield (but cooldown continues)
         SetActive(false);
+        
+        // Stop shield sound
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.StopShieldSound();
+        }
+        
         Debug.Log("Shield: Deactivated - Cooldown continues");
         
         // Wait for remaining cooldown time
@@ -173,6 +186,12 @@ public class Shield : MonoBehaviour, IWeapon
         if (shieldCollider != null)
         {
             shieldCollider.enabled = active;
+        }
+        
+        // Stop shield sound when deactivated (safety check)
+        if (!active && SFXManager.Instance != null)
+        {
+            SFXManager.Instance.StopShieldSound();
         }
     }
     

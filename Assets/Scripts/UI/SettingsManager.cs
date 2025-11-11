@@ -129,8 +129,11 @@ public class SettingsManager : MonoBehaviour
     {
         UpdateSFXDisplay();
 
-        // TODO: Khi thêm AudioManager, set volume thật:
-        // AudioManager.Instance.SetSFXVolume(value);
+        // Set SFX volume in SFXManager
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.SetVolume(value);
+        }
 
         if (saveSettingsAutomatically)
         {
