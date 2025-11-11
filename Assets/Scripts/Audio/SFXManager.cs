@@ -15,6 +15,7 @@ public class SFXManager : Singleton<SFXManager>
     [SerializeField] private AudioClip batterySound; // battery sound
     [SerializeField] private AudioClip staminaSound; // stamina sound
     [SerializeField] private AudioClip dashSound; // dash sound
+    [SerializeField] private AudioClip ghostSound; // ghost sound (shadow attack)
     
     [Header("Audio Sources")]
     [SerializeField] private AudioSource flashLightSource; // For looping flashlight sound
@@ -105,6 +106,16 @@ public class SFXManager : Singleton<SFXManager>
             if (dashSound == null)
             {
                 dashSound = Resources.Load<AudioClip>("dash");
+            }
+        }
+        
+        // Try to load ghost sound
+        if (ghostSound == null)
+        {
+            ghostSound = Resources.Load<AudioClip>("Audio/ghost");
+            if (ghostSound == null)
+            {
+                ghostSound = Resources.Load<AudioClip>("ghost");
             }
         }
     }
@@ -402,6 +413,34 @@ public class SFXManager : Singleton<SFXManager>
         else
         {
             Debug.LogWarning("SFXManager: Dash sound not assigned! Please assign dash sound in Inspector.");
+        }
+    }
+    
+    /// <summary>
+    /// Play ghost sound (one-shot) - when shadow attacks
+    /// </summary>
+    public void PlayGhostSound()
+    {
+        // Ensure audio source exists
+        if (oneShotSource == null)
+        {
+            CreateAudioSources();
+            ConfigureAudioSources();
+        }
+        
+        if (oneShotSource == null)
+        {
+            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+            return;
+        }
+        
+        if (ghostSound != null)
+        {
+            oneShotSource.PlayOneShot(ghostSound, sfxVolume);
+        }
+        else
+        {
+            Debug.LogWarning("SFXManager: Ghost sound not assigned! Please assign ghost sound in Inspector.");
         }
     }
 }

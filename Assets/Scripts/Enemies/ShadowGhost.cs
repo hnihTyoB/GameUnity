@@ -99,6 +99,15 @@ public class ShadowGhost : MonoBehaviour, IEnemy
                 lockedTarget = enemyAI.GetCurrentTarget();
             }
             
+            // Play ghost attack sound only when attacking Player
+            if (lockedTarget != null && lockedTarget.CompareTag("Player"))
+            {
+                if (SFXManager.Instance != null)
+                {
+                    SFXManager.Instance.PlayGhostSound();
+                }
+            }
+            
             StartCoroutine(DashAttackRoutine());
         }
     }
