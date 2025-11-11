@@ -113,8 +113,11 @@ public class SettingsManager : MonoBehaviour
     {
         UpdateMusicDisplay();
 
-        // TODO: Khi thêm AudioManager, set volume thật:
-        // AudioManager.Instance.SetMusicVolume(value);
+        // Set music volume in BackgroundMusicManager
+        if (BackgroundMusicManager.Instance != null)
+        {
+            BackgroundMusicManager.Instance.SetVolume(value);
+        }
 
         if (saveSettingsAutomatically)
         {
