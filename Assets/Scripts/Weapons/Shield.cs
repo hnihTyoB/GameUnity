@@ -29,6 +29,10 @@ public class Shield : MonoBehaviour, IWeapon
     private float cooldownEndTime = 0f;
     private Coroutine activeShieldCoroutine = null;
     
+    // Lưu giá trị gốc
+    private float baseShieldDuration;
+    private float baseShieldCooldown;
+    
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -41,6 +45,13 @@ public class Shield : MonoBehaviour, IWeapon
         }
         shieldCollider.isTrigger = true;
         shieldCollider.radius = 0.5f; // Adjust based on shield sprite size
+        
+        // Lưu giá trị gốc
+        baseShieldDuration = shieldDuration;
+        baseShieldCooldown = shieldCooldown;
+        
+        // Áp dụng difficulty
+        ApplyDifficultySettings();
     }
     
     private void Start()
@@ -68,6 +79,43 @@ public class Shield : MonoBehaviour, IWeapon
         
         // Shield starts inactive, waiting for player to activate
         SetActive(false);
+    }
+    
+    private void OnEnable()
+    {
+        // Subscribe vào event khi difficulty thay đổi
+        DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
+    }
+    
+    private void OnDisable()
+    {
+        // Unsubscribe
+        DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
+    }
+    
+    /// <summary>
+    /// Áp dụng difficulty vào shield settings
+    /// </summary>
+    private void ApplyDifficultySettings()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        
+        // Duration: Easy (1.4x) = 7s, Normal (1.0x) = 5s, Hard (0.67x) = 3.35s
+        shieldDuration = baseShieldDuration / multiplier;
+        
+        // Cooldown: Easy (0.7x) = 10.5s, Normal (1.0x) = 15s, Hard (1.5x) = 22.5s
+        shieldCooldown = baseShieldCooldown * multiplier;
+        
+        Debug.Log($"Shield: Difficulty applied - Duration: {shieldDuration:F1}s, Cooldown: {shieldCooldown:F1}s");
+    }
+    
+    /// <summary>
+    /// Callback khi difficulty thay đổi
+    /// </summary>
+    private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
+    {
+        ApplyDifficultySettings();
+        // Note: Nếu shield đang active, settings mới sẽ áp dụng cho lần activate tiếp theo
     }
     
     /// <summary>

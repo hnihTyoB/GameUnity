@@ -12,15 +12,46 @@ public class EnemyPathFinding : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private float currentSpeed;
     private float baseSpeed;
+    private float baseMoveSpeed; // Lưu giá trị gốc từ Inspector
     private float speedMultiplier = 1f; // For flashlight slow effect
     private bool isMovementEnabled = true; // For flashlight stun effect
+    
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         knockback = GetComponent<Knockback>();
         rb = GetComponent<Rigidbody2D>();
-        baseSpeed = moveSpeed;
-        currentSpeed = moveSpeed;
+        
+        // Lưu giá trị gốc
+        baseMoveSpeed = moveSpeed;
+        
+        // Áp dụng difficulty multiplier vào speed
+        ApplyDifficultySettings();
+    }
+    
+    /// <summary>
+    /// Áp dụng difficulty multiplier vào enemy speed (private method cho Awake)
+    /// </summary>
+    private void ApplyDifficultySettings()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        baseSpeed = baseMoveSpeed * multiplier;
+        currentSpeed = baseSpeed;
+        
+        Debug.Log($"EnemyPathFinding: Difficulty applied - Speed: {baseSpeed:F2} (base: {baseMoveSpeed:F2}, multiplier: {multiplier:F2}x)");
+    }
+    
+    /// <summary>
+    /// Public method để cập nhật difficulty trong runtime
+    /// </summary>
+    public void ApplyDifficultyMultiplier(float multiplier)
+    {
+        baseSpeed = baseMoveSpeed * multiplier;
+        // Nếu đang dùng base speed (không bị slow), cập nhật currentSpeed
+        if (speedMultiplier == 1f)
+        {
+            currentSpeed = baseSpeed;
+        }
     }
 
     private void FixedUpdate()

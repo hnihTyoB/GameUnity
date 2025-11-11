@@ -40,6 +40,18 @@ public class FlashlightEffect : MonoBehaviour
     private Dictionary<EnemyAI, ShadowExposureData> exposedShadows = new Dictionary<EnemyAI, ShadowExposureData>();
     private bool isFlashlightOn = false;
     
+    // Lưu giá trị gốc
+    private float baseSlowTime;
+    private float baseStunTime;
+    private float baseKillTime;
+    private float baseCooldownTime;
+    private float baseSlowDuration;
+    private float baseStunDuration;
+    private float baseNormalDrainRate;
+    private float baseSlowDrainRate;
+    private float baseStunDrainRate;
+    private float baseKillDrainRate;
+    
     private class ShadowExposureData
     {
         public float exposureTime = 0f;
@@ -72,6 +84,75 @@ public class FlashlightEffect : MonoBehaviour
         {
             detectionRange = flashlightCone.GetConeLength();
         }
+        
+        // Lưu giá trị gốc
+        baseSlowTime = slowTime;
+        baseStunTime = stunTime;
+        baseKillTime = killTime;
+        baseCooldownTime = cooldownTime;
+        baseSlowDuration = slowDuration;
+        baseStunDuration = stunDuration;
+        baseNormalDrainRate = normalDrainRate;
+        baseSlowDrainRate = slowDrainRate;
+        baseStunDrainRate = stunDrainRate;
+        baseKillDrainRate = killDrainRate;
+        
+        // Áp dụng difficulty
+        ApplyDifficultySettings();
+    }
+    
+    private void OnEnable()
+    {
+        // Subscribe vào event khi difficulty thay đổi
+        DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
+    }
+    
+    private void OnDisable()
+    {
+        // Unsubscribe
+        DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
+    }
+    
+    /// <summary>
+    /// Áp dụng difficulty vào flashlight effect settings
+    /// </summary>
+    private void ApplyDifficultySettings()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        
+        // Effect timings: Easy (0.7x) = nhanh hơn, Hard (1.5x) = chậm hơn
+        // Easy: Dễ stun/kill hơn (timing ngắn hơn)
+        // Hard: Khó stun/kill hơn (timing dài hơn)
+        slowTime = baseSlowTime / multiplier; // Easy: 0.35s, Hard: 0.75s
+        stunTime = baseStunTime / multiplier; // Easy: 1.4s, Hard: 3s
+        killTime = baseKillTime / multiplier; // Easy: 4.2s, Hard: 9s
+        
+        // Cooldown: Easy (0.7x) = ngắn hơn, Hard (1.5x) = dài hơn
+        cooldownTime = baseCooldownTime * multiplier; // Easy: 3.5s, Hard: 7.5s
+        
+        // Effect durations: Easy (1.4x) = dài hơn, Hard (0.67x) = ngắn hơn
+        slowDuration = baseSlowDuration / multiplier; // Easy: 4.3s, Hard: 2s
+        stunDuration = baseStunDuration / multiplier; // Easy: 3.6s, Hard: 1.67s
+        
+        // Battery drain rates: Easy (0.7x) = chậm hơn, Hard (1.5x) = nhanh hơn
+        normalDrainRate = baseNormalDrainRate * multiplier;
+        slowDrainRate = baseSlowDrainRate * multiplier;
+        stunDrainRate = baseStunDrainRate * multiplier;
+        killDrainRate = baseKillDrainRate * multiplier;
+        
+        Debug.Log($"FlashlightEffect: Difficulty applied - Slow: {slowTime:F1}s, Stun: {stunTime:F1}s, Kill: {killTime:F1}s, Cooldown: {cooldownTime:F1}s");
+        Debug.Log($"FlashlightEffect: Durations - Slow: {slowDuration:F1}s, Stun: {stunDuration:F1}s");
+        Debug.Log($"FlashlightEffect: Drain rates - Normal: {normalDrainRate:F2}, Slow: {slowDrainRate:F2}, Stun: {stunDrainRate:F2}, Kill: {killDrainRate:F2}");
+    }
+    
+    /// <summary>
+    /// Callback khi difficulty thay đổi
+    /// </summary>
+    private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
+    {
+        ApplyDifficultySettings();
+        // Note: Các enemy đang trong process sẽ giữ exposureTime hiện tại, nhưng các threshold mới sẽ áp dụng
+        // Các enemy mới sẽ sử dụng threshold mới ngay lập tức
     }
     
     private void Update()

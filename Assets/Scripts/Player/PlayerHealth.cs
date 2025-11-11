@@ -14,6 +14,7 @@ public class PlayerHealth : Singleton<PlayerHealth>
     private bool canTakeDamage = true;
     private Knockback knockback;
     private Flash flash;
+    private float baseDamageRecoveryTime; // Lưu giá trị gốc
     const string HEALTH_SLIDER_TEXT = "Battery Slider";
 
     const string TOWN_TEXT = "Scene1";
@@ -25,6 +26,9 @@ public class PlayerHealth : Singleton<PlayerHealth>
 
         flash = GetComponent<Flash>();
         knockback = GetComponent<Knockback>();
+        
+        // Lưu giá trị gốc
+        baseDamageRecoveryTime = damageRecoveryTime;
     }
     private void Start()
     {
@@ -139,14 +143,27 @@ public class PlayerHealth : Singleton<PlayerHealth>
     }
     private IEnumerator DeathLoadSceneRoutine()
     {
-        yield return new WaitForSeconds(damageRecoveryTime);
+        float adjustedTime = GetAdjustedRecoveryTime();
+        yield return new WaitForSeconds(adjustedTime);
         canTakeDamage = true;
     }
 
     private IEnumerator DamageRecoveryRoutine()
     {
-        yield return new WaitForSeconds(damageRecoveryTime);
+        float adjustedTime = GetAdjustedRecoveryTime();
+        yield return new WaitForSeconds(adjustedTime);
         canTakeDamage = true;
+    }
+    
+    /// <summary>
+    /// Lấy recovery time đã điều chỉnh theo difficulty
+    /// Easy: Hồi nhanh hơn (0.7x thời gian)
+    /// Hard: Hồi chậm hơn (1.5x thời gian)
+    /// </summary>
+    private float GetAdjustedRecoveryTime()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        return baseDamageRecoveryTime * multiplier;
     }
 
     /// <summary>

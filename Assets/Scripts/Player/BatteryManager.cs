@@ -25,6 +25,7 @@ public class BatteryManager : Singleton<BatteryManager>
     private bool isFlashlightOn = false;
     private Coroutine batteryDrainCoroutine;
     private bool isLowBatteryWarningShown = false;
+    private float baseBatteryDrainRate; // Lưu giá trị gốc
     
     public float CurrentBattery => currentBattery;
     public float MaxBattery => maxBattery;
@@ -34,6 +35,46 @@ public class BatteryManager : Singleton<BatteryManager>
     {
         base.Awake();
         currentBattery = maxBattery; // Start with full battery
+        
+        // Lưu giá trị gốc
+        baseBatteryDrainRate = batteryDrainRate;
+        
+        // Áp dụng difficulty
+        ApplyDifficultySettings();
+    }
+    
+    private void OnEnable()
+    {
+        // Subscribe vào event khi difficulty thay đổi
+        DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
+    }
+    
+    private void OnDisable()
+    {
+        // Unsubscribe
+        DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
+    }
+    
+    /// <summary>
+    /// Áp dụng difficulty vào battery drain rate
+    /// </summary>
+    private void ApplyDifficultySettings()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        
+        // Battery drain: Easy (0.7x) = 0.35/s, Normal (1.0x) = 0.5/s, Hard (1.5x) = 0.75/s
+        batteryDrainRate = baseBatteryDrainRate * multiplier;
+        
+        Debug.Log($"BatteryManager: Difficulty applied - Drain rate: {batteryDrainRate:F2}/s (base: {baseBatteryDrainRate:F2}, multiplier: {multiplier:F2}x)");
+    }
+    
+    /// <summary>
+    /// Callback khi difficulty thay đổi
+    /// </summary>
+    private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
+    {
+        ApplyDifficultySettings();
+        // Note: Nếu FlashlightEffect đang set drain rate, nó sẽ override lại
     }
     
     private void Start()
@@ -296,9 +337,19 @@ public class BatteryManager : Singleton<BatteryManager>
     
     /// <summary>
     /// Set drain rate dynamically (for flashlight effects)
+    /// Note: FlashlightEffect sẽ set rate này khi có effects (slow/stun/kill)
+    /// Khi không có effects, rate sẽ về base rate (đã được điều chỉnh theo difficulty)
     /// </summary>
     public void SetDrainRate(float newRate)
     {
         batteryDrainRate = newRate;
+    }
+    
+    /// <summary>
+    /// Reset drain rate về base rate (đã được điều chỉnh theo difficulty)
+    /// </summary>
+    public void ResetDrainRate()
+    {
+        ApplyDifficultySettings();
     }
 }

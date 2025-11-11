@@ -110,6 +110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8774908605815746164}
   - component: {fileID: 4980126201551259130}
+  - component: {fileID: 5870416473352548919}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -151,6 +152,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b9a2a6ee6198ef42910ac4346f010fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5870416473352548919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2287018932296934119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb12730b413baf7418687a25150d8ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DifficultyUpdateManager
 --- !u!1 &3176343327556454123
 GameObject:
   m_ObjectHideFlags: 0

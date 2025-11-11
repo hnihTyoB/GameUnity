@@ -24,6 +24,10 @@ public class ShadowGhost3 : MonoBehaviour, IEnemy
     private ParticleSystem spawnedSmoke; // Track spawned smoke
     private Transform lockedTarget; // Store target at start of attack
     private LightFearBehavior lightFear; // Fear of light behavior
+    
+    // Lưu giá trị gốc
+    private float baseNormalSpeed;
+    private float baseDashSpeed;
 
     private void Awake()
     {
@@ -41,6 +45,53 @@ public class ShadowGhost3 : MonoBehaviour, IEnemy
         
         // Keep collider normal (not trigger) so it collides with walls/tileset
         // NonDamagingEnemy component prevents damage/knockback to player
+        
+        // Lưu giá trị gốc
+        baseNormalSpeed = normalSpeed;
+        baseDashSpeed = dashSpeed;
+        
+        // Áp dụng difficulty
+        ApplyDifficultySettings();
+    }
+    
+    private void OnEnable()
+    {
+        // Subscribe vào event khi difficulty thay đổi
+        DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
+    }
+    
+    private void OnDisable()
+    {
+        // Unsubscribe
+        DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
+    }
+    
+    /// <summary>
+    /// Áp dụng difficulty vào ShadowGhost3 speed settings
+    /// </summary>
+    private void ApplyDifficultySettings()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        
+        // Speed: Easy (0.7x) = chậm hơn, Hard (1.5x) = nhanh hơn
+        normalSpeed = baseNormalSpeed * multiplier;
+        dashSpeed = baseDashSpeed * multiplier;
+        
+        Debug.Log($"ShadowGhost3: Difficulty applied - Normal Speed: {normalSpeed:F2}, Dash Speed: {dashSpeed:F2}");
+    }
+    
+    /// <summary>
+    /// Callback khi difficulty thay đổi
+    /// </summary>
+    private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
+    {
+        ApplyDifficultySettings();
+        
+        // Cập nhật speed nếu không đang dash
+        if (!isDashing && enemyPathfinding != null)
+        {
+            enemyPathfinding.SetSpeed(normalSpeed);
+        }
     }
 
     private void Start()

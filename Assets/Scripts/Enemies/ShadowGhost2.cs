@@ -40,6 +40,11 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     private Transform lockedTarget; // Store target at start of attack
     private LightFearBehavior lightFear; // Fear of light behavior
     
+    // Lưu giá trị gốc
+    private float baseNormalSpeed;
+    private float baseBlockSpeed;
+    private float baseDashSpeed;
+    
     private void Awake()
     {
         enemyPathfinding = GetComponent<EnemyPathFinding>();
@@ -51,6 +56,60 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
         if (spriteRenderer != null)
         {
             spriteRenderer.color = shadowColor;
+        }
+        
+        // Lưu giá trị gốc
+        baseNormalSpeed = normalSpeed;
+        baseBlockSpeed = blockSpeed;
+        baseDashSpeed = dashSpeed;
+        
+        // Áp dụng difficulty
+        ApplyDifficultySettings();
+    }
+    
+    private void OnEnable()
+    {
+        // Subscribe vào event khi difficulty thay đổi
+        DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
+    }
+    
+    private void OnDisable()
+    {
+        // Unsubscribe
+        DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
+    }
+    
+    /// <summary>
+    /// Áp dụng difficulty vào ShadowGhost2 speed settings
+    /// </summary>
+    private void ApplyDifficultySettings()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        
+        // Speed: Easy (0.7x) = chậm hơn, Hard (1.5x) = nhanh hơn
+        normalSpeed = baseNormalSpeed * multiplier;
+        blockSpeed = baseBlockSpeed * multiplier;
+        dashSpeed = baseDashSpeed * multiplier;
+        
+        Debug.Log($"ShadowGhost2: Difficulty applied - Normal: {normalSpeed:F2}, Block: {blockSpeed:F2}, Dash: {dashSpeed:F2}");
+    }
+    
+    /// <summary>
+    /// Callback khi difficulty thay đổi
+    /// </summary>
+    private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
+    {
+        ApplyDifficultySettings();
+        
+        // Cập nhật speed nếu không đang dash/block
+        if (!isDashing && !isBlocking && enemyPathfinding != null)
+        {
+            enemyPathfinding.SetSpeed(normalSpeed);
+        }
+        // Nếu đang block, cập nhật blockSpeed
+        else if (isBlocking && enemyPathfinding != null)
+        {
+            enemyPathfinding.SetSpeed(blockSpeed);
         }
     }
     

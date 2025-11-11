@@ -9,17 +9,47 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float knockBackThrust = 15f;
 
     private int currentHealth;
+    private int baseStartingHealth; // Lưu giá trị gốc
     private Knockback knockback;
     private Flash flash;
+    
     private void Awake()
     {
         flash = GetComponent<Flash>();
         knockback = GetComponent<Knockback>();
+        
+        // Lưu giá trị gốc
+        baseStartingHealth = startingHealth;
     }
 
     private void Start()
     {
-        currentHealth = startingHealth;
+        // Áp dụng difficulty multiplier vào health
+        ApplyDifficultyMultiplier();
+    }
+    
+    /// <summary>
+    /// Áp dụng difficulty multiplier vào enemy health
+    /// </summary>
+    private void ApplyDifficultyMultiplier()
+    {
+        float multiplier = DifficultyManager.GetDifficultyMultiplier();
+        int adjustedHealth = Mathf.RoundToInt(baseStartingHealth * multiplier);
+        currentHealth = adjustedHealth;
+        
+        Debug.Log($"EnemyHealth: Difficulty applied - Health: {currentHealth} (base: {baseStartingHealth}, multiplier: {multiplier:F2}x)");
+    }
+    
+    /// <summary>
+    /// Public method để cập nhật difficulty trong runtime (nếu enemy chưa bị damage)
+    /// </summary>
+    public void UpdateDifficultyMultiplier()
+    {
+        // Chỉ áp dụng nếu enemy còn full health (chưa bị damage)
+        if (currentHealth >= baseStartingHealth || currentHealth == Mathf.RoundToInt(baseStartingHealth * DifficultyManager.GetDifficultyMultiplier()))
+        {
+            ApplyDifficultyMultiplier();
+        }
     }
 
     public void TakeDamage(int damage)
