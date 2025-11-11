@@ -16,6 +16,7 @@ public class SFXManager : Singleton<SFXManager>
     [SerializeField] private AudioClip staminaSound; // stamina sound
     [SerializeField] private AudioClip dashSound; // dash sound
     [SerializeField] private AudioClip ghostSound; // ghost sound (shadow attack)
+    [SerializeField] private AudioClip shootSound; // shoot sound (enemy projectile)
     
     [Header("Audio Sources")]
     [SerializeField] private AudioSource flashLightSource; // For looping flashlight sound
@@ -116,6 +117,16 @@ public class SFXManager : Singleton<SFXManager>
             if (ghostSound == null)
             {
                 ghostSound = Resources.Load<AudioClip>("ghost");
+            }
+        }
+        
+        // Try to load shoot sound
+        if (shootSound == null)
+        {
+            shootSound = Resources.Load<AudioClip>("Audio/shoot");
+            if (shootSound == null)
+            {
+                shootSound = Resources.Load<AudioClip>("shoot");
             }
         }
     }
@@ -441,6 +452,34 @@ public class SFXManager : Singleton<SFXManager>
         else
         {
             Debug.LogWarning("SFXManager: Ghost sound not assigned! Please assign ghost sound in Inspector.");
+        }
+    }
+    
+    /// <summary>
+    /// Play shoot sound (one-shot) - when enemy shoots projectile at player
+    /// </summary>
+    public void PlayShootSound()
+    {
+        // Ensure audio source exists
+        if (oneShotSource == null)
+        {
+            CreateAudioSources();
+            ConfigureAudioSources();
+        }
+        
+        if (oneShotSource == null)
+        {
+            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+            return;
+        }
+        
+        if (shootSound != null)
+        {
+            oneShotSource.PlayOneShot(shootSound, sfxVolume);
+        }
+        else
+        {
+            Debug.LogWarning("SFXManager: Shoot sound not assigned! Please assign shoot sound in Inspector.");
         }
     }
 }

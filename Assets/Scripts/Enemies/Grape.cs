@@ -44,6 +44,15 @@ public class Grape : MonoBehaviour, IEnemy
             
             if (distanceToTarget <= maxAttackRange)
             {
+                // Play shoot sound only when shooting at Player
+                if (currentTarget.CompareTag("Player"))
+                {
+                    if (SFXManager.Instance != null)
+                    {
+                        SFXManager.Instance.PlayShootSound();
+                    }
+                }
+                
                 // Spawn projectile and set its target
                 GameObject projectile = Instantiate(grapeProjectilePrefab, transform.position, Quaternion.identity);
                 GrapeProjectile grapeProj = projectile.GetComponent<GrapeProjectile>();
