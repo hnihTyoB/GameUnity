@@ -5494,6 +5494,7 @@ MonoBehaviour:
   dashSound: {fileID: 8300000, guid: 1cf825508614fce4c83b71962e5d26ca, type: 3}
   ghostSound: {fileID: 8300000, guid: b9b94f1c50e6b704e91be139ae189e3b, type: 3}
   shootSound: {fileID: 8300000, guid: 19c68e214818bae4bb0900c596423479, type: 3}
+  damageTakenSound: {fileID: 8300000, guid: b9befc9912c159d4e89c9c5b82498fd5, type: 3}
   flashLightSource: {fileID: 0}
   shieldSource: {fileID: 0}
   oneShotSource: {fileID: 0}

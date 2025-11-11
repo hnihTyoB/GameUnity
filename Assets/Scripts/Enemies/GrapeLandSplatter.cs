@@ -30,6 +30,12 @@ public class GrapeLandSplatter : MonoBehaviour
             // Apply stun to player
             playerController.ApplyStun(stunDuration);
             
+            // Play damage taken sound when Grape hits player
+            if (SFXManager.Instance != null)
+            {
+                SFXManager.Instance.PlayDamageTakenSound();
+            }
+            
             // Visual/audio feedback
             ScreenShakeManager.Instance?.ShakeScreen();
             return;

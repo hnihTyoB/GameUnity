@@ -17,6 +17,7 @@ public class SFXManager : Singleton<SFXManager>
     [SerializeField] private AudioClip dashSound; // dash sound
     [SerializeField] private AudioClip ghostSound; // ghost sound (shadow attack)
     [SerializeField] private AudioClip shootSound; // shoot sound (enemy projectile)
+    [SerializeField] private AudioClip damageTakenSound; // damage_taken sound (player knockback/grape hit)
     
     [Header("Audio Sources")]
     [SerializeField] private AudioSource flashLightSource; // For looping flashlight sound
@@ -127,6 +128,16 @@ public class SFXManager : Singleton<SFXManager>
             if (shootSound == null)
             {
                 shootSound = Resources.Load<AudioClip>("shoot");
+            }
+        }
+        
+        // Try to load damage taken sound
+        if (damageTakenSound == null)
+        {
+            damageTakenSound = Resources.Load<AudioClip>("Audio/damage_taken");
+            if (damageTakenSound == null)
+            {
+                damageTakenSound = Resources.Load<AudioClip>("damage_taken");
             }
         }
     }
@@ -480,6 +491,34 @@ public class SFXManager : Singleton<SFXManager>
         else
         {
             Debug.LogWarning("SFXManager: Shoot sound not assigned! Please assign shoot sound in Inspector.");
+        }
+    }
+    
+    /// <summary>
+    /// Play damage taken sound (one-shot) - when player takes damage/knockback or Grape hits player
+    /// </summary>
+    public void PlayDamageTakenSound()
+    {
+        // Ensure audio source exists
+        if (oneShotSource == null)
+        {
+            CreateAudioSources();
+            ConfigureAudioSources();
+        }
+        
+        if (oneShotSource == null)
+        {
+            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+            return;
+        }
+        
+        if (damageTakenSound != null)
+        {
+            oneShotSource.PlayOneShot(damageTakenSound, sfxVolume);
+        }
+        else
+        {
+            Debug.LogWarning("SFXManager: Damage taken sound not assigned! Please assign damage_taken sound in Inspector.");
         }
     }
 }

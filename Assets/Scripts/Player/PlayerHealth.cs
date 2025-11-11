@@ -111,6 +111,13 @@ public class PlayerHealth : Singleton<PlayerHealth>
 
         ScreenShakeManager.Instance.ShakeScreen();
         knockback.GetKnockedBack(hitTransform, knockBackThrustAmount);
+        
+        // Play damage taken sound when player gets knocked back
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.PlayDamageTakenSound();
+        }
+        
         StartCoroutine(flash.FlashRoutine());
         canTakeDamage = false;
         currentHealth -= damageAmount;
@@ -151,6 +158,13 @@ public class PlayerHealth : Singleton<PlayerHealth>
 
         // Apply knockback and visual effects but no damage
         knockback.GetKnockedBack(hitTransform, knockBackThrustAmount);
+        
+        // Play damage taken sound when player gets knocked back
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.PlayDamageTakenSound();
+        }
+        
         StartCoroutine(flash.FlashRoutine());
         canTakeDamage = false;
         StartCoroutine(DamageRecoveryRoutine());
