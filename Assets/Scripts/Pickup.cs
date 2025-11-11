@@ -90,10 +90,20 @@ public class Pickup : MonoBehaviour
                 break;
             case PickUpType.StaminaGlobe:
                 Stamina.Instance.RefreshStamina();
+                // Play stamina pickup sound
+                if (SFXManager.Instance != null)
+                {
+                    SFXManager.Instance.PlayStaminaSound();
+                }
                 break;
             case PickUpType.LightFragment:
                 // Restore stamina (represents mental energy)
                 Stamina.Instance.RefreshStamina();
+                // Play stamina pickup sound
+                if (SFXManager.Instance != null)
+                {
+                    SFXManager.Instance.PlayStaminaSound();
+                }
                 // Could also give bonus effect in future
                 break;
             case PickUpType.Battery:
@@ -102,6 +112,11 @@ public class Pickup : MonoBehaviour
                 {
                     BatteryManager.Instance.AddBattery(1f);
                     Debug.Log("Battery picked up (via Pickup.cs) - added to BatteryManager");
+                    // Play battery pickup sound
+                    if (SFXManager.Instance != null)
+                    {
+                        SFXManager.Instance.PlayBatterySound();
+                    }
                 }
                 else
                 {
@@ -113,6 +128,11 @@ public class Pickup : MonoBehaviour
             case PickUpType.CourageFragment:
                 // Give courage to face bullying
                 Stamina.Instance.RefreshStamina(); // Restore mental energy
+                // Play stamina pickup sound
+                if (SFXManager.Instance != null)
+                {
+                    SFXManager.Instance.PlayStaminaSound();
+                }
                 // TODO: Could add temporary courage buff
                 break;
             case PickUpType.ShieldFragment:

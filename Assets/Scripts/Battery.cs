@@ -97,7 +97,13 @@ public class Battery : MonoBehaviour
             Debug.LogError("BatteryManager.Instance is NULL! Cannot add battery!");
         }
         
-        // Play pickup effects
+        // Play battery pickup sound via SFXManager
+        if (SFXManager.Instance != null)
+        {
+            SFXManager.Instance.PlayBatterySound();
+        }
+        
+        // Play pickup effects (visual effects only)
         PlayPickupEffects();
         
         // Destroy the battery
@@ -106,13 +112,7 @@ public class Battery : MonoBehaviour
     
     private void PlayPickupEffects()
     {
-        // Play sound
-        if (audioSource != null && pickupSound != null)
-        {
-            audioSource.PlayOneShot(pickupSound);
-        }
-        
-        // Spawn pickup effect
+        // Spawn pickup effect (visual only, sound is handled by SFXManager)
         if (pickupEffect != null)
         {
             GameObject effect = Instantiate(pickupEffect, transform.position, Quaternion.identity);

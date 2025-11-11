@@ -47,6 +47,9 @@ MonoBehaviour:
   flashLightSound: {fileID: 8300000, guid: 628fe1f2b6a82d64e821745db07bf7e7, type: 3}
   shieldSound: {fileID: 8300000, guid: 6a37c4ef7d0f58a44a3e6a8045013b5b, type: 3}
   hitSound: {fileID: 8300000, guid: f1c145907264aec4c96f53d9e55c0d8c, type: 3}
+  batterySound: {fileID: 8300000, guid: 7947623fd287e524484bad48c87dd486, type: 3}
+  staminaSound: {fileID: 8300000, guid: e0b57986b218e3a408337b01cfa2bbdd, type: 3}
+  dashSound: {fileID: 8300000, guid: 1cf825508614fce4c83b71962e5d26ca, type: 3}
   flashLightSource: {fileID: 0}
   shieldSource: {fileID: 0}
   oneShotSource: {fileID: 0}

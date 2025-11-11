@@ -112,6 +112,13 @@ public class PlayerController : Singleton<PlayerController>
             isDashing = true;
             moveSpeed *= dashSpeed;
             myTrailRenderer.emitting = true;
+            
+            // Play dash sound
+            if (SFXManager.Instance != null)
+            {
+                SFXManager.Instance.PlayDashSound();
+            }
+            
             StartCoroutine(EndDashRoutine());
         }
     }

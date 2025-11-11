@@ -12,6 +12,9 @@ public class SFXManager : Singleton<SFXManager>
     [SerializeField] private AudioClip flashLightSound; // flash_light.ogg
     [SerializeField] private AudioClip shieldSound; // shield.wav
     [SerializeField] private AudioClip hitSound; // hit.wav
+    [SerializeField] private AudioClip batterySound; // battery sound
+    [SerializeField] private AudioClip staminaSound; // stamina sound
+    [SerializeField] private AudioClip dashSound; // dash sound
     
     [Header("Audio Sources")]
     [SerializeField] private AudioSource flashLightSource; // For looping flashlight sound
@@ -75,10 +78,34 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Warn if still not found
-        if (hitSound == null)
+        // Try to load battery sound
+        if (batterySound == null)
         {
-            Debug.LogWarning("SFXManager: Hit sound (hit.wav) not found in Resources! Please assign it in Inspector or move hit.wav to Assets/Resources/Audio/");
+            batterySound = Resources.Load<AudioClip>("Audio/battery");
+            if (batterySound == null)
+            {
+                batterySound = Resources.Load<AudioClip>("battery");
+            }
+        }
+        
+        // Try to load stamina sound
+        if (staminaSound == null)
+        {
+            staminaSound = Resources.Load<AudioClip>("Audio/stamina");
+            if (staminaSound == null)
+            {
+                staminaSound = Resources.Load<AudioClip>("stamina");
+            }
+        }
+        
+        // Try to load dash sound
+        if (dashSound == null)
+        {
+            dashSound = Resources.Load<AudioClip>("Audio/dash");
+            if (dashSound == null)
+            {
+                dashSound = Resources.Load<AudioClip>("dash");
+            }
         }
     }
     
@@ -291,6 +318,90 @@ public class SFXManager : Singleton<SFXManager>
         if (oneShotSource != null && clip != null)
         {
             oneShotSource.PlayOneShot(clip, sfxVolume * volumeMultiplier);
+        }
+    }
+    
+    /// <summary>
+    /// Play battery pickup sound (one-shot)
+    /// </summary>
+    public void PlayBatterySound()
+    {
+        // Ensure audio source exists
+        if (oneShotSource == null)
+        {
+            CreateAudioSources();
+            ConfigureAudioSources();
+        }
+        
+        if (oneShotSource == null)
+        {
+            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+            return;
+        }
+        
+        if (batterySound != null)
+        {
+            oneShotSource.PlayOneShot(batterySound, sfxVolume);
+        }
+        else
+        {
+            Debug.LogWarning("SFXManager: Battery sound not assigned! Please assign battery sound in Inspector.");
+        }
+    }
+    
+    /// <summary>
+    /// Play stamina pickup sound (one-shot)
+    /// </summary>
+    public void PlayStaminaSound()
+    {
+        // Ensure audio source exists
+        if (oneShotSource == null)
+        {
+            CreateAudioSources();
+            ConfigureAudioSources();
+        }
+        
+        if (oneShotSource == null)
+        {
+            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+            return;
+        }
+        
+        if (staminaSound != null)
+        {
+            oneShotSource.PlayOneShot(staminaSound, sfxVolume);
+        }
+        else
+        {
+            Debug.LogWarning("SFXManager: Stamina sound not assigned! Please assign stamina sound in Inspector.");
+        }
+    }
+    
+    /// <summary>
+    /// Play dash sound (one-shot)
+    /// </summary>
+    public void PlayDashSound()
+    {
+        // Ensure audio source exists
+        if (oneShotSource == null)
+        {
+            CreateAudioSources();
+            ConfigureAudioSources();
+        }
+        
+        if (oneShotSource == null)
+        {
+            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+            return;
+        }
+        
+        if (dashSound != null)
+        {
+            oneShotSource.PlayOneShot(dashSound, sfxVolume);
+        }
+        else
+        {
+            Debug.LogWarning("SFXManager: Dash sound not assigned! Please assign dash sound in Inspector.");
         }
     }
 }
