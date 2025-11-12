@@ -19,12 +19,19 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
 
     private void OnEnable()
     {
-        playerControls.Enable();
+        if (playerControls != null)
+        {
+            playerControls.Enable();
+        }
     }
-    
+
     private void OnDisable()
     {
-        playerControls.Disable();
+        // Check null to prevent NullReferenceException when Singleton destroys old instance
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+        }
     }
     
     /// <summary>

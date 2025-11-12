@@ -96,7 +96,7 @@ public class BackgroundMusicManager : Singleton<BackgroundMusicManager>
     {
         string newSceneName = scene.name;
         
-        Debug.Log($"BackgroundMusicManager: Scene loaded - {newSceneName} (Current: {currentSceneName})");
+        Debug.Log($"BackgroundMusicManager: OnSceneLoaded called - Scene: {newSceneName}, Mode: {mode}, Current: {currentSceneName}");
         
         // Only change music if scene changed
         if (newSceneName != currentSceneName)
@@ -104,11 +104,14 @@ public class BackgroundMusicManager : Singleton<BackgroundMusicManager>
             Debug.Log($"BackgroundMusicManager: Scene changed from {currentSceneName} to {newSceneName}, changing music...");
             currentSceneName = newSceneName;
             PlayMusicForScene(newSceneName);
+            Debug.Log($"BackgroundMusicManager: Music change initiated");
         }
         else
         {
             Debug.Log($"BackgroundMusicManager: Scene name unchanged, keeping current music");
         }
+        
+        Debug.Log($"BackgroundMusicManager: OnSceneLoaded complete");
     }
     
     /// <summary>
@@ -178,11 +181,16 @@ public class BackgroundMusicManager : Singleton<BackgroundMusicManager>
     /// </summary>
     private void PlayMusic(AudioClip clip)
     {
-        if (audioSource == null || clip == null) return;
+        if (audioSource == null || clip == null)
+        {
+            Debug.LogWarning($"BackgroundMusicManager: Cannot play music - audioSource or clip is null");
+            return;
+        }
         
         // If same clip is already playing, don't restart
         if (audioSource.clip == clip && audioSource.isPlaying)
         {
+            Debug.Log($"BackgroundMusicManager: Same clip already playing, skipping");
             return;
         }
         
@@ -190,10 +198,17 @@ public class BackgroundMusicManager : Singleton<BackgroundMusicManager>
         if (fadeCoroutine != null)
         {
             StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
         }
         
         // Start fade and play
+        Debug.Log($"BackgroundMusicManager: Starting FadeAndPlayMusic coroutine for clip: {clip.name}");
         fadeCoroutine = StartCoroutine(FadeAndPlayMusic(clip));
+        
+        if (fadeCoroutine == null)
+        {
+            Debug.LogError("BackgroundMusicManager: Failed to start FadeAndPlayMusic coroutine!");
+        }
     }
     
     /// <summary>

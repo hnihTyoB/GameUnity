@@ -64,10 +64,18 @@ public class ScoreManager : Singleton<ScoreManager>
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log($"ScoreManager: OnSceneLoaded called - Scene: {scene.name}, Mode: {mode}");
+        
         // Don't reset if loading main menu
         if (scene.name != "MainMenu")
         {
+            Debug.Log($"ScoreManager: Resetting score for scene: {scene.name}");
             ResetScore();
+            Debug.Log($"ScoreManager: Score reset complete");
+        }
+        else
+        {
+            Debug.Log($"ScoreManager: MainMenu loaded, skipping score reset");
         }
     }
     

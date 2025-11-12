@@ -16,17 +16,31 @@ public class ActiveInventory : Singleton<ActiveInventory>
 
     private void Start()
     {
-        playerControls.Inventory.Keyboard.performed += ctx => ToggleActiveSlot((int)ctx.ReadValue<float>());
+        if (playerControls != null)
+        {
+            playerControls.Inventory.Keyboard.performed += ctx => ToggleActiveSlot((int)ctx.ReadValue<float>());
+        }
+        else
+        {
+            Debug.LogError("ActiveInventory: playerControls is null in Start()! This should not happen.");
+        }
     }
 
     private void OnEnable()
     {
-        playerControls.Enable();
+        if (playerControls != null)
+        {
+            playerControls.Enable();
+        }
     }
     
     private void OnDisable()
     {
-        playerControls.Disable();
+        // Check null to prevent NullReferenceException when Singleton destroys old instance
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+        }
     }
     
     /// <summary>
