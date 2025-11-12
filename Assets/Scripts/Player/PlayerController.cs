@@ -58,6 +58,28 @@ public class PlayerController : Singleton<PlayerController>
     private void OnDisable() {
         playerControls.Disable();
     }
+    
+    /// <summary>
+    /// Disable player input (called when game is paused, e.g., EndLevelUI)
+    /// </summary>
+    public void DisableInput()
+    {
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+        }
+    }
+    
+    /// <summary>
+    /// Enable player input (called when game is resumed)
+    /// </summary>
+    public void EnableInput()
+    {
+        if (playerControls != null)
+        {
+            playerControls.Enable();
+        }
+    }
 
     private void Update()
     {

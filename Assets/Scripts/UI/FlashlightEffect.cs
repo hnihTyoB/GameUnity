@@ -405,6 +405,12 @@ public class FlashlightEffect : MonoBehaviour
         // Change to red glow warning (but destroy it quickly)
         RemoveVisualEffect(data);
         
+        // Add kill penalty to score (shadow killed by flashlight)
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddKillPoints();
+        }
+        
         // Record kill for score penalty
         RecordFlashlightKill(enemy);
         

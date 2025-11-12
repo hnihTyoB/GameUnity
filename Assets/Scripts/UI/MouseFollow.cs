@@ -5,6 +5,9 @@ using UnityEngine;
 public class MouseFollow : MonoBehaviour
 {
     private void Update() {
+        // Don't rotate if game is paused
+        if (Time.timeScale == 0f) return;
+        
         FaceMouse();
     }
 

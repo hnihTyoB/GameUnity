@@ -183,11 +183,6 @@ public class DifficultyManager : MonoBehaviour
 
     // Public methods
 
-    public Difficulty GetCurrentDifficulty()
-    {
-        return currentDifficulty;
-    }
-
     public void SetEasy()
     {
         SetDifficulty(Difficulty.Easy);
@@ -235,6 +230,15 @@ public class DifficultyManager : MonoBehaviour
     public static bool IsHardMode()
     {
         return PlayerPrefs.GetInt(DIFFICULTY_KEY, (int)Difficulty.Normal) == (int)Difficulty.Hard;
+    }
+
+    /// <summary>
+    /// Get current difficulty (static method for ScoreManager and other systems)
+    /// </summary>
+    public static Difficulty GetCurrentDifficulty()
+    {
+        int difficulty = PlayerPrefs.GetInt(DIFFICULTY_KEY, (int)Difficulty.Normal);
+        return (Difficulty)difficulty;
     }
 
     private void OnDestroy()

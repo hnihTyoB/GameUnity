@@ -21,6 +21,33 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
     {
         playerControls.Enable();
     }
+    
+    private void OnDisable()
+    {
+        playerControls.Disable();
+    }
+    
+    /// <summary>
+    /// Disable weapon input (called when game is paused, e.g., EndLevelUI)
+    /// </summary>
+    public void DisableInput()
+    {
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+        }
+    }
+    
+    /// <summary>
+    /// Enable weapon input (called when game is resumed)
+    /// </summary>
+    public void EnableInput()
+    {
+        if (playerControls != null)
+        {
+            playerControls.Enable();
+        }
+    }
 
     private void Start()
     {

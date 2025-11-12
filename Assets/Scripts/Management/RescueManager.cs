@@ -29,6 +29,9 @@ public class RescueManager : Singleton<RescueManager>
         victimsRescued++;
         Debug.Log($"Victim rescued! Total: {victimsRescued}");
         
+        // Note: Points are NOT added here - they are added when victim reaches SafeZone
+        // This only tracks the count of rescued victims
+        
         // Notify UI
         UpdateUI();
         

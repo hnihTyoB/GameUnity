@@ -57,6 +57,13 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
         knockback.GetKnockedBack(PlayerController.Instance.transform, knockBackThrust);
         StartCoroutine(flash.FlashRoutine());
+        
+        // Add hit penalty to score
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddHitPoints();
+        }
+        
         StartCoroutine(CheckDetectDeathRoutine());
     }
 
@@ -68,6 +75,12 @@ public class EnemyHealth : MonoBehaviour
 
     public void DetectDeath() {
         if (currentHealth <= 0) {
+            // Add kill penalty to score (before destroying)
+            if (ScoreManager.Instance != null)
+            {
+                ScoreManager.Instance.AddKillPoints();
+            }
+            
             if (deathVFXPrefab != null)
             {
                 Instantiate(deathVFXPrefab, transform.position, Quaternion.identity);

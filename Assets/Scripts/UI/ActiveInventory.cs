@@ -24,6 +24,33 @@ public class ActiveInventory : Singleton<ActiveInventory>
         playerControls.Enable();
     }
     
+    private void OnDisable()
+    {
+        playerControls.Disable();
+    }
+    
+    /// <summary>
+    /// Disable inventory input (called when game is paused, e.g., EndLevelUI)
+    /// </summary>
+    public void DisableInput()
+    {
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+        }
+    }
+    
+    /// <summary>
+    /// Enable inventory input (called when game is resumed)
+    /// </summary>
+    public void EnableInput()
+    {
+        if (playerControls != null)
+        {
+            playerControls.Enable();
+        }
+    }
+    
     public void EquipStartingWeapon() {
         ToggleActiveHighlight(0);
     }

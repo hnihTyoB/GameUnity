@@ -47,6 +47,9 @@ public class Flashlight : MonoBehaviour, IWeapon
 
     private void Update()
     {
+        // Don't rotate if game is paused
+        if (Time.timeScale == 0f) return;
+        
         // Make light follow mouse direction (like ActiveWeapon does)
         if (isLightOn && flashlightLight != null)
         {

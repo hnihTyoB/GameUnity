@@ -27,9 +27,9 @@ public class Grape : MonoBehaviour, IEnemy
         if (currentTarget != null)
         {
             if (transform.position.x - currentTarget.position.x < 0) {
-            spriteRenderer.flipX = false;
-        } else {
-            spriteRenderer.flipX = true;
+                spriteRenderer.flipX = false;
+            } else {
+                spriteRenderer.flipX = true;
             }
         }
     }

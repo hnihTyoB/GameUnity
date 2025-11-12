@@ -96,11 +96,18 @@ public class BackgroundMusicManager : Singleton<BackgroundMusicManager>
     {
         string newSceneName = scene.name;
         
+        Debug.Log($"BackgroundMusicManager: Scene loaded - {newSceneName} (Current: {currentSceneName})");
+        
         // Only change music if scene changed
         if (newSceneName != currentSceneName)
         {
+            Debug.Log($"BackgroundMusicManager: Scene changed from {currentSceneName} to {newSceneName}, changing music...");
             currentSceneName = newSceneName;
             PlayMusicForScene(newSceneName);
+        }
+        else
+        {
+            Debug.Log($"BackgroundMusicManager: Scene name unchanged, keeping current music");
         }
     }
     
@@ -115,11 +122,13 @@ public class BackgroundMusicManager : Singleton<BackgroundMusicManager>
         if (sceneName.Contains("Menu") || sceneName.Contains("MainMenu"))
         {
             clipToPlay = menuMusic;
+            Debug.Log($"BackgroundMusicManager: Playing menu music (wait.mp3) for scene: {sceneName}");
         }
         else
         {
             // Game scenes (Scene1, Scene2, etc.)
             clipToPlay = gameMusic;
+            Debug.Log($"BackgroundMusicManager: Playing game music (music.mp3) for scene: {sceneName}");
         }
         
         if (clipToPlay != null)
@@ -129,6 +138,38 @@ public class BackgroundMusicManager : Singleton<BackgroundMusicManager>
         else
         {
             Debug.LogWarning($"BackgroundMusicManager: No music clip found for scene: {sceneName}");
+        }
+    }
+    
+    /// <summary>
+    /// Force play menu music (wait.mp3) - called when EndLevelUI shows
+    /// </summary>
+    public void PlayMenuMusic()
+    {
+        if (menuMusic != null)
+        {
+            PlayMusic(menuMusic);
+            Debug.Log("BackgroundMusicManager: Forced to play menu music (wait.mp3)");
+        }
+        else
+        {
+            Debug.LogWarning("BackgroundMusicManager: Menu music (wait.mp3) not assigned! Cannot play menu music.");
+        }
+    }
+    
+    /// <summary>
+    /// Force play game music (music.mp3) - called when returning to game
+    /// </summary>
+    public void PlayGameMusic()
+    {
+        if (gameMusic != null)
+        {
+            PlayMusic(gameMusic);
+            Debug.Log("BackgroundMusicManager: Forced to play game music (music.mp3)");
+        }
+        else
+        {
+            Debug.LogWarning("BackgroundMusicManager: Game music (music.mp3) not assigned! Cannot play game music.");
         }
     }
     

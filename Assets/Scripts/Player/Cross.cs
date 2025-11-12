@@ -25,6 +25,9 @@ public class Cross : MonoBehaviour, IWeapon
     }
     private void Update()
     {
+        // Don't rotate if game is paused
+        if (Time.timeScale == 0f) return;
+        
         MouseFollowWithOffset();
     }
 

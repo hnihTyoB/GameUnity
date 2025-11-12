@@ -14,7 +14,7 @@ public class PickUpSpawner : MonoBehaviour
         
         // Random từ 0-1
         float randomValue = Random.Range(0f, 1f);
-        
+
         if (randomValue < noDropChance)
         {
             // Không drop gì

@@ -25,6 +25,7 @@ public class Victim : MonoBehaviour
     private Vector2 roamDirection;
     private bool isRescued = false;
     private bool isRescuing = false; // Lock to prevent double rescue
+    private bool hasReachedSafeZone = false; // Track if victim has reached safe zone
     private VictimFollowPlayer followScript;
     private VictimSlowDebuff slowDebuff;
     private float roamTimer;
@@ -231,13 +232,54 @@ public class Victim : MonoBehaviour
         return isRescued;
     }
     
-    // Called when victim reaches safe zone
+    /// <summary>
+    /// Check if victim has reached safe zone
+    /// </summary>
+    public bool HasReachedSafeZone()
+    {
+        return hasReachedSafeZone;
+    }
+    
+    /// <summary>
+    /// Called when victim reaches safe zone
+    /// This is called by SafeZone when victim enters the safe zone
+    /// </summary>
     public void OnReachedSafeZone()
     {
-        // Will implement reward system later
-        Debug.Log("Victim reached safe zone!");
-        // For now, just destroy
-        Destroy(gameObject);
+        if (hasReachedSafeZone) return; // Prevent double processing
+        
+        hasReachedSafeZone = true;
+        Debug.Log($"Victim {gameObject.name} reached safe zone!");
+        
+        // Stop following player
+        if (followScript != null)
+        {
+            followScript.enabled = false;
+        }
+        
+        // Stop movement
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+        
+        // Disable collider to prevent further interactions
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+        
+        // Hide victim visually (optional - fade out effect)
+        if (spriteRenderer != null)
+        {
+            // Can add fade out effect here if needed
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.5f);
+        }
+        
+        // Destroy victim after a delay to show visual feedback
+        // Note: Score is already added in SafeZone, so it's safe to destroy
+        Destroy(gameObject, 1f); // Delay to show visual feedback
     }
     
     /// <summary>
