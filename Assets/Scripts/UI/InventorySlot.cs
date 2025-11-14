@@ -31,20 +31,36 @@ public class InventorySlot : MonoBehaviour
     
     private IEnumerator RegisterShieldUIWhenReady()
     {
+        // Wait a bit for scene to fully load and Singleton conflicts to resolve
+        yield return new WaitForSeconds(0.2f);
+        
         // Wait until ShieldManager instance is available
         int waitFrames = 0;
         while (ShieldManager.Instance == null)
         {
             waitFrames++;
             yield return null;
+            
+            if (waitFrames > 100)
+            {
+                Debug.LogError($"InventorySlot ({gameObject.name}): ShieldManager still null after 100 frames!");
+                yield break;
+            }
         }
         
         Debug.Log($"InventorySlot ({gameObject.name}): ShieldManager found after {waitFrames} frames, registering UI");
+        Debug.Log($"InventorySlot ({gameObject.name}): cooldownUI valid = {(cooldownUI != null)}");
         
         // Register this cooldown UI with ShieldManager
-        ShieldManager.Instance.RegisterShieldCooldownUI(cooldownUI);
-        
-        Debug.Log($"InventorySlot ({gameObject.name}): Registration complete");
+        if (cooldownUI != null && ShieldManager.Instance != null)
+        {
+            ShieldManager.Instance.RegisterShieldCooldownUI(cooldownUI);
+            Debug.Log($"InventorySlot ({gameObject.name}): Registration complete");
+        }
+        else
+        {
+            Debug.LogError($"InventorySlot ({gameObject.name}): Cannot register - cooldownUI or ShieldManager is null!");
+        }
     }
 
     public WeaponInfo GetWeaponInfo() {

@@ -38,19 +38,30 @@ public class ShieldManager : Singleton<ShieldManager>
     }
     
     /// <summary>
-    /// Reset UI reference when new scene loads (new UICanvas with new WeaponCooldownUI)
+    /// Handle scene loaded event
+    /// Don't clear UI reference - let new UI override when it registers
     /// </summary>
     private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
     {
-        Debug.Log($"ShieldManager: OnSceneLoaded - Scene: {scene.name}, clearing UI reference");
-        shieldCooldownUI = null; // Clear old reference, will be re-registered by new UI
+        Debug.Log($"ShieldManager: OnSceneLoaded - Scene: {scene.name}, Mode: {mode}");
+        Debug.Log($"ShieldManager: Current shieldCooldownUI = {(shieldCooldownUI != null ? "EXISTS" : "NULL")}");
+        
+        // DON'T clear shieldCooldownUI here!
+        // New InventorySlot will register and override it automatically
+        // This prevents timing issues where OnSceneLoaded runs after registration
         
         // Reset cooldown state when starting new game (Scene1)
         if (scene.name == "Scene1")
         {
             isOnCooldown = false;
             cooldownEndTime = 0f;
-            Debug.Log("ShieldManager: Reset cooldown state for new game");
+            shieldCooldownUI = null; // Clear UI when restarting game
+            Debug.Log("ShieldManager: Reset cooldown state and UI for new game");
+        }
+        else
+        {
+            Debug.Log($"ShieldManager: Keeping cooldown state - isOnCooldown={isOnCooldown}, remaining={GetRemainingCooldown():F1}s");
+            Debug.Log($"ShieldManager: Waiting for new UI to register...");
         }
     }
     
@@ -60,8 +71,10 @@ public class ShieldManager : Singleton<ShieldManager>
     /// </summary>
     public void RegisterShieldCooldownUI(WeaponCooldownUI cooldownUI)
     {
+        Debug.Log($"ShieldManager: RegisterShieldCooldownUI called - cooldownUI={cooldownUI != null}, this={this != null}");
+        
         shieldCooldownUI = cooldownUI;
-        Debug.Log("ShieldManager: Registered Shield Cooldown UI");
+        Debug.Log($"ShieldManager: Registered Shield Cooldown UI - shieldCooldownUI now = {(shieldCooldownUI != null ? "SET" : "NULL")}");
         
         // If shield is on cooldown, sync the new UI
         if (isOnCooldown)
@@ -70,8 +83,19 @@ public class ShieldManager : Singleton<ShieldManager>
             if (remainingCooldown > 0f)
             {
                 Debug.Log($"ShieldManager: Syncing UI with {remainingCooldown:F1}s remaining cooldown");
-                shieldCooldownUI.StartCooldown(remainingCooldown);
+                if (shieldCooldownUI != null)
+                {
+                    shieldCooldownUI.StartCooldown(remainingCooldown);
+                }
+                else
+                {
+                    Debug.LogError("ShieldManager: Cannot sync - shieldCooldownUI is NULL!");
+                }
             }
+        }
+        else
+        {
+            Debug.Log("ShieldManager: No active cooldown to sync");
         }
     }
     
@@ -90,6 +114,7 @@ public class ShieldManager : Singleton<ShieldManager>
     public void OnShieldCooldownStarted(float cooldownDuration)
     {
         Debug.Log($"ShieldManager: Shield Cooldown Started - {cooldownDuration}s");
+        Debug.Log($"ShieldManager: shieldCooldownUI = {(shieldCooldownUI != null ? "EXISTS" : "NULL")}");
         
         // Store cooldown state
         isOnCooldown = true;
@@ -97,11 +122,12 @@ public class ShieldManager : Singleton<ShieldManager>
         
         if (shieldCooldownUI != null)
         {
+            Debug.Log($"ShieldManager: Calling shieldCooldownUI.StartCooldown({cooldownDuration}s)");
             shieldCooldownUI.StartCooldown(cooldownDuration);
         }
         else
         {
-            Debug.LogWarning("ShieldManager: No cooldown UI registered!");
+            Debug.LogWarning("ShieldManager: No cooldown UI registered! Cannot display cooldown.");
         }
     }
     
