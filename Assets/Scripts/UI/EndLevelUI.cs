@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -267,14 +268,34 @@ public class EndLevelUI : MonoBehaviour
     private void OnRestart()
     {
         Debug.Log("EndLevelUI: Restart button clicked!");
+        StartCoroutine(FadeAndRestart());
+    }
+    
+    /// <summary>
+    /// Fade to black then restart game
+    /// </summary>
+    private IEnumerator FadeAndRestart()
+    {
+        // Keep input disabled during fade
+        // Don't re-enable input yet!
         
-        // Hide panel before loading
+        Time.timeScale = 1f;
+        
+        // Fade to black
+        if (UIFade.Instance != null)
+        {
+            UIFade.Instance.FadeToBlack();
+            Debug.Log("EndLevelUI: Fading to black...");
+            yield return new WaitForSeconds(1f);
+        }
+        
+        // Hide panel after fade
         if (endLevelPanel != null)
         {
             endLevelPanel.SetActive(false);
         }
         
-        // Re-enable input before loading scene
+        // Re-enable input just before loading (scene will handle it)
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.EnableInput();
@@ -290,12 +311,10 @@ public class EndLevelUI : MonoBehaviour
             ActiveInventory.Instance.EnableInput();
         }
         
-        Time.timeScale = 1f;
-        
-        // Destroy all DontDestroyOnLoad objects to ensure clean restart
+        // Destroy all DontDestroyOnLoad objects
         DestroyPersistentObjects();
         
-        // Load first scene to restart game
+        // Load first scene
         SceneManager.LoadScene(firstSceneName);
     }
     
@@ -330,14 +349,34 @@ public class EndLevelUI : MonoBehaviour
     private void OnMenu()
     {
         Debug.Log("EndLevelUI: Menu button clicked!");
+        StartCoroutine(FadeAndLoadMenu());
+    }
+    
+    /// <summary>
+    /// Fade to black then load main menu
+    /// </summary>
+    private IEnumerator FadeAndLoadMenu()
+    {
+        // Keep input disabled during fade
+        // Don't re-enable input yet!
         
-        // Hide panel before loading
+        Time.timeScale = 1f;
+        
+        // Fade to black
+        if (UIFade.Instance != null)
+        {
+            UIFade.Instance.FadeToBlack();
+            Debug.Log("EndLevelUI: Fading to black...");
+            yield return new WaitForSeconds(1f);
+        }
+        
+        // Hide panel after fade
         if (endLevelPanel != null)
         {
             endLevelPanel.SetActive(false);
         }
         
-        // Re-enable input before loading scene
+        // Re-enable input just before loading (scene will handle it)
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.EnableInput();
@@ -353,11 +392,10 @@ public class EndLevelUI : MonoBehaviour
             ActiveInventory.Instance.EnableInput();
         }
         
-        Time.timeScale = 1f;
-        
-        // Destroy all DontDestroyOnLoad objects before going to menu
+        // Destroy all DontDestroyOnLoad objects
         DestroyPersistentObjects();
         
+        // Load main menu
         SceneManager.LoadScene(menuSceneName);
     }
 }
