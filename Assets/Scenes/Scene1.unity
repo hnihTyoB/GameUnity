@@ -6583,7 +6583,7 @@ Transform:
   m_GameObject: {fileID: 1116665861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.96, y: 12.18, z: 0}
+  m_LocalPosition: {x: 1, y: 12.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6601,7 +6601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37b4ba179585574e8275eaef518ea7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SafeZone
-  checkRadius: 2
+  checkRadius: 1.25
   requireAllVictims: 0
   gizmoColor: {r: 0, g: 1, b: 0, a: 0.3}
   showGizmos: 1
@@ -6639,8 +6639,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0008313656, y: 0}
-  m_Radius: 1.9940298
+  m_Offset: {x: -0.0008313656, y: -0.0052576065}
+  m_Radius: 1.2628174
 --- !u!1 &1124346077
 GameObject:
   m_ObjectHideFlags: 0
@@ -43167,10 +43167,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 387314440859090955, guid: 50ee05297dc3657448b9acefd3478371, type: 3}
-      propertyPath: m_RaycastTarget
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 565112373816414388, guid: 50ee05297dc3657448b9acefd3478371, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

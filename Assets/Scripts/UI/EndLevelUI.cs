@@ -11,6 +11,7 @@ public class EndLevelUI : MonoBehaviour
 {
     [Header("UI Elements")]
     [SerializeField] private GameObject endLevelPanel;
+    [SerializeField] private TMP_Text difficultyText;
     [SerializeField] private TMP_Text currentScoreText;
     [SerializeField] private TMP_Text highScoreText;
     [SerializeField] private TMP_Text victimsRescuedText;
@@ -113,6 +114,13 @@ public class EndLevelUI : MonoBehaviour
         // Update UI with score and statistics
         if (ScoreManager.Instance != null)
         {
+            // Difficulty
+            if (difficultyText != null)
+            {
+                DifficultyManager.Difficulty difficulty = DifficultyManager.GetCurrentDifficulty();
+                difficultyText.text = $"Difficulty: {difficulty}";
+            }
+            
             // Current score
             if (currentScoreText != null)
             {
@@ -129,17 +137,19 @@ public class EndLevelUI : MonoBehaviour
             // Statistics
             if (victimsRescuedText != null)
             {
-                victimsRescuedText.text = $"Victims In Safe Zone: {ScoreManager.Instance.GetVictimsInSafeZone()}";
+                victimsRescuedText.text = $"Victims Rescued: {ScoreManager.Instance.GetVictimsInSafeZone()}";
             }
             
             if (enemiesHitText != null)
             {
-                enemiesHitText.text = $"Enemies Hit: {ScoreManager.Instance.GetEnemiesHit()}";
+                int hitPenalty = ScoreManager.Instance.GetTotalHitPenalty();
+                enemiesHitText.text = $"Enemies Hit: -{hitPenalty}";
             }
             
             if (enemiesKilledText != null)
             {
-                enemiesKilledText.text = $"Enemies Killed: {ScoreManager.Instance.GetEnemiesKilled()}";
+                int killPenalty = ScoreManager.Instance.GetTotalKillPenalty();
+                enemiesKilledText.text = $"Enemies Killed: -{killPenalty}";
             }
         }
         

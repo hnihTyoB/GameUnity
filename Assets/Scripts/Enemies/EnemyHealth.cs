@@ -59,9 +59,14 @@ public class EnemyHealth : MonoBehaviour
         StartCoroutine(flash.FlashRoutine());
         
         // Add hit penalty to score
+        Debug.Log($"EnemyHealth: TakeDamage called on {gameObject.name}, ScoreManager.Instance = {(ScoreManager.Instance != null ? "EXISTS" : "NULL")}");
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.AddHitPoints();
+        }
+        else
+        {
+            Debug.LogError("EnemyHealth: ScoreManager.Instance is NULL! Cannot add hit penalty.");
         }
         
         StartCoroutine(CheckDetectDeathRoutine());
@@ -76,9 +81,14 @@ public class EnemyHealth : MonoBehaviour
     public void DetectDeath() {
         if (currentHealth <= 0) {
             // Add kill penalty to score (before destroying)
+            Debug.Log($"EnemyHealth: Enemy {gameObject.name} died, ScoreManager.Instance = {(ScoreManager.Instance != null ? "EXISTS" : "NULL")}");
             if (ScoreManager.Instance != null)
             {
                 ScoreManager.Instance.AddKillPoints();
+            }
+            else
+            {
+                Debug.LogError("EnemyHealth: ScoreManager.Instance is NULL! Cannot add kill penalty.");
             }
             
             if (deathVFXPrefab != null)

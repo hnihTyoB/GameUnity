@@ -16,6 +16,8 @@ public class ScoreManager : Singleton<ScoreManager>
     private int victimsInSafeZone = 0; // Victims that reached safe zone (scored)
     private int enemiesHit = 0;
     private int enemiesKilled = 0;
+    private int totalHitPenalty = 0; // Total points lost from hitting enemies
+    private int totalKillPenalty = 0; // Total points lost from killing enemies
     
     [Header("Events")]
     public System.Action<int> OnScoreChanged; // Event when score changes
@@ -61,13 +63,17 @@ public class ScoreManager : Singleton<ScoreManager>
     
     /// <summary>
     /// Reset score when a new scene is loaded
+    /// Only reset when starting a new game (Scene1) or going to MainMenu
+    /// Don't reset when progressing through levels (Scene1 -> Scene2)
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"ScoreManager: OnSceneLoaded called - Scene: {scene.name}, Mode: {mode}");
         
-        // Don't reset if loading main menu
-        if (scene.name != "MainMenu")
+        // Reset score only when:
+        // 1. Loading Scene1 (start of new game)
+        // 2. Loading MainMenu (back to menu)
+        if (scene.name == "Scene1" || scene.name == "MainMenu")
         {
             Debug.Log($"ScoreManager: Resetting score for scene: {scene.name}");
             ResetScore();
@@ -75,7 +81,7 @@ public class ScoreManager : Singleton<ScoreManager>
         }
         else
         {
-            Debug.Log($"ScoreManager: MainMenu loaded, skipping score reset");
+            Debug.Log($"ScoreManager: Scene {scene.name} loaded, keeping current score: {currentScore}");
         }
     }
     
@@ -88,6 +94,8 @@ public class ScoreManager : Singleton<ScoreManager>
         victimsInSafeZone = 0;
         enemiesHit = 0;
         enemiesKilled = 0;
+        totalHitPenalty = 0;
+        totalKillPenalty = 0;
         OnScoreChanged?.Invoke(currentScore);
     }
     
@@ -98,10 +106,10 @@ public class ScoreManager : Singleton<ScoreManager>
     public void AddSafeZonePoints()
     {
         int points = GetRescuePoints();
-        currentScore = Mathf.Max(0, currentScore + points); // Minimum = 0
+        currentScore += points; // Allow negative score temporarily
         victimsInSafeZone++;
-        OnScoreChanged?.Invoke(currentScore);
-        Debug.Log($"ScoreManager: Victim reached safe zone! +{points} points (Total: {currentScore})");
+        OnScoreChanged?.Invoke(Mathf.Max(0, currentScore)); // Display as 0 if negative
+        Debug.Log($"ScoreManager: Victim reached safe zone! +{points} points (Total: {currentScore}, Victims: {victimsInSafeZone})");
     }
     
     /// <summary>
@@ -110,9 +118,10 @@ public class ScoreManager : Singleton<ScoreManager>
     public void AddHitPoints()
     {
         int penalty = GetHitPenalty();
-        currentScore = Mathf.Max(0, currentScore - penalty); // Minimum = 0
+        currentScore -= penalty; // Allow negative score temporarily
         enemiesHit++;
-        OnScoreChanged?.Invoke(currentScore);
+        totalHitPenalty += penalty;
+        OnScoreChanged?.Invoke(Mathf.Max(0, currentScore)); // Display as 0 if negative
         Debug.Log($"ScoreManager: Hit enemy! -{penalty} points (Total: {currentScore})");
     }
     
@@ -122,9 +131,10 @@ public class ScoreManager : Singleton<ScoreManager>
     public void AddKillPoints()
     {
         int penalty = GetKillPenalty();
-        currentScore = Mathf.Max(0, currentScore - penalty); // Minimum = 0
+        currentScore -= penalty; // Allow negative score temporarily
         enemiesKilled++;
-        OnScoreChanged?.Invoke(currentScore);
+        totalKillPenalty += penalty;
+        OnScoreChanged?.Invoke(Mathf.Max(0, currentScore)); // Display as 0 if negative
         Debug.Log($"ScoreManager: Killed enemy! -{penalty} points (Total: {currentScore})");
     }
     
@@ -190,10 +200,14 @@ public class ScoreManager : Singleton<ScoreManager>
     /// </summary>
     public void OnLevelComplete()
     {
+        // Clamp final score to minimum 0
+        currentScore = Mathf.Max(0, currentScore);
+        
         // Save high score if current score is higher
         SaveHighScore();
         
         Debug.Log($"ScoreManager: Level complete! Final Score: {currentScore}, High Score: {GetHighScore()}");
+        Debug.Log($"ScoreManager: Stats - Victims: {victimsInSafeZone}, Hits: {enemiesHit} (-{totalHitPenalty}), Kills: {enemiesKilled} (-{totalKillPenalty})");
         Debug.Log($"ScoreManager: OnLevelEnd event has {OnLevelEnd?.GetInvocationList().Length ?? 0} subscribers");
         
         // Trigger level end event
@@ -256,9 +270,11 @@ public class ScoreManager : Singleton<ScoreManager>
     }
     
     // Public getters
-    public int GetCurrentScore() => currentScore;
+    public int GetCurrentScore() => Mathf.Max(0, currentScore); // Always return non-negative
     public int GetVictimsInSafeZone() => victimsInSafeZone;
     public int GetEnemiesHit() => enemiesHit;
     public int GetEnemiesKilled() => enemiesKilled;
+    public int GetTotalHitPenalty() => totalHitPenalty;
+    public int GetTotalKillPenalty() => totalKillPenalty;
 }
 
