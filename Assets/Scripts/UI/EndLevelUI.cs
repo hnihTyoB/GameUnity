@@ -17,13 +17,12 @@ public class EndLevelUI : MonoBehaviour
     [SerializeField] private TMP_Text victimsRescuedText;
     [SerializeField] private TMP_Text enemiesHitText;
     [SerializeField] private TMP_Text enemiesKilledText;
-    [SerializeField] private Button continueButton;
+    [SerializeField] private Button restartButton;
     [SerializeField] private Button menuButton;
     
     [Header("Scene Settings")]
     [SerializeField] private string menuSceneName = "MainMenu";
-    
-    private static string nextSceneName = ""; // Store next scene from AreaExit
+    [SerializeField] private string firstSceneName = "Scene1";
     
     private void OnEnable()
     {
@@ -47,14 +46,14 @@ public class EndLevelUI : MonoBehaviour
         }
         
         // Setup buttons
-        if (continueButton != null)
+        if (restartButton != null)
         {
-            continueButton.onClick.AddListener(OnContinue);
-            Debug.Log("EndLevelUI: Continue button setup");
+            restartButton.onClick.AddListener(OnRestart);
+            Debug.Log("EndLevelUI: Restart button setup");
         }
         else
         {
-            Debug.LogError("EndLevelUI: Continue button is null! Please assign it in Inspector!");
+            Debug.LogError("EndLevelUI: Restart button is null! Please assign it in Inspector!");
         }
         
         if (menuButton != null)
@@ -228,14 +227,14 @@ public class EndLevelUI : MonoBehaviour
         }
         
         // Double-check buttons are assigned and setup
-        if (continueButton == null)
+        if (restartButton == null)
         {
-            Debug.LogError("EndLevelUI: Continue button is NULL! Please assign it in Inspector!");
+            Debug.LogError("EndLevelUI: Restart button is NULL! Please assign it in Inspector!");
         }
         else
         {
-            continueButton.interactable = true;
-            Debug.Log("EndLevelUI: Continue button is interactable");
+            restartButton.interactable = true;
+            Debug.Log("EndLevelUI: Restart button is interactable");
         }
         
         if (menuButton == null)
@@ -263,11 +262,17 @@ public class EndLevelUI : MonoBehaviour
     }
     
     /// <summary>
-    /// Continue to next level (or reload current level if no next scene)
+    /// Restart game from the beginning (Scene1)
     /// </summary>
-    private void OnContinue()
+    private void OnRestart()
     {
-        Debug.Log("EndLevelUI: Continue button clicked!");
+        Debug.Log("EndLevelUI: Restart button clicked!");
+        
+        // Hide panel before loading
+        if (endLevelPanel != null)
+        {
+            endLevelPanel.SetActive(false);
+        }
         
         // Re-enable input before loading scene
         if (PlayerController.Instance != null)
@@ -287,32 +292,36 @@ public class EndLevelUI : MonoBehaviour
         
         Time.timeScale = 1f;
         
-        // Load next scene if available, otherwise reload current scene
-        if (!string.IsNullOrEmpty(nextSceneName))
-        {
-            SceneManager.LoadScene(nextSceneName);
-        }
-        else
-        {
-            // Reload current scene if no next scene set
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        // Destroy all DontDestroyOnLoad objects to ensure clean restart
+        DestroyPersistentObjects();
+        
+        // Load first scene to restart game
+        SceneManager.LoadScene(firstSceneName);
     }
     
     /// <summary>
-    /// Set next scene to load (called by AreaExit)
+    /// Destroy all persistent (DontDestroyOnLoad) objects for clean restart
     /// </summary>
-    public static void SetNextScene(string sceneName)
+    private void DestroyPersistentObjects()
     {
-        nextSceneName = sceneName;
-    }
-    
-    /// <summary>
-    /// Clear next scene (called when resetting)
-    /// </summary>
-    public static void ClearNextScene()
-    {
-        nextSceneName = "";
+        // Find all root GameObjects in DontDestroyOnLoad scene
+        GameObject[] rootObjects = gameObject.scene.GetRootGameObjects();
+        
+        // Also get objects from DontDestroyOnLoad
+        GameObject temp = new GameObject("Temp");
+        DontDestroyOnLoad(temp);
+        UnityEngine.SceneManagement.Scene dontDestroyScene = temp.scene;
+        Destroy(temp);
+        
+        GameObject[] dontDestroyObjects = dontDestroyScene.GetRootGameObjects();
+        
+        Debug.Log($"EndLevelUI: Found {dontDestroyObjects.Length} DontDestroyOnLoad objects to destroy");
+        
+        foreach (GameObject obj in dontDestroyObjects)
+        {
+            Debug.Log($"EndLevelUI: Destroying {obj.name}");
+            Destroy(obj);
+        }
     }
     
     /// <summary>
@@ -321,6 +330,12 @@ public class EndLevelUI : MonoBehaviour
     private void OnMenu()
     {
         Debug.Log("EndLevelUI: Menu button clicked!");
+        
+        // Hide panel before loading
+        if (endLevelPanel != null)
+        {
+            endLevelPanel.SetActive(false);
+        }
         
         // Re-enable input before loading scene
         if (PlayerController.Instance != null)

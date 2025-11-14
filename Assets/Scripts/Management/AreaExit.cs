@@ -22,12 +22,6 @@ public class AreaExit : MonoBehaviour
             // Only show EndLevelUI in Scene2 (or last scene)
             if (currentSceneName == "Scene2")
             {
-                // Store scene to load for EndLevelUI
-                if (!string.IsNullOrEmpty(sceneToLoad))
-                {
-                    EndLevelUI.SetNextScene(sceneToLoad);
-                }
-                
                 // Find EndLevelUI in scene if it exists
                 EndLevelUI endLevelUI = FindObjectOfType<EndLevelUI>();
                 if (endLevelUI == null)
@@ -39,7 +33,7 @@ public class AreaExit : MonoBehaviour
                     Debug.Log("AreaExit: Found EndLevelUI in scene");
                 }
                 
-                // Trigger level complete (EndLevelUI will handle displaying results and scene transition)
+                // Trigger level complete (EndLevelUI will handle displaying results)
                 if (ScoreManager.Instance != null)
                 {
                     ScoreManager.Instance.OnLevelComplete();
@@ -50,15 +44,15 @@ public class AreaExit : MonoBehaviour
                 }
                 
                 // Note: EndLevelUI will pause the game and show results
-                // Player can then choose to continue (load next scene) or go to menu
+                // Player can then choose to restart or go to menu
             }
             else
             {
                 // Scene1: Just load next scene without showing EndLevelUI
-            SceneManagement.Instance.SetTransitionName(sceneTransitionName);
-            UIFade.Instance.FadeToBlack();
-            StartCoroutine(LoadSceneRoutine());
-        }
+                SceneManagement.Instance.SetTransitionName(sceneTransitionName);
+                UIFade.Instance.FadeToBlack();
+                StartCoroutine(LoadSceneRoutine());
+            }
     }
     }
     

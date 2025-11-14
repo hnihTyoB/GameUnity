@@ -77,6 +77,14 @@ public class ScoreManager : Singleton<ScoreManager>
         {
             Debug.Log($"ScoreManager: Resetting score for scene: {scene.name}");
             ResetScore();
+            
+            // Also reset RescueManager when starting new game
+            if (scene.name == "Scene1" && RescueManager.Instance != null)
+            {
+                RescueManager.Instance.ResetRescueCount();
+                Debug.Log($"ScoreManager: RescueManager reset complete");
+            }
+            
             Debug.Log($"ScoreManager: Score reset complete");
         }
         else

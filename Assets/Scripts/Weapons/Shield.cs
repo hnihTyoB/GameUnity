@@ -79,6 +79,10 @@ public class Shield : MonoBehaviour, IWeapon
         
         // Shield starts inactive, waiting for player to activate
         SetActive(false);
+        
+        // Make shield persist across scenes (it's attached to Player which also persists)
+        // No need for DontDestroyOnLoad since it's child of Player
+        Debug.Log("Shield: Initialized and attached to Player");
     }
     
     private void OnEnable()
@@ -208,16 +212,19 @@ public class Shield : MonoBehaviour, IWeapon
     
     public void Attack()
     {
+        // Check cooldown from ShieldManager (persistent across scenes)
+        bool managerOnCooldown = ShieldManager.Instance != null && ShieldManager.Instance.IsOnCooldown();
+        
         // When player presses slot key again (e.g., press "2" twice), activate shield
         // But only if not already on cooldown
-        if (!isOnCooldown && activeShieldCoroutine == null)
+        if (!managerOnCooldown && !isOnCooldown && activeShieldCoroutine == null)
         {
             activeShieldCoroutine = StartCoroutine(ActivateShieldRoutine());
             Debug.Log("Shield: Activating via slot key press!");
         }
-        else if (isOnCooldown)
+        else if (managerOnCooldown || isOnCooldown)
         {
-            float remaining = GetRemainingCooldown();
+            float remaining = ShieldManager.Instance != null ? ShieldManager.Instance.GetRemainingCooldown() : GetRemainingCooldown();
             Debug.Log($"Shield on cooldown! {remaining:F1}s remaining");
         }
     }

@@ -1332,7 +1332,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Continue
+  m_text: Restart
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8e2b63f0874886c43b97982cd87580fc, type: 2}
   m_sharedMaterial: {fileID: -3446160940842129825, guid: 8e2b63f0874886c43b97982cd87580fc, type: 2}
@@ -2572,7 +2572,7 @@ GameObject:
   - component: {fileID: 2094462881783099614}
   - component: {fileID: 2089752194410086417}
   m_Layer: 5
-  m_Name: EndContinueButton
+  m_Name: EndRestartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4198,7 +4198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5553291865355999214
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4953,15 +4953,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndLevelUI
   endLevelPanel: {fileID: 6853853382176412408}
-  difficultyText: {fileID: 0}
+  difficultyText: {fileID: 3810265010597768984}
   currentScoreText: {fileID: 3246377839813236208}
   highScoreText: {fileID: 1195362311684243110}
   victimsRescuedText: {fileID: 4407695018375584152}
   enemiesHitText: {fileID: 1722044250644828579}
   enemiesKilledText: {fileID: 6420300575095139159}
-  continueButton: {fileID: 2089752194410086417}
+  restartButton: {fileID: 2089752194410086417}
   menuButton: {fileID: 2709646944959983240}
   menuSceneName: MainMenu
+  firstSceneName: Scene1
 --- !u!1 &7944875282335675028
 GameObject:
   m_ObjectHideFlags: 0

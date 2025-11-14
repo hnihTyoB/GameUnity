@@ -44,6 +44,8 @@ public class WeaponCooldownUI : MonoBehaviour
     /// </summary>
     public void StartCooldown(float cooldownDuration)
     {
+        Debug.Log($"WeaponCooldownUI ({gameObject.name}): StartCooldown called with duration={cooldownDuration:F1}s");
+        
         maxCooldown = cooldownDuration;
         currentCooldown = cooldownDuration;
         isOnCooldown = true;
@@ -52,11 +54,21 @@ public class WeaponCooldownUI : MonoBehaviour
         if (cooldownText != null)
         {
             cooldownText.gameObject.SetActive(true);
+            Debug.Log($"WeaponCooldownUI ({gameObject.name}): Cooldown text activated");
+        }
+        else
+        {
+            Debug.LogError($"WeaponCooldownUI ({gameObject.name}): cooldownText is NULL!");
         }
         
         if (cooldownOverlay != null)
         {
             cooldownOverlay.gameObject.SetActive(true);
+            Debug.Log($"WeaponCooldownUI ({gameObject.name}): Cooldown overlay activated");
+        }
+        else
+        {
+            Debug.LogError($"WeaponCooldownUI ({gameObject.name}): cooldownOverlay is NULL!");
         }
     }
     
