@@ -354,6 +354,10 @@ public class EndLevelUI : MonoBehaviour
         }
         
         Time.timeScale = 1f;
+        
+        // Destroy all DontDestroyOnLoad objects before going to menu
+        DestroyPersistentObjects();
+        
         SceneManager.LoadScene(menuSceneName);
     }
 }
