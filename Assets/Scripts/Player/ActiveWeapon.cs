@@ -95,9 +95,28 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
         attackButtonDown = false;
     }
     private void Attack() {
+        // Don't attack if clicking on UI
+        if (IsPointerOverUI())
+        {
+            return;
+        }
+        
         if (attackButtonDown && !isAttacking && CurrentActiveWeapon) {
             AttackCooldown();
             (CurrentActiveWeapon as IWeapon).Attack();
         }
+    }
+    
+    /// <summary>
+    /// Check if pointer is over UI element
+    /// </summary>
+    private bool IsPointerOverUI()
+    {
+        if (UnityEngine.EventSystems.EventSystem.current == null)
+        {
+            return false;
+        }
+        
+        return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 }
