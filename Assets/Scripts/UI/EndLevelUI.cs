@@ -15,6 +15,7 @@ public class EndLevelUI : MonoBehaviour
     [SerializeField] private TMP_Text difficultyText;
     [SerializeField] private TMP_Text currentScoreText;
     [SerializeField] private TMP_Text highScoreText;
+    [SerializeField] private TMP_Text playTimeText;
     [SerializeField] private TMP_Text victimsRescuedText;
     [SerializeField] private TMP_Text enemiesHitText;
     [SerializeField] private TMP_Text enemiesKilledText;
@@ -131,7 +132,19 @@ public class EndLevelUI : MonoBehaviour
             if (highScoreText != null)
             {
                 int highScore = ScoreManager.Instance.GetHighScore();
+                Debug.Log($"EndLevelUI: Displaying High Score: {highScore}");
                 highScoreText.text = $"High Score: {highScore}";
+            }
+            else
+            {
+                Debug.LogError("EndLevelUI: highScoreText is NULL!");
+            }
+            
+            // Play time
+            if (playTimeText != null)
+            {
+                string playTime = ScoreManager.Instance.GetPlayTimeFormatted();
+                playTimeText.text = $"Time: {playTime}";
             }
             
             // Statistics

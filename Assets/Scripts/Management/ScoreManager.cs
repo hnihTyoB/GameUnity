@@ -19,6 +19,10 @@ public class ScoreManager : Singleton<ScoreManager>
     private int totalHitPenalty = 0; // Total points lost from hitting enemies
     private int totalKillPenalty = 0; // Total points lost from killing enemies
     
+    [Header("Time Tracking")]
+    private float playTime = 0f; // Total play time in seconds (excluding pause time)
+    private bool isTimerRunning = false;
+    
     [Header("Events")]
     public System.Action<int> OnScoreChanged; // Event when score changes
     public System.Action OnLevelEnd; // Event when level ends
@@ -51,8 +55,20 @@ public class ScoreManager : Singleton<ScoreManager>
         // Reset score when level starts
         ResetScore();
         
+        // Start timer
+        StartTimer();
+        
         // Subscribe to scene loaded event to reset score on new level
         SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    
+    private void Update()
+    {
+        // Update play time (only when not paused)
+        if (isTimerRunning && Time.timeScale > 0f)
+        {
+            playTime += Time.deltaTime;
+        }
     }
     
     private void OnDestroy()
@@ -104,7 +120,44 @@ public class ScoreManager : Singleton<ScoreManager>
         enemiesKilled = 0;
         totalHitPenalty = 0;
         totalKillPenalty = 0;
+        playTime = 0f;
         OnScoreChanged?.Invoke(currentScore);
+    }
+    
+    /// <summary>
+    /// Start play time timer
+    /// </summary>
+    public void StartTimer()
+    {
+        isTimerRunning = true;
+        Debug.Log("ScoreManager: Timer started");
+    }
+    
+    /// <summary>
+    /// Stop play time timer
+    /// </summary>
+    public void StopTimer()
+    {
+        isTimerRunning = false;
+        Debug.Log($"ScoreManager: Timer stopped at {GetPlayTimeFormatted()}");
+    }
+    
+    /// <summary>
+    /// Get play time in seconds
+    /// </summary>
+    public float GetPlayTime()
+    {
+        return playTime;
+    }
+    
+    /// <summary>
+    /// Get play time formatted as MM:SS
+    /// </summary>
+    public string GetPlayTimeFormatted()
+    {
+        int minutes = Mathf.FloorToInt(playTime / 60f);
+        int seconds = Mathf.FloorToInt(playTime % 60f);
+        return $"{minutes:00}:{seconds:00}";
     }
     
     /// <summary>
@@ -208,14 +261,20 @@ public class ScoreManager : Singleton<ScoreManager>
     /// </summary>
     public void OnLevelComplete()
     {
+        // Stop timer
+        StopTimer();
+        
         // Clamp final score to minimum 0
         currentScore = Mathf.Max(0, currentScore);
+        
+        Debug.Log($"ScoreManager: OnLevelComplete called - Current Score BEFORE save: {currentScore}");
         
         // Save high score if current score is higher
         SaveHighScore();
         
         Debug.Log($"ScoreManager: Level complete! Final Score: {currentScore}, High Score: {GetHighScore()}");
         Debug.Log($"ScoreManager: Stats - Victims: {victimsInSafeZone}, Hits: {enemiesHit} (-{totalHitPenalty}), Kills: {enemiesKilled} (-{totalKillPenalty})");
+        Debug.Log($"ScoreManager: Play Time: {GetPlayTimeFormatted()}");
         Debug.Log($"ScoreManager: OnLevelEnd event has {OnLevelEnd?.GetInvocationList().Length ?? 0} subscribers");
         
         // Trigger level end event
@@ -229,14 +288,26 @@ public class ScoreManager : Singleton<ScoreManager>
     /// </summary>
     private void SaveHighScore()
     {
+        DifficultyManager.Difficulty difficulty = DifficultyManager.GetCurrentDifficulty();
+        string key = GetHighScoreKey(difficulty);
         int highScore = GetHighScore();
+        
+        Debug.Log($"ScoreManager: SaveHighScore - Difficulty: {difficulty}, Key: {key}");
+        Debug.Log($"ScoreManager: Current Score: {currentScore}, Previous High Score: {highScore}");
+        
         if (currentScore > highScore)
         {
-            DifficultyManager.Difficulty difficulty = DifficultyManager.GetCurrentDifficulty();
-            string key = GetHighScoreKey(difficulty);
             PlayerPrefs.SetInt(key, currentScore);
             PlayerPrefs.Save();
-            Debug.Log($"ScoreManager: New high score! {currentScore} (Previous: {highScore})");
+            Debug.Log($"ScoreManager: NEW HIGH SCORE SAVED! {currentScore} (Previous: {highScore})");
+            
+            // Verify save
+            int savedScore = PlayerPrefs.GetInt(key, -1);
+            Debug.Log($"ScoreManager: Verification - Saved score read back: {savedScore}");
+        }
+        else
+        {
+            Debug.Log($"ScoreManager: No new high score. Current: {currentScore} <= High: {highScore}");
         }
     }
     
@@ -247,7 +318,9 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         DifficultyManager.Difficulty difficulty = DifficultyManager.GetCurrentDifficulty();
         string key = GetHighScoreKey(difficulty);
-        return PlayerPrefs.GetInt(key, 0);
+        int highScore = PlayerPrefs.GetInt(key, 0);
+        Debug.Log($"ScoreManager: GetHighScore - Difficulty: {difficulty}, Key: {key}, Score: {highScore}");
+        return highScore;
     }
     
     /// <summary>
