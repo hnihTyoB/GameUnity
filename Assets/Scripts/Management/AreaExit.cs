@@ -7,53 +7,52 @@ public class AreaExit : MonoBehaviour
 {
     [SerializeField] private string sceneToLoad;
     [SerializeField] private string sceneTransitionName;
+    [SerializeField] private string endExitTag = "AreaEnd";
     private float waitToLoadTime = 1f;
     private bool hasTriggered = false; // Prevent multiple triggers
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent<PlayerController>() && !hasTriggered)
+        if (hasTriggered) return;
+        if (other.gameObject.GetComponent<PlayerController>() == null) return;
+
+        hasTriggered = true;
+
+        // If this door is tagged as the end-game exit, trigger level complete
+        if (gameObject.CompareTag(endExitTag))
         {
-            hasTriggered = true;
-            
-            // Check current scene name
-            string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-            
-            // Only show EndLevelUI in Scene2 (or last scene)
-            if (currentSceneName == "Scene2")
+            if (ScoreManager.Instance != null)
             {
-                // Find EndLevelUI in scene if it exists
-                EndLevelUI endLevelUI = FindObjectOfType<EndLevelUI>();
-                if (endLevelUI == null)
-                {
-                    Debug.LogError("AreaExit: EndLevelUI not found in scene! Please add EndLevelUI component to a GameObject in Scene2.");
-                }
-                else
-                {
-                    Debug.Log("AreaExit: Found EndLevelUI in scene");
-                }
-                
-                // Trigger level complete (EndLevelUI will handle displaying results)
-                if (ScoreManager.Instance != null)
-                {
-                    ScoreManager.Instance.OnLevelComplete();
-                }
-                else
-                {
-                    Debug.LogError("AreaExit: ScoreManager.Instance is null!");
-                }
-                
-                // Note: EndLevelUI will pause the game and show results
-                // Player can then choose to restart or go to menu
+                ScoreManager.Instance.OnLevelComplete();
+                Debug.Log("AreaExit: End-game door triggered - OnLevelComplete called");
             }
             else
             {
-                // Scene1: Just load next scene without showing EndLevelUI
-                SceneManagement.Instance.SetTransitionName(sceneTransitionName);
-                UIFade.Instance.FadeToBlack();
-                StartCoroutine(LoadSceneRoutine());
+                Debug.LogError("AreaExit: ScoreManager.Instance is null!");
             }
-    }
+            return;
+        }
+
+        // Normal scene transition (non end-game door)
+        if (SceneManagement.Instance != null)
+        {
+            SceneManagement.Instance.SetTransitionName(sceneTransitionName);
+        }
+        else
+        {
+            Debug.LogWarning("AreaExit: SceneManagement.Instance is null.");
+        }
+
+        if (UIFade.Instance != null)
+        {
+            UIFade.Instance.FadeToBlack();
+        }
+        else
+        {
+            Debug.LogWarning("AreaExit: UIFade.Instance is null.");
+        }
+
+        StartCoroutine(LoadSceneRoutine());
     }
     
     private IEnumerator LoadSceneRoutine()
