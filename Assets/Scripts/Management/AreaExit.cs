@@ -8,13 +8,36 @@ public class AreaExit : MonoBehaviour
     [SerializeField] private string sceneToLoad;
     [SerializeField] private string sceneTransitionName;
     [SerializeField] private string endExitTag = "AreaEnd";
+    [SerializeField] private BoxCollider2D blockingCollider; // Tham chiếu đến BoxCollider2D để chặn người chơi
+
     private float waitToLoadTime = 1f;
     private bool hasTriggered = false; // Prevent multiple triggers
+
+    private void Start()
+    {
+        // Đảm bảo blockingCollider bị tắt khi bắt đầu
+        if (blockingCollider != null)
+        {
+            blockingCollider.enabled = false;
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (hasTriggered) return;
         if (other.gameObject.GetComponent<PlayerController>() == null) return;
+
+        // Ngăn người chơi quay lại scene1 từ scene2
+        if (SceneManager.GetActiveScene().name == "Scene2" && sceneToLoad == "Scene1")
+        {
+            // Kích hoạt collider để chặn người chơi và không chuyển cảnh
+            if (blockingCollider != null)
+            {
+                blockingCollider.enabled = true;
+            }
+            Debug.Log("AreaExit: Đã chặn người chơi quay lại scene1 từ scene2.");
+            return; // Dừng thực thi để không chuyển cảnh
+        }
 
         hasTriggered = true;
 
@@ -53,6 +76,16 @@ public class AreaExit : MonoBehaviour
         }
 
         StartCoroutine(LoadSceneRoutine());
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        // Tắt blockingCollider khi người chơi rời khỏi khu vực trigger
+        // để họ có thể đi vào lại nếu cần (ví dụ: nếu đó không phải là cửa bị chặn)
+        if (blockingCollider != null && blockingCollider.enabled)
+        {
+            blockingCollider.enabled = false;
+        }
     }
     
     private IEnumerator LoadSceneRoutine()
