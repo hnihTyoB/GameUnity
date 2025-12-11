@@ -23,6 +23,11 @@ public class ScoreManager : Singleton<ScoreManager>
     private float playTime = 0f; // Total play time in seconds (excluding pause time)
     private bool isTimerRunning = false;
     
+    [Header("Time Bonus")]
+    [SerializeField] private float timeBonusThreshold = 180f; // Time in seconds to beat for bonus
+    [SerializeField] private int timeBonusAmount = 500; // Points awarded for beating the time
+    private bool timeBonusAwarded = false; // To track if bonus was given
+    
     [Header("Events")]
     public System.Action<int> OnScoreChanged; // Event when score changes
     public System.Action OnLevelEnd; // Event when level ends
@@ -121,6 +126,7 @@ public class ScoreManager : Singleton<ScoreManager>
         totalHitPenalty = 0;
         totalKillPenalty = 0;
         playTime = 0f;
+        timeBonusAwarded = false;
         OnScoreChanged?.Invoke(currentScore);
     }
     
@@ -264,6 +270,15 @@ public class ScoreManager : Singleton<ScoreManager>
         // Stop timer
         StopTimer();
         
+        // Check for time bonus
+        if (playTime <= timeBonusThreshold)
+        {
+            currentScore += timeBonusAmount;
+            timeBonusAwarded = true;
+            Debug.Log($"ScoreManager: Time bonus awarded! +{timeBonusAmount} points for finishing in {GetPlayTimeFormatted()}.");
+            OnScoreChanged?.Invoke(Mathf.Max(0, currentScore)); // Update UI with bonus points
+        }
+        
         // Clamp final score to minimum 0
         currentScore = Mathf.Max(0, currentScore);
         
@@ -273,7 +288,7 @@ public class ScoreManager : Singleton<ScoreManager>
         SaveHighScore();
         
         Debug.Log($"ScoreManager: Level complete! Final Score: {currentScore}, High Score: {GetHighScore()}");
-        Debug.Log($"ScoreManager: Stats - Victims: {victimsInSafeZone}, Hits: {enemiesHit} (-{totalHitPenalty}), Kills: {enemiesKilled} (-{totalKillPenalty})");
+        Debug.Log($"ScoreManager: Stats - Victims: {victimsInSafeZone}, Hits: {enemiesHit} (-{totalHitPenalty}), Kills: {enemiesKilled} (-{totalKillPenalty}), Time Bonus: {timeBonusAwarded}");
         Debug.Log($"ScoreManager: Play Time: {GetPlayTimeFormatted()}");
         Debug.Log($"ScoreManager: OnLevelEnd event has {OnLevelEnd?.GetInvocationList().Length ?? 0} subscribers");
         
@@ -357,5 +372,8 @@ public class ScoreManager : Singleton<ScoreManager>
     public int GetEnemiesKilled() => enemiesKilled;
     public int GetTotalHitPenalty() => totalHitPenalty;
     public int GetTotalKillPenalty() => totalKillPenalty;
+
+    public bool WasTimeBonusAwarded() => timeBonusAwarded;
+    public int GetTimeBonusAmount() => timeBonusAmount;
 }
 

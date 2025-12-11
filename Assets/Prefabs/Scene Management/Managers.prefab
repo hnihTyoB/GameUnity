@@ -177,6 +177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468b3a48e8bda8f43a6577fca7db8458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
+  timeBonusThreshold: 180
+  timeBonusAmount: 500
 --- !u!1 &3176343327556454123
 GameObject:
   m_ObjectHideFlags: 0
