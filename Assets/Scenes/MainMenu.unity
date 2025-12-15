@@ -5873,18 +5873,19 @@ MonoBehaviour:
     l\xE0 mang \xE1nh s\xE1ng c\u1EE7a \r\nl\xF2ng nh\xE2n \xE1i \u0111\u1EBFn nh\u1EEFng
     n\u01A1i t\u0103m t\u1ED1i nh\u1EA5t.\r\n\r\nH\xE3y d\u0169ng c\u1EA3m v\xE0
     kh\xF4n ngoan!"
-  - "\u0110I\u1EC0U KHI\u1EC2N NH\xC2N V\u1EACT:\r\n\r\nDI CHUY\u1EC2N:\r\n\u2022
-    WASD ho\u1EB7c Ph\xEDm m\u0169i t\xEAn\r\n  - W: Di chuy\u1EC3n l\xEAn\r\n  -
-    S: Di chuy\u1EC3n xu\u1ED1ng\r\n  - A: Di chuy\u1EC3n tr\xE1i\r\n  - D: Di chuy\u1EC3n
-    ph\u1EA3i\r\nH\xC0NH \u0110\u1ED8NG:\r\n\u2022 Chu\u1ED9t tr\xE1i: T\u1EA5n c\xF4ng\r\n\u2022
-    Space: L\u01B0\u1EDBt (Ti\xEAu t\u1ED1n n\u0103ng l\u01B0\u1EE3ng)\n\u2022 E:
-    D\u1EABn n\u1EA1n nh\xE2n \u0111i theo"
-  - "TRANG B\u1ECA NH\xC2N V\u1EACT\n\n1 \u0110\xC8N PIN\r\n\u2022 Chi\u1EBFu s\xE1ng
-    khu v\u1EF1c t\u1ED1i\n\u2022 Ng\u0103n c\u1EA3n b\xF3ng ma\r\n\u2022 Ti\xEAu
-    t\u1ED1n n\u0103ng l\u01B0\u1EE3ng pin\r\n2 KHI\xCAN  \r\n\u2022 K\xEDch ho\u1EA1t
-    \u0111\u1EC3 ph\xF2ng th\u1EE7\r\n\u2022 Ch\u1EB7n s\u1EF1 ti\u1EBFp c\u1EADn
-    c\u1EE7a b\xF3ng ma\r\n3 TH\xC1NH GI\xC1\r\n\u2022 T\u1EA5n c\xF4ng c\u1EADn
-    chi\u1EBFn\r\n\u2022 Ph\xE1 h\u1EE7y v\u1EADt th\u1EC3 v\xE0 ph\xF2ng v\u1EC7"
+  - "\u0110I\u1EC0U KHI\u1EC2N NH\xC2N V\u1EACT:\r\n\r\nDI CHUY\u1EC2N:\r\n  - W:
+    Di chuy\u1EC3n l\xEAn\r\n  - S: Di chuy\u1EC3n xu\u1ED1ng\r\n  - A: Di chuy\u1EC3n
+    tr\xE1i\r\n  - D: Di chuy\u1EC3n ph\u1EA3i\r\nH\xC0NH \u0110\u1ED8NG:\r\n\u2022
+    Chu\u1ED9t tr\xE1i: T\u1EA5n c\xF4ng\r\n\u2022 Space: L\u01B0\u1EDBt (Ti\xEAu
+    t\u1ED1n n\u0103ng l\u01B0\u1EE3ng)\n\u2022 E: D\u1EABn n\u1EA1n nh\xE2n \u0111i
+    theo"
+  - "TRANG B\u1ECA NH\xC2N V\u1EACT\n\nPh\xEDm Q: \u0110\xC8N PIN\r\n\u2022 Chi\u1EBFu
+    s\xE1ng khu v\u1EF1c t\u1ED1i\n\u2022 Ng\u0103n c\u1EA3n b\xF3ng ma\r\n\u2022
+    Ti\xEAu t\u1ED1n n\u0103ng l\u01B0\u1EE3ng pin\r\nPh\xEDm E: KHI\xCAN  \r\n\u2022
+    K\xEDch ho\u1EA1t \u0111\u1EC3 ph\xF2ng th\u1EE7\r\n\u2022 Ch\u1EB7n s\u1EF1
+    ti\u1EBFp c\u1EADn c\u1EE7a b\xF3ng ma\r\nPh\xEDm R: TH\xC1NH GI\xC1\r\n\u2022
+    T\u1EA5n c\xF4ng c\u1EADn chi\u1EBFn\r\n\u2022 Ph\xE1 h\u1EE7y v\u1EADt th\u1EC3
+    v\xE0 ph\xF2ng v\u1EC7"
   - "CH\u1EC8 S\u1ED0 QUAN TR\u1ECCNG:\n\n1 PIN\n\u2022 N\u0103ng l\u01B0\u1EE3ng
     cho \u0111\xE8n pin\n\u2022 T\xECm pin \u0111\u1EC3 n\u1EA1p th\xEAm\n\u2022
     T\u1EAFt \u0111\xE8n khi kh\xF4ng c\u1EA7n\r\n2 N\u0102NG L\u01AF\u1EE2NG\r\n\u2022

@@ -14,17 +14,12 @@ public class ActiveInventory : Singleton<ActiveInventory>
         playerControls = new PlayerControls();
     }
 
-    private void Start()
-    {
-        if (playerControls != null)
-        {
-            playerControls.Inventory.Keyboard.performed += ctx => ToggleActiveSlot((int)ctx.ReadValue<float>());
-        }
-        else
-        {
-            Debug.LogError("ActiveInventory: playerControls is null in Start()! This should not happen.");
-        }
-    }
+private void Start()
+{
+    playerControls.Inventory.Slot1.performed += _ => ToggleActiveSlot(1);
+    playerControls.Inventory.Slot2.performed += _ => ToggleActiveSlot(2);
+    playerControls.Inventory.Slot3.performed += _ => ToggleActiveSlot(3);
+}
 
     private void OnEnable()
     {
