@@ -162,13 +162,13 @@
       "isPartOfComposite": false
     },
     {
-      "path": "<Keyboard>/e",
+      "path": "<Keyboard>/r",
       "action": "Slot2",
       "isComposite": false,
       "isPartOfComposite": false
     },
     {
-      "path": "<Keyboard>/r",
+      "path": "<Keyboard>/t",
       "action": "Slot3",
       "isComposite": false,
       "isPartOfComposite": false
