@@ -12,10 +12,10 @@ public class SceneFadeIn : MonoBehaviour
 
     private IEnumerator FadeInRoutine()
     {
-        // Đợi một chút trước khi fade in
+  
         yield return new WaitForSeconds(fadeInDelay);
         
-        // Fade to clear khi scene load xong
+  
         if (UIFade.Instance != null)
         {
             UIFade.Instance.FadeToClear();

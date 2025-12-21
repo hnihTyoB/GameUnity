@@ -1,16 +1,13 @@
 using UnityEngine;
 
-/// <summary>
-/// Singleton manager to track rescued victims count
-/// Updates UI and handles rescue events
-/// </summary>
+
 public class RescueManager : Singleton<RescueManager>
 {
     [Header("Rescue Tracking")]
     private int victimsRescued = 0;
     
     [Header("Events")]
-    public System.Action<int> OnVictimRescuedEvent; // Event for UI update
+    public System.Action<int> OnVictimRescuedEvent; 
     
     protected override void Awake()
     {
@@ -19,7 +16,7 @@ public class RescueManager : Singleton<RescueManager>
 
     private void Start()
     {
-        // Initialize rescue count
+      
         victimsRescued = 0;
         UpdateUI();
     }
@@ -27,22 +24,17 @@ public class RescueManager : Singleton<RescueManager>
     public void OnVictimRescued()
     {
         victimsRescued++;
-        Debug.Log($"Victim rescued! Total: {victimsRescued}");
         
-        // Note: Points are NOT added here - they are added when victim reaches SafeZone
-        // This only tracks the count of rescued victims
-        
-        // Notify UI
+       
         UpdateUI();
         
-        // Trigger event
+
         OnVictimRescuedEvent?.Invoke(victimsRescued);
     }
 
     private void UpdateUI()
     {
-        // Update UI display
-        Debug.Log($"RescueManager: UpdateUI called, victimsRescued={victimsRescued}, RescueUI.Instance={RescueUI.Instance != null}");
+     
         if (RescueUI.Instance != null)
         {
             RescueUI.Instance.UpdateRescueCount(victimsRescued);

@@ -1,9 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// Quản lý việc cập nhật difficulty cho tất cả enemy trong scene khi difficulty thay đổi
-/// </summary>
+
 public class DifficultyUpdateManager : MonoBehaviour
 {
     private void OnEnable()
@@ -16,18 +14,16 @@ public class DifficultyUpdateManager : MonoBehaviour
         DifficultyManager.OnDifficultyChanged -= UpdateAllEnemies;
     }
     
-    /// <summary>
-    /// Cập nhật difficulty cho tất cả enemy trong scene
-    /// </summary>
+  
     private void UpdateAllEnemies(DifficultyManager.Difficulty newDifficulty)
     {
         float multiplier = DifficultyManager.GetDifficultyMultiplier();
         
-        // Tìm tất cả enemy trong scene
+     
         EnemyHealth[] allEnemies = FindObjectsOfType<EnemyHealth>();
         EnemyPathFinding[] allEnemyPaths = FindObjectsOfType<EnemyPathFinding>();
         
-        // Cập nhật health (chỉ áp dụng nếu enemy còn full health)
+      
         foreach (EnemyHealth enemy in allEnemies)
         {
             if (enemy != null)
@@ -36,7 +32,7 @@ public class DifficultyUpdateManager : MonoBehaviour
             }
         }
         
-        // Cập nhật speed
+        
         foreach (EnemyPathFinding enemyPath in allEnemyPaths)
         {
             if (enemyPath != null)
