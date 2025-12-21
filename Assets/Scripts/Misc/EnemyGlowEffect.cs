@@ -1,9 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Visual glow effect for enemies affected by flashlight
-/// </summary>
+
 public class EnemyGlowEffect : MonoBehaviour
 {
     [Header("Glow Settings")]
@@ -18,14 +16,13 @@ public class EnemyGlowEffect : MonoBehaviour
     
     private void Awake()
     {
-        // CRITICAL: Get and save original color in Awake (before Start modifies it)
+      
         enemySprite = GetComponentInParent<SpriteRenderer>();
         
         if (enemySprite != null)
         {
-            // Save ORIGINAL color BEFORE any modifications
+        
             originalColor = enemySprite.color;
-            Debug.Log($"[GLOW] Saved ORIGINAL color for {enemySprite.gameObject.name}: {originalColor}");
         }
         else
         {
@@ -35,7 +32,7 @@ public class EnemyGlowEffect : MonoBehaviour
     
     private void Start()
     {
-        // Now apply glow effects (originalColor already saved in Awake)
+       
         if (enemySprite != null)
         {
             if (enablePulse)
@@ -61,7 +58,7 @@ public class EnemyGlowEffect : MonoBehaviour
     {
         while (enemySprite != null && this != null)
         {
-            float pulse = (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f; // 0 to 1
+            float pulse = (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f; 
             float currentIntensity = Mathf.Lerp(0.8f, glowIntensity, pulse);
             
             enemySprite.color = glowColor * currentIntensity;
@@ -72,16 +69,15 @@ public class EnemyGlowEffect : MonoBehaviour
     
     private void OnDestroy()
     {
-        // Stop all coroutines IMMEDIATELY
+  
         StopAllCoroutines();
         
-        // Restore original color when glow is removed
+    
         if (enemySprite != null)
         {
-            Debug.Log($"[GLOW] Restoring {enemySprite.gameObject.name} from CURRENT={enemySprite.color} to ORIGINAL={originalColor}");
             enemySprite.color = originalColor;
             
-            // Verify restoration
+           
             if (enemySprite.color != originalColor)
             {
                 Debug.LogError($"[GLOW] ❌ COLOR RESTORE FAILED! Expected {originalColor} but got {enemySprite.color}");
@@ -99,13 +95,12 @@ public class EnemyGlowEffect : MonoBehaviour
     
     private void OnDisable()
     {
-        // Stop coroutines when disabled too
+   
         StopAllCoroutines();
         
-        // Also restore when disabled (safety)
+
         if (enemySprite != null)
         {
-            Debug.Log($"[GLOW] OnDisable: Restoring {enemySprite.gameObject.name} to {originalColor}");
             enemySprite.color = originalColor;
         }
     }

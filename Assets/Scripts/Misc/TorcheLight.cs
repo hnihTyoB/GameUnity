@@ -1,14 +1,12 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-/// <summary>
-/// Manages Torche light source for Shadow Ghost fear behavior
-/// </summary>
+
 public class TorcheLight : MonoBehaviour
 {
     [Header("Light Settings")]
     [SerializeField] private Light2D lightComponent;
-    [SerializeField] private float lightRadius = 2.22f; // Default radius from prefab
+    [SerializeField] private float lightRadius = 2.22f;
     [SerializeField] private bool isActive = true;
     
     [Header("Debug")]
@@ -17,13 +15,13 @@ public class TorcheLight : MonoBehaviour
 
     private void Awake()
     {
-        // Auto-find Light2D if not assigned
+    
         if (lightComponent == null)
         {
             lightComponent = GetComponentInChildren<Light2D>();
         }
         
-        // Get radius from Light2D component if available
+     
         if (lightComponent != null)
         {
             lightRadius = lightComponent.pointLightOuterRadius;
