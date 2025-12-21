@@ -16,7 +16,6 @@ public class Staff : MonoBehaviour, IWeapon
     }
     private void Update()
     {
-        // Don't rotate if game is paused
         if (Time.timeScale == 0f) return;
         
         MouseFollowWithOffset();
@@ -24,9 +23,6 @@ public class Staff : MonoBehaviour, IWeapon
 
     public void Attack()
     {
-        // myAnimator.SetTrigger(FIRE_HASH);
-        // GameObject newArrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, ActiveWeapon.Instance.transform.rotation);
-        // newArrow.GetComponent<Projectile>().UpdateProjectileRange(weaponInfo.weaponRange);
         myAnimator.SetTrigger(ATTACK_HASH);
     }
 

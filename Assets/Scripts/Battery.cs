@@ -1,23 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Battery pickup item - adds battery power to player
-/// </summary>
 public class Battery : MonoBehaviour
 {
     [Header("Battery Settings")]
-    [SerializeField] private int batteryAmount = 1; // How much battery this pickup gives
-    [SerializeField] private float pickupRange = 1.5f; // Range to detect player
-    [SerializeField] private float moveSpeed = 2f; // Speed when moving towards player
+    [SerializeField] private int batteryAmount = 1; 
+    [SerializeField] private float pickupRange = 1.5f; 
+    [SerializeField] private float moveSpeed = 2f; 
     
     [Header("Visual Effects")]
-    [SerializeField] private GameObject pickupEffect; // Particle effect when picked up
-    [SerializeField] private AudioClip pickupSound; // Sound when picked up
+    [SerializeField] private GameObject pickupEffect; 
+    [SerializeField] private AudioClip pickupSound;
     
     [Header("Animation")]
-    [SerializeField] private float bobHeight = 0.3f; // How high the battery bobs
-    [SerializeField] private float bobSpeed = 2f; // Speed of bobbing animation
+    [SerializeField] private float bobHeight = 0.3f; 
+    [SerializeField] private float bobSpeed = 2f; 
     
     private bool isPickedUp = false;
     private Transform playerTransform;
@@ -34,7 +31,7 @@ public class Battery : MonoBehaviour
     
     private void Start()
     {
-        // Start bobbing animation
+
         StartCoroutine(BobbingAnimation());
     }
     
@@ -42,14 +39,14 @@ public class Battery : MonoBehaviour
     {
         if (isPickedUp) return;
         
-        // Check if player is in range
+    
         if (PlayerController.Instance != null)
         {
             float distanceToPlayer = Vector2.Distance(transform.position, PlayerController.Instance.transform.position);
             
             if (distanceToPlayer <= pickupRange)
             {
-                // Start moving towards player
+              
                 StartCoroutine(MoveTowardsPlayer());
             }
         }
@@ -70,7 +67,6 @@ public class Battery : MonoBehaviour
         isPickedUp = true;
         playerTransform = PlayerController.Instance.transform;
         
-        // Move towards player
         while (Vector2.Distance(transform.position, playerTransform.position) > 0.1f)
         {
             Vector2 direction = (playerTransform.position - transform.position).normalized;
@@ -78,7 +74,6 @@ public class Battery : MonoBehaviour
             yield return null;
         }
         
-        // Pick up the battery
         PickupBattery();
     }
     
@@ -86,7 +81,6 @@ public class Battery : MonoBehaviour
     {
         Debug.Log($"Battery pickup triggered! Amount: {batteryAmount}");
         
-        // Add battery to player
         if (BatteryManager.Instance != null)
         {
             BatteryManager.Instance.AddBattery(batteryAmount);
@@ -97,32 +91,28 @@ public class Battery : MonoBehaviour
             Debug.LogError("BatteryManager.Instance is NULL! Cannot add battery!");
         }
         
-        // Play battery pickup sound via SFXManager
         if (SFXManager.Instance != null)
         {
             SFXManager.Instance.PlayBatterySound();
         }
         
-        // Play pickup effects (visual effects only)
         PlayPickupEffects();
         
-        // Destroy the battery
         Destroy(gameObject);
     }
     
     private void PlayPickupEffects()
     {
-        // Spawn pickup effect (visual only, sound is handled by SFXManager)
+     
         if (pickupEffect != null)
         {
             GameObject effect = Instantiate(pickupEffect, transform.position, Quaternion.identity);
-            Destroy(effect, 2f); // Clean up after 2 seconds
+            Destroy(effect, 2f); 
         }
     }
     
     private void OnDrawGizmosSelected()
     {
-        // Draw pickup range in editor
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, pickupRange);
     }

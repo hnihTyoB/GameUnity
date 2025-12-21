@@ -1,12 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Shield weapon - protective barrier around player
-/// Blocks damage and provides defense
-/// Knocks back enemies on contact
-/// Has activation cooldown
-/// </summary>
 public class Shield : MonoBehaviour, IWeapon
 {
     [Header("Shield Settings")]
@@ -38,13 +32,12 @@ public class Shield : MonoBehaviour, IWeapon
         spriteRenderer = GetComponent<SpriteRenderer>();
         shieldCollider = GetComponent<CircleCollider2D>();
         
-        // Ensure collider exists and is set as trigger
         if (shieldCollider == null)
         {
             shieldCollider = gameObject.AddComponent<CircleCollider2D>();
         }
         shieldCollider.isTrigger = true;
-        shieldCollider.radius = 0.5f; // Adjust based on shield sprite size
+        shieldCollider.radius = 0.5f;
         
         // Lưu giá trị gốc
         baseShieldDuration = shieldDuration;
@@ -56,32 +49,26 @@ public class Shield : MonoBehaviour, IWeapon
     
     private void Start()
     {
-        // Remove shield from ActiveWeapon transform hierarchy to prevent rotation
-        // Shield stays as child of player directly, not weapon system
+
         if (transform.parent == ActiveWeapon.Instance.transform)
         {
-            // Detach from weapon system and attach to player
+       
             Transform playerTransform = PlayerController.Instance.transform;
             transform.SetParent(playerTransform);
         }
         
-        // Position shield in front of player (relative to player, not weapon)
         transform.localPosition = fixedLocalPosition;
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
         
-        // Force sprite to never flip
         if (spriteRenderer != null)
         {
             spriteRenderer.flipX = false;
             spriteRenderer.flipY = false;
         }
         
-        // Shield starts inactive, waiting for player to activate
         SetActive(false);
         
-        // Make shield persist across scenes (it's attached to Player which also persists)
-        // No need for DontDestroyOnLoad since it's child of Player
         Debug.Log("Shield: Initialized and attached to Player");
     }
     
@@ -122,10 +109,6 @@ public class Shield : MonoBehaviour, IWeapon
         // Note: Nếu shield đang active, settings mới sẽ áp dụng cho lần activate tiếp theo
     }
     
-    /// <summary>
-    /// Activate shield when player uses attack button
-    /// Shield will stay active for duration, then go on cooldown
-    /// </summary>
     private IEnumerator ActivateShieldRoutine()
     {
         // Activate shield and start cooldown immediately
@@ -212,11 +195,9 @@ public class Shield : MonoBehaviour, IWeapon
     
     public void Attack()
     {
-        // Check cooldown from ShieldManager (persistent across scenes)
         bool managerOnCooldown = ShieldManager.Instance != null && ShieldManager.Instance.IsOnCooldown();
         
-        // When player presses slot key again (e.g., press "2" twice), activate shield
-        // But only if not already on cooldown
+ 
         if (!managerOnCooldown && !isOnCooldown && activeShieldCoroutine == null)
         {
             activeShieldCoroutine = StartCoroutine(ActivateShieldRoutine());
@@ -229,97 +210,74 @@ public class Shield : MonoBehaviour, IWeapon
         }
     }
     
-    /// <summary>
-    /// Activate/deactivate shield
-    /// </summary>
+
     public void SetActive(bool active)
     {
         isActive = active;
         spriteRenderer.enabled = active;
-        
-        // Also enable/disable collider
+      
         if (shieldCollider != null)
         {
             shieldCollider.enabled = active;
         }
         
-        // Stop shield sound when deactivated (safety check)
+   
         if (!active && SFXManager.Instance != null)
         {
             SFXManager.Instance.StopShieldSound();
         }
     }
     
-    /// <summary>
-    /// Called when weapon is unequipped (switched to another weapon)
-    /// Shield persists and stays visible if still active
-    /// </summary>
     public void OnWeaponUnequipped()
     {
-        // Shield stays visible and active - doesn't hide when switching weapons
-        // It will only disappear when its 5s duration ends
+    
         Debug.Log($"Shield: Unequipped but still visible - Active: {isActive}, Cooldown: {isOnCooldown}");
     }
     
-    /// <summary>
-    /// Called when weapon is re-equipped (switched back to shield)
-    /// Shield is already there, just update reference
-    /// </summary>
     public void OnWeaponEquipped()
     {
-        // Shield was never hidden, so nothing to do here
+  
         Debug.Log($"Shield: Re-equipped - Active: {isActive}, Cooldown: {isOnCooldown}");
     }
     
-    /// <summary>
-    /// Check if shield is currently on cooldown
-    /// </summary>
+
     public bool IsOnCooldown()
     {
         return isOnCooldown;
     }
     
-    /// <summary>
-    /// Get remaining cooldown time
-    /// </summary>
+
     public float GetRemainingCooldown()
     {
         if (!isOnCooldown) return 0f;
         return Mathf.Max(0f, cooldownEndTime - Time.time);
     }
-    
-    /// <summary>
-    /// Called when shield blocks damage (implement later)
-    /// </summary>
+ 
     public void OnBlockDamage()
     {
         Debug.Log("Shield blocked damage!");
         // Add visual/audio feedback here
     }
     
-    /// <summary>
-    /// Detect collision with enemies and knock them back
-    /// </summary>
-    private void OnTriggerStay2D(Collider2D other)
+      private void OnTriggerStay2D(Collider2D other)
     {
-        // Check if cooldown has passed
+ 
         if (Time.time < lastKnockBackTime + knockBackCooldown)
         {
             return;
         }
         
-        // Check if the colliding object is an enemy
+       
         EnemyAI enemy = other.GetComponent<EnemyAI>();
         if (enemy != null)
         {
-            // Get enemy's knockback component
+          
             Knockback enemyKnockback = other.GetComponent<Knockback>();
             if (enemyKnockback != null)
             {
-                // Knock back the enemy away from shield/player
+             
                 enemyKnockback.GetKnockedBack(transform, knockBackThrust);
                 
-                // Optional: Add flash effect if enemy has it
                 Flash enemyFlash = other.GetComponent<Flash>();
                 if (enemyFlash != null)
                 {
@@ -331,10 +289,6 @@ public class Shield : MonoBehaviour, IWeapon
             }
         }
     }
-    
-    /// <summary>
-    /// Also handle OnTriggerEnter2D for immediate response
-    /// </summary>
     private void OnTriggerEnter2D(Collider2D other)
     {
         OnTriggerStay2D(other);

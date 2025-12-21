@@ -2,10 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Quản lý Settings Panel với volume sliders
-/// Attach vào SettingsPanel GameObject
-/// </summary>
+
 public class SettingsManager : MonoBehaviour
 {
     [Header("Music Settings")]
@@ -106,7 +103,6 @@ public class SettingsManager : MonoBehaviour
         }
 
         PlayerPrefs.Save();
-        Debug.Log("SettingsManager: Settings saved!");
     }
 
     private void OnMusicVolumeChanged(float value)

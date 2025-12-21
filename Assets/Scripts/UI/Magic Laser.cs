@@ -40,10 +40,8 @@ public class MagicLaser : MonoBehaviour
             timePassed += Time.deltaTime;
             float linearT = timePassed / laserGrowTime;
 
-            // sprite 
             spriteRenderer.size = new Vector2(Mathf.Lerp(1f, laserRange, linearT), 1f);
 
-            // collider
             capsuleCollider2D.size = new Vector2(Mathf.Lerp(1f, laserRange, linearT), capsuleCollider2D.size.y);
             capsuleCollider2D.offset = new Vector2((Mathf.Lerp(1f, laserRange, linearT)) / 2, capsuleCollider2D.offset.y);
 

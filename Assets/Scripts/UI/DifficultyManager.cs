@@ -3,10 +3,6 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-/// <summary>
-/// Quản lý độ khó của game (Easy, Normal, Hard)
-/// Attach vào SettingsPanel hoặc ContentTable
-/// </summary>
 public class DifficultyManager : MonoBehaviour
 {
     [Header("Difficulty Toggles")]
@@ -181,8 +177,6 @@ public class DifficultyManager : MonoBehaviour
         }
     }
 
-    // Public methods
-
     public void SetEasy()
     {
         SetDifficulty(Difficulty.Easy);
@@ -232,9 +226,6 @@ public class DifficultyManager : MonoBehaviour
         return PlayerPrefs.GetInt(DIFFICULTY_KEY, (int)Difficulty.Normal) == (int)Difficulty.Hard;
     }
 
-    /// <summary>
-    /// Get current difficulty (static method for ScoreManager and other systems)
-    /// </summary>
     public static Difficulty GetCurrentDifficulty()
     {
         int difficulty = PlayerPrefs.GetInt(DIFFICULTY_KEY, (int)Difficulty.Normal);
@@ -243,7 +234,6 @@ public class DifficultyManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Cleanup listeners
         if (easyToggle != null)
             easyToggle.onValueChanged.RemoveAllListeners();
         

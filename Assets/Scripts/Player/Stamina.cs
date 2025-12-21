@@ -28,7 +28,7 @@ public class Stamina : Singleton<Stamina>
         {
             staminaContainer = staminaContainerObj.transform;
         }
-        // Stamina system is optional - no error if container not found
+
     }
     public void UseStamina() {
         CurrentStamina--;
@@ -54,7 +54,6 @@ public class Stamina : Singleton<Stamina>
     private void UpdateStaminaImages() {
         if (staminaContainer == null)
         {
-            // Stamina system is disabled - skip update
             return;
         }
         

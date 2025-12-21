@@ -7,19 +7,19 @@ using UnityEngine.Rendering.Universal;
 public class VisionDebuff : Singleton<VisionDebuff>
 {
     [Header("Vision Reduction Settings")]
-    [SerializeField] private float visionDuration = 2.5f; // Same as slow debuff
-    [SerializeField] private float vignettePerStack = 0.15f; // Vignette intensity increase per shadow
-    [SerializeField] private float maxVignette = 0.7f; // Maximum vignette intensity
+    [SerializeField] private float visionDuration = 2.5f; 
+    [SerializeField] private float vignettePerStack = 0.15f; 
+    [SerializeField] private float maxVignette = 0.7f; 
     
     [Header("Visual Feedback - Post-Processing Vignette")]
     [SerializeField] private GameObject isolationAuraEffectPrefab;
-    [SerializeField] private Volume postProcessVolume; // Post-processing volume with vignette
+    [SerializeField] private Volume postProcessVolume; 
     
     private Vignette vignette;
     private int activeDebuffs = 0;
     private List<Coroutine> activeCoroutines = new List<Coroutine>();
     private float baseVignetteIntensity = 0f;
-    private GameObject spawnedAuraEffect; // Instance of the aura
+    private GameObject spawnedAuraEffect; 
 
     protected override void Awake()
     {
@@ -28,7 +28,6 @@ public class VisionDebuff : Singleton<VisionDebuff>
 
     private void Start()
     {
-        // Auto-find Global Volume if not assigned
         if (postProcessVolume == null)
         {
             postProcessVolume = FindObjectOfType<Volume>();
@@ -40,7 +39,6 @@ public class VisionDebuff : Singleton<VisionDebuff>
             Debug.Log("VisionDebuff: Auto-found Global Volume: " + postProcessVolume.name);
         }
         
-        // Get vignette from post-processing volume
         if (postProcessVolume != null && postProcessVolume.profile.TryGet(out Vignette vignetteEffect))
         {
             vignette = vignetteEffect;
@@ -51,7 +49,6 @@ public class VisionDebuff : Singleton<VisionDebuff>
             Debug.LogWarning("VisionDebuff: No Vignette found in Post-Processing Volume!");
         }
         
-        // Instantiate aura effect as child if prefab is assigned
         if (isolationAuraEffectPrefab != null && spawnedAuraEffect == null)
         {
             spawnedAuraEffect = Instantiate(isolationAuraEffectPrefab, transform);
@@ -62,35 +59,27 @@ public class VisionDebuff : Singleton<VisionDebuff>
 
     public void ApplyVisionReduction()
     {
-        // Each shadow applies one independent debuff
         Coroutine newCoroutine = StartCoroutine(VisionReductionRoutine());
         activeCoroutines.Add(newCoroutine);
     }
 
     private IEnumerator VisionReductionRoutine()
     {
-        // Increment active debuffs (each shadow = +1)
         activeDebuffs++;
         
-        // Update darkness based on current stack count
         UpdateDarkness();
         
-        // Show aura on first debuff
         if (activeDebuffs == 1 && spawnedAuraEffect != null)
         {
             spawnedAuraEffect.SetActive(true);
         }
         
-        // Wait for duration
         yield return new WaitForSeconds(visionDuration);
         
-        // Decrement active debuffs
         activeDebuffs--;
         
-        // Update darkness based on remaining stacks
         UpdateDarkness();
         
-        // Hide aura if no more debuffs
         if (activeDebuffs == 0 && spawnedAuraEffect != null)
         {
             spawnedAuraEffect.SetActive(false);
@@ -101,12 +90,8 @@ public class VisionDebuff : Singleton<VisionDebuff>
     {
         if (vignette == null) return;
         
-        // Calculate vignette intensity based on stack count
-        // Each shadow adds vignettePerStack (default 0.15)
         float targetIntensity = baseVignetteIntensity + (activeDebuffs * vignettePerStack);
-        targetIntensity = Mathf.Min(targetIntensity, maxVignette); // Cap at max vignette
-        
-        // Smoothly transition to new vignette intensity
+        targetIntensity = Mathf.Min(targetIntensity, maxVignette);
         StartCoroutine(FadeVignette(targetIntensity));
     }
 
@@ -151,7 +136,6 @@ public class VisionDebuff : Singleton<VisionDebuff>
     
     private void OnDestroy()
     {
-        // Clean up spawned aura
         if (spawnedAuraEffect != null)
         {
             Destroy(spawnedAuraEffect);

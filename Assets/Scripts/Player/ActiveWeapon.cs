@@ -27,16 +27,12 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
 
     private void OnDisable()
     {
-        // Check null to prevent NullReferenceException when Singleton destroys old instance
         if (playerControls != null)
         {
             playerControls.Disable();
         }
     }
-    
-    /// <summary>
-    /// Disable weapon input (called when game is paused, e.g., EndLevelUI)
-    /// </summary>
+
     public void DisableInput()
     {
         if (playerControls != null)
@@ -45,9 +41,6 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
         }
     }
     
-    /// <summary>
-    /// Enable weapon input (called when game is resumed)
-    /// </summary>
     public void EnableInput()
     {
         if (playerControls != null)
@@ -95,7 +88,6 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
         attackButtonDown = false;
     }
     private void Attack() {
-        // Don't attack if clicking on UI
         if (IsPointerOverUI())
         {
             return;
@@ -107,9 +99,6 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
         }
     }
     
-    /// <summary>
-    /// Check if pointer is over UI element
-    /// </summary>
     private bool IsPointerOverUI()
     {
         if (UnityEngine.EventSystems.EventSystem.current == null)

@@ -5,22 +5,21 @@ using UnityEngine;
 public class InventorySlot : MonoBehaviour
 {
     [SerializeField] private WeaponInfo weaponInfo;
-    [SerializeField] private bool isShieldSlot = false; // Mark if this is shield slot
+    [SerializeField] private bool isShieldSlot = false;
     
     private WeaponCooldownUI cooldownUI;
 
     private void Awake()
     {
-        // Get cooldown UI component if exists
+       
         cooldownUI = GetComponentInChildren<WeaponCooldownUI>();
         
         Debug.Log($"InventorySlot ({gameObject.name}): Awake - isShieldSlot={isShieldSlot}, cooldownUI={cooldownUI != null}");
         
-        // If this is shield slot, register with ShieldManager
+       
         if (isShieldSlot && cooldownUI != null)
         {
             Debug.Log($"InventorySlot ({gameObject.name}): Starting registration coroutine");
-            // Wait for ShieldManager to be ready
             StartCoroutine(RegisterShieldUIWhenReady());
         }
         else if (isShieldSlot && cooldownUI == null)
@@ -31,10 +30,8 @@ public class InventorySlot : MonoBehaviour
     
     private IEnumerator RegisterShieldUIWhenReady()
     {
-        // Wait a bit for scene to fully load and Singleton conflicts to resolve
         yield return new WaitForSeconds(0.2f);
         
-        // Wait until ShieldManager instance is available
         int waitFrames = 0;
         while (ShieldManager.Instance == null)
         {
@@ -51,7 +48,6 @@ public class InventorySlot : MonoBehaviour
         Debug.Log($"InventorySlot ({gameObject.name}): ShieldManager found after {waitFrames} frames, registering UI");
         Debug.Log($"InventorySlot ({gameObject.name}): cooldownUI valid = {(cooldownUI != null)}");
         
-        // Register this cooldown UI with ShieldManager
         if (cooldownUI != null && ShieldManager.Instance != null)
         {
             ShieldManager.Instance.RegisterShieldCooldownUI(cooldownUI);

@@ -3,16 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Manages game pause functionality
-/// Handles pause panel display and input
-/// </summary>
 public class PauseManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private Button pauseButton;
-    [SerializeField] private Button backButton; // Resume button (renamed to Back)
+    [SerializeField] private Button backButton; 
     [SerializeField] private Button restartButton;
     [SerializeField] private Button menuButton;
     
@@ -24,16 +20,13 @@ public class PauseManager : MonoBehaviour
     
     private void Start()
     {
-        // Hide pause panel initially
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);
         }
         
-        // Ensure EventSystem exists
         EnsureEventSystem();
-        
-        // Setup button listeners
+    
         if (pauseButton != null)
         {
             pauseButton.onClick.AddListener(PauseGame);
@@ -60,22 +53,19 @@ public class PauseManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Ensure EventSystem exists for UI interaction
-    /// </summary>
     private void EnsureEventSystem()
     {
         UnityEngine.EventSystems.EventSystem eventSystem = UnityEngine.EventSystems.EventSystem.current;
         
         if (eventSystem == null)
         {
-            // Try to find EventSystem in scene
+          
             eventSystem = FindObjectOfType<UnityEngine.EventSystems.EventSystem>();
         }
         
         if (eventSystem == null)
         {
-            // Create EventSystem if it doesn't exist
+          
             GameObject eventSystemObj = new GameObject("EventSystem");
             eventSystem = eventSystemObj.AddComponent<UnityEngine.EventSystems.EventSystem>();
             eventSystemObj.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
@@ -86,7 +76,7 @@ public class PauseManager : MonoBehaviour
             Debug.Log("PauseManager: EventSystem already exists");
         }
         
-        // Ensure Canvas has GraphicRaycaster
+      
         Canvas canvas = GetComponentInParent<Canvas>();
         if (canvas == null)
         {
@@ -112,24 +102,20 @@ public class PauseManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Restart game from beginning
-    /// </summary>
+   
     private void OnRestart()
     {
         Debug.Log("PauseManager: Restart button clicked!");
         StartCoroutine(FadeAndRestart());
     }
     
-    /// <summary>
-    /// Fade to black then restart game
-    /// </summary>
+ 
     private IEnumerator FadeAndRestart()
     {
-        // Keep input disabled during fade
+       
         Time.timeScale = 1f;
         
-        // Fade to black
+       
         if (UIFade.Instance != null)
         {
             UIFade.Instance.FadeToBlack();
@@ -137,7 +123,7 @@ public class PauseManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         
-        // Hide pause panel
+       
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);
@@ -145,7 +131,6 @@ public class PauseManager : MonoBehaviour
         
         isPaused = false;
         
-        // Re-enable input
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.EnableInput();
@@ -161,31 +146,26 @@ public class PauseManager : MonoBehaviour
             ActiveInventory.Instance.EnableInput();
         }
         
-        // Destroy all DontDestroyOnLoad objects
+        
         DestroyPersistentObjects();
         
-        // Load first scene
+       
         SceneManager.LoadScene(firstSceneName);
     }
     
-    /// <summary>
-    /// Go to main menu
-    /// </summary>
+  
     private void OnMenu()
     {
         Debug.Log("PauseManager: Menu button clicked!");
         StartCoroutine(FadeAndLoadMenu());
     }
     
-    /// <summary>
-    /// Fade to black then load main menu
-    /// </summary>
-    private IEnumerator FadeAndLoadMenu()
+      private IEnumerator FadeAndLoadMenu()
     {
-        // Keep input disabled during fade
+       
         Time.timeScale = 1f;
         
-        // Fade to black
+        
         if (UIFade.Instance != null)
         {
             UIFade.Instance.FadeToBlack();
@@ -193,7 +173,7 @@ public class PauseManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         
-        // Hide pause panel
+     
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);
@@ -201,7 +181,7 @@ public class PauseManager : MonoBehaviour
         
         isPaused = false;
         
-        // Re-enable input
+       
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.EnableInput();
@@ -217,19 +197,17 @@ public class PauseManager : MonoBehaviour
             ActiveInventory.Instance.EnableInput();
         }
         
-        // Destroy all DontDestroyOnLoad objects
+        
         DestroyPersistentObjects();
         
-        // Load main menu
+    
         SceneManager.LoadScene(menuSceneName);
     }
     
-    /// <summary>
-    /// Destroy all persistent (DontDestroyOnLoad) objects for clean restart
-    /// </summary>
+  
     private void DestroyPersistentObjects()
     {
-        // Find all root GameObjects in DontDestroyOnLoad scene
+       
         GameObject temp = new GameObject("Temp");
         DontDestroyOnLoad(temp);
         Scene dontDestroyScene = temp.scene;
@@ -248,7 +226,6 @@ public class PauseManager : MonoBehaviour
     
     private void Update()
     {
-        // Check for ESC key
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
@@ -262,9 +239,7 @@ public class PauseManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Pause the game
-    /// </summary>
+    
     public void PauseGame()
     {
         Debug.Log("PauseManager: PauseGame() called!");
@@ -273,16 +248,14 @@ public class PauseManager : MonoBehaviour
         
         isPaused = true;
         
-        // Show pause panel
+   
         if (pausePanel != null)
         {
             pausePanel.SetActive(true);
         }
         
-        // Pause game
         Time.timeScale = 0f;
         
-        // Disable player input
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.DisableInput();
@@ -298,7 +271,6 @@ public class PauseManager : MonoBehaviour
             ActiveInventory.Instance.DisableInput();
         }
         
-        // Switch to menu music (wait.mp3) when paused
         if (BackgroundMusicManager.Instance != null)
         {
             BackgroundMusicManager.Instance.PlayMenuMusic();
@@ -308,25 +280,19 @@ public class PauseManager : MonoBehaviour
         Debug.Log("PauseManager: Game paused");
     }
     
-    /// <summary>
-    /// Resume the game
-    /// </summary>
     public void ResumeGame()
     {
         if (!isPaused) return;
         
         isPaused = false;
-        
-        // Hide pause panel
+  
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);
         }
-        
-        // Resume game
+
         Time.timeScale = 1f;
         
-        // Enable player input
         if (PlayerController.Instance != null)
         {
             PlayerController.Instance.EnableInput();
@@ -342,7 +308,7 @@ public class PauseManager : MonoBehaviour
             ActiveInventory.Instance.EnableInput();
         }
         
-        // Switch back to game music when resumed
+  
         if (BackgroundMusicManager.Instance != null)
         {
             BackgroundMusicManager.Instance.PlayGameMusic();
@@ -352,9 +318,6 @@ public class PauseManager : MonoBehaviour
         Debug.Log("PauseManager: Game resumed");
     }
     
-    /// <summary>
-    /// Check if game is currently paused
-    /// </summary>
     public bool IsPaused()
     {
         return isPaused;

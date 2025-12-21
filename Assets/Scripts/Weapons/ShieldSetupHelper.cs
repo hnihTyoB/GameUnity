@@ -4,10 +4,6 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-/// <summary>
-/// Helper script to automatically create ShieldManager in scene
-/// This will run in Editor to ensure ShieldManager always exists
-/// </summary>
 [ExecuteInEditMode]
 public class ShieldSetupHelper : MonoBehaviour
 {
@@ -15,7 +11,7 @@ public class ShieldSetupHelper : MonoBehaviour
     [MenuItem("Tools/Setup Shield Manager")]
     private static void SetupShieldManager()
     {
-        // Check if ShieldManager already exists
+
         ShieldManager existingManager = FindObjectOfType<ShieldManager>();
         
         if (existingManager != null)
@@ -25,7 +21,6 @@ public class ShieldSetupHelper : MonoBehaviour
             return;
         }
         
-        // Create new GameObject with ShieldManager
         GameObject managerObj = new GameObject("ShieldManager");
         managerObj.AddComponent<ShieldManager>();
         
@@ -46,7 +41,6 @@ public class ShieldSetupHelper : MonoBehaviour
             return;
         }
         
-        // Check if it has InventorySlot component
         InventorySlot inventorySlot = selected.GetComponent<InventorySlot>();
         if (inventorySlot == null)
         {
@@ -56,7 +50,6 @@ public class ShieldSetupHelper : MonoBehaviour
             return;
         }
         
-        // Check if CooldownUI already exists
         WeaponCooldownUI existingUI = selected.GetComponentInChildren<WeaponCooldownUI>();
         if (existingUI != null)
         {
@@ -66,13 +59,11 @@ public class ShieldSetupHelper : MonoBehaviour
             return;
         }
         
-        // Create CooldownUI structure
         GameObject cooldownUIObj = new GameObject("CooldownUI");
         cooldownUIObj.transform.SetParent(selected.transform);
         RectTransform cooldownUIRect = cooldownUIObj.AddComponent<RectTransform>();
         WeaponCooldownUI cooldownUI = cooldownUIObj.AddComponent<WeaponCooldownUI>();
-        
-        // Set RectTransform to stretch
+    
         cooldownUIRect.anchorMin = Vector2.zero;
         cooldownUIRect.anchorMax = Vector2.one;
         cooldownUIRect.offsetMin = Vector2.zero;

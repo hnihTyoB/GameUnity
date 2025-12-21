@@ -42,16 +42,13 @@ public class PickUpSpawner : MonoBehaviour
             Debug.Log($"PickUpSpawner: Dropped {randomAmountOfGold} gold coins (Difficulty: {multiplier:F2}x)");
         }
         
-        // If nothing assigned, log warning
+
         if (battery == null && staminaGlobe == null && goldCoin == null)
         {
             Debug.LogWarning($"PickUpSpawner on {gameObject.name}: No items assigned! Cannot drop anything.");
         }
     }
     
-    /// <summary>
-    /// Drop only battery (for Shadow enemies)
-    /// </summary>
     public void DropBatteryOnly()
     {
         if (battery != null)

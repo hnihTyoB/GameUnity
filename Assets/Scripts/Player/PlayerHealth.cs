@@ -43,7 +43,6 @@ public class PlayerHealth : Singleton<PlayerHealth>
 
         if (enemy)
         {
-            // Check if enemy is Shadow Ghost (auto-detect via script components)
             bool isShadow = other.gameObject.GetComponent<ShadowGhost>() != null ||
                            other.gameObject.GetComponent<ShadowGhost2>() != null ||
                            other.gameObject.GetComponent<ShadowGhost3>() != null;
@@ -54,11 +53,9 @@ public class PlayerHealth : Singleton<PlayerHealth>
                 return;
             }
             
-            // Check if enemy is non-damaging (for non-violent game design)
             NonDamagingEnemy nonDamaging = other.gameObject.GetComponent<NonDamagingEnemy>();
             if (nonDamaging == null)
             {
-                // Normal enemy: damage + knockback
                 TakeDamage(1, other.transform);
             }
             else
@@ -71,12 +68,10 @@ public class PlayerHealth : Singleton<PlayerHealth>
     
     private void OnTriggerStay2D(Collider2D other)
     {
-        // Handle trigger-based enemies
         EnemyAI enemy = other.gameObject.GetComponent<EnemyAI>();
 
         if (enemy)
         {
-            // Check if enemy is Shadow Ghost (auto-detect via script components)
             bool isShadow = other.gameObject.GetComponent<ShadowGhost>() != null ||
                            other.gameObject.GetComponent<ShadowGhost2>() != null ||
                            other.gameObject.GetComponent<ShadowGhost3>() != null;
@@ -87,11 +82,9 @@ public class PlayerHealth : Singleton<PlayerHealth>
                 return;
             }
             
-            // Check if enemy is non-damaging
             NonDamagingEnemy nonDamaging = other.gameObject.GetComponent<NonDamagingEnemy>();
             if (nonDamaging == null)
             {
-                // Normal enemy: damage + knockback
                 TakeDamage(1, other.transform);
             }
             else
@@ -103,7 +96,6 @@ public class PlayerHealth : Singleton<PlayerHealth>
     }
     public void HealPlayer()
     {
-        // This method is kept for compatibility but now uses battery system
         if (BatteryManager.Instance != null)
         {
             BatteryManager.Instance.AddBattery(1);
@@ -116,7 +108,6 @@ public class PlayerHealth : Singleton<PlayerHealth>
         ScreenShakeManager.Instance.ShakeScreen();
         knockback.GetKnockedBack(hitTransform, knockBackThrustAmount);
         
-        // Play damage taken sound when player gets knocked back
         if (SFXManager.Instance != null)
         {
             SFXManager.Instance.PlayDamageTakenSound();
@@ -136,7 +127,6 @@ public class PlayerHealth : Singleton<PlayerHealth>
             isDead = true;
             Destroy(ActiveWeapon.Instance.gameObject);
             currentHealth = 0;
-            // Debug.Log("Player is dead");
             GetComponent<Animator>().SetTrigger(DEATH_HASH);
             StartCoroutine(DeathLoadSceneRoutine());
         }
@@ -166,17 +156,12 @@ public class PlayerHealth : Singleton<PlayerHealth>
         return baseDamageRecoveryTime * multiplier;
     }
 
-    /// <summary>
-    /// Apply knockback without damage (for NonDamagingEnemy that are not Shadow)
-    /// </summary>
     private void ApplyKnockbackOnly(Transform hitTransform)
     {
         if (!canTakeDamage) { return; }
 
-        // Apply knockback and visual effects but no damage
         knockback.GetKnockedBack(hitTransform, knockBackThrustAmount);
         
-        // Play damage taken sound when player gets knocked back
         if (SFXManager.Instance != null)
         {
             SFXManager.Instance.PlayDamageTakenSound();
@@ -195,7 +180,6 @@ public class PlayerHealth : Singleton<PlayerHealth>
             }
         }
 
-        // Only update slider if it exists
         if (healthSlider != null) {
             healthSlider.maxValue = maxHealth;
             healthSlider.value = currentHealth;

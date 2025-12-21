@@ -2,45 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Manages flashlight effects on Shadow enemies
-/// HYBRID SYSTEM: Slow → Stun → Kill (with penalty)
-/// </summary>
 public class FlashlightEffect : MonoBehaviour
 {
     [Header("Flashlight Settings")]
-    [SerializeField] private FlashlightCone flashlightCone; // Reference to flashlight
-    [SerializeField] private float detectionAngle = 45f; // Cone angle for detection
-    [SerializeField] private LayerMask enemyLayer; // Layer for enemies
+    [SerializeField] private FlashlightCone flashlightCone; 
+    [SerializeField] private float detectionAngle = 45f; 
+    [SerializeField] private LayerMask enemyLayer; 
     
-    private float detectionRange; // Auto-synced with flashlight cone length
+    private float detectionRange; 
     
     [Header("Effect Timings")]
-    [SerializeField] private float slowTime = 0.5f; // Time until slow effect (instant)
-    [SerializeField] private float stunTime = 2.0f; // Time until stun (2 seconds)
-    [SerializeField] private float killTime = 6.0f; // Time until kill (6 seconds total - reduced from 8s)
-    [SerializeField] private float cooldownTime = 5.0f; // Cooldown before can stun again
+    [SerializeField] private float slowTime = 0.5f; 
+    [SerializeField] private float stunTime = 2.0f; 
+    [SerializeField] private float killTime = 6.0f; 
+    [SerializeField] private float cooldownTime = 5.0f;
     
     [Header("Effect Strengths")]
-    [SerializeField] private float slowMultiplier = 0.5f; // Slow to 50% speed
-    [SerializeField] private float slowDuration = 3.0f; // Slow persists for 3 seconds after light stops
-    [SerializeField] private float stunDuration = 2.5f; // Stun for 2.5 seconds
+    [SerializeField] private float slowMultiplier = 0.5f; 
+    [SerializeField] private float slowDuration = 3.0f; 
+    [SerializeField] private float stunDuration = 2.5f; 
     
     [Header("Battery Costs")]
-    [SerializeField] private float normalDrainRate = 0.2f; // Normal light (not changed)
-    [SerializeField] private float slowDrainRate = 1.9f; // When slowing enemy (increased for balance)
-    [SerializeField] private float stunDrainRate = 0.8f; // Burst cost when stunning (not used during stun)
-    [SerializeField] private float killDrainRate = 1.9f; // When dealing kill damage (same as slow)
+    [SerializeField] private float normalDrainRate = 0.2f; 
+    [SerializeField] private float slowDrainRate = 1.9f; 
+    [SerializeField] private float stunDrainRate = 0.8f; 
+    [SerializeField] private float killDrainRate = 1.9f;
     
     [Header("Visual Effects")]
-    [SerializeField] private GameObject slowGlowPrefab; // Yellow glow for slow
-    [SerializeField] private GameObject stunGlowPrefab; // Bright yellow glow for stun
-    [SerializeField] private GameObject killGlowPrefab; // Red glow for kill warning
+    [SerializeField] private GameObject slowGlowPrefab; 
+    [SerializeField] private GameObject stunGlowPrefab; 
+    [SerializeField] private GameObject killGlowPrefab; 
     
     private Dictionary<EnemyAI, ShadowExposureData> exposedShadows = new Dictionary<EnemyAI, ShadowExposureData>();
     private bool isFlashlightOn = false;
     
-    // Lưu giá trị gốc
     private float baseSlowTime;
     private float baseStunTime;
     private float baseKillTime;
@@ -60,8 +55,8 @@ public class FlashlightEffect : MonoBehaviour
         public bool isStunned = false;
         public GameObject currentGlow = null;
         public Coroutine stunCoroutine = null;
-        public Coroutine slowDurationCoroutine = null; // NEW: Track slow duration
-        public bool isSlowPersisting = false; // NEW: Flag for when slow is persisting (not actively being applied)
+        public Coroutine slowDurationCoroutine = null; 
+        public bool isSlowPersisting = false; 
     }
     
     private enum ExposureState
@@ -79,13 +74,12 @@ public class FlashlightEffect : MonoBehaviour
             flashlightCone = GetComponent<FlashlightCone>();
         }
         
-        // Initialize detection range from flashlight cone
+  
         if (flashlightCone != null)
         {
             detectionRange = flashlightCone.GetConeLength();
         }
         
-        // Lưu giá trị gốc
         baseSlowTime = slowTime;
         baseStunTime = stunTime;
         baseKillTime = killTime;
@@ -97,26 +91,19 @@ public class FlashlightEffect : MonoBehaviour
         baseStunDrainRate = stunDrainRate;
         baseKillDrainRate = killDrainRate;
         
-        // Áp dụng difficulty
         ApplyDifficultySettings();
     }
     
     private void OnEnable()
     {
-        // Subscribe vào event khi difficulty thay đổi
         DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
     }
     
     private void OnDisable()
     {
-        // Unsubscribe
         DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
     }
-    
-    /// <summary>
-    /// Áp dụng difficulty vào flashlight effect settings
-    /// </summary>
-    private void ApplyDifficultySettings()
+        private void ApplyDifficultySettings()
     {
         float multiplier = DifficultyManager.GetDifficultyMultiplier();
         
@@ -140,19 +127,12 @@ public class FlashlightEffect : MonoBehaviour
         stunDrainRate = baseStunDrainRate * multiplier;
         killDrainRate = baseKillDrainRate * multiplier;
         
-        Debug.Log($"FlashlightEffect: Difficulty applied - Slow: {slowTime:F1}s, Stun: {stunTime:F1}s, Kill: {killTime:F1}s, Cooldown: {cooldownTime:F1}s");
-        Debug.Log($"FlashlightEffect: Durations - Slow: {slowDuration:F1}s, Stun: {stunDuration:F1}s");
-        Debug.Log($"FlashlightEffect: Drain rates - Normal: {normalDrainRate:F2}, Slow: {slowDrainRate:F2}, Stun: {stunDrainRate:F2}, Kill: {killDrainRate:F2}");
     }
     
-    /// <summary>
-    /// Callback khi difficulty thay đổi
-    /// </summary>
     private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
     {
         ApplyDifficultySettings();
-        // Note: Các enemy đang trong process sẽ giữ exposureTime hiện tại, nhưng các threshold mới sẽ áp dụng
-        // Các enemy mới sẽ sử dụng threshold mới ngay lập tức
+     
     }
     
     private void Update()
@@ -170,18 +150,15 @@ public class FlashlightEffect : MonoBehaviour
         }
         else
         {
-            // NEW: Don't clear ALL effects immediately
-            // Let persisting slow effects continue via their coroutines
-            ClearActiveEffects(); // Only clear non-persisting effects
+            
+            ClearActiveEffects(); 
         }
         
-        // Update cooldowns
         UpdateCooldowns();
     }
     
     private void DetectAndAffectShadows()
     {
-        // Find all enemies in range
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, detectionRange, enemyLayer);
         
         HashSet<EnemyAI> currentlyExposed = new HashSet<EnemyAI>();
@@ -191,7 +168,6 @@ public class FlashlightEffect : MonoBehaviour
             EnemyAI enemy = enemyCollider.GetComponent<EnemyAI>();
             if (enemy == null) continue;
             
-            // Check if enemy is in flashlight cone
             if (IsInFlashlightCone(enemy.transform.position))
             {
                 currentlyExposed.Add(enemy);
@@ -203,11 +179,10 @@ public class FlashlightEffect : MonoBehaviour
         List<EnemyAI> toRemove = new List<EnemyAI>();
         foreach (var kvp in exposedShadows)
         {
-            // Skip if currently in persisting slow state (don't remove yet)
             if (kvp.Value.isSlowPersisting && !currentlyExposed.Contains(kvp.Key))
             {
                 Debug.Log($"[DETECT] {kvp.Key.name} is persisting slow - SKIPPING removal (coroutine will handle it)");
-                continue; // Let the coroutine handle cleanup
+                continue; 
             }
             
             if (!currentlyExposed.Contains(kvp.Key) || kvp.Key == null)
@@ -227,14 +202,13 @@ public class FlashlightEffect : MonoBehaviour
             exposedShadows.Remove(enemy);
         }
         
-        // Update battery drain based on highest effect active
         UpdateBatteryDrain();
     }
     
     private bool IsInFlashlightCone(Vector3 targetPosition)
     {
         Vector3 directionToTarget = (targetPosition - transform.position).normalized;
-        Vector3 flashlightForward = transform.right; // Assuming flashlight points right
+        Vector3 flashlightForward = transform.right; 
         
         float angleToTarget = Vector3.Angle(flashlightForward, directionToTarget);
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
@@ -253,7 +227,6 @@ public class FlashlightEffect : MonoBehaviour
         
         ShadowExposureData data = exposedShadows[enemy];
         
-        // NEW: If re-shining on enemy during persisting slow, cancel the duration coroutine
         if (data.isSlowPersisting)
         {
             Debug.Log($"{enemy.name} re-exposed during slow persist - resuming progression");
@@ -263,24 +236,18 @@ public class FlashlightEffect : MonoBehaviour
                 data.slowDurationCoroutine = null;
             }
             data.isSlowPersisting = false;
-            // Keep exposureTime and continue progression toward stun!
         }
         
-        // Don't process if on cooldown
         if (data.cooldownTimer > 0f)
         {
-            // Still apply slow effect during cooldown
             ApplySlowEffectOnly(enemy, data);
             return;
         }
         
-        // Increase exposure time
         data.exposureTime += Time.deltaTime;
         
-        // Determine state based on exposure time
         ExposureState newState = DetermineExposureState(data.exposureTime);
         
-        // Apply effects based on state change
         if (newState != data.currentState)
         {
             TransitionToState(enemy, data, newState);
@@ -298,7 +265,6 @@ public class FlashlightEffect : MonoBehaviour
                 pathfinding.SetSpeedMultiplier(slowMultiplier);
             }
             
-            // Add slow glow if not present
             if (data.currentGlow == null && slowGlowPrefab != null)
             {
                 data.currentGlow = Instantiate(slowGlowPrefab, enemy.transform);
@@ -325,7 +291,6 @@ public class FlashlightEffect : MonoBehaviour
     
     private void TransitionToState(EnemyAI enemy, ShadowExposureData data, ExposureState newState)
     {
-        // Remove old effects
         RemoveVisualEffect(data);
         
         switch (newState)
@@ -348,14 +313,13 @@ public class FlashlightEffect : MonoBehaviour
     {
         Debug.Log($"Flashlight: Slowing {enemy.name}");
         
-        // Apply slow to enemy pathfinding
+
         EnemyPathFinding pathfinding = enemy.GetComponent<EnemyPathFinding>();
         if (pathfinding != null)
         {
             pathfinding.SetSpeedMultiplier(slowMultiplier);
         }
         
-        // Spawn slow glow if prefab exists
         if (slowGlowPrefab != null && data.currentGlow == null)
         {
             data.currentGlow = Instantiate(slowGlowPrefab, enemy.transform);
@@ -371,28 +335,23 @@ public class FlashlightEffect : MonoBehaviour
     {
         Debug.Log($"Flashlight: Stunning {enemy.name}");
         
-        // Remove slow glow first
         RemoveVisualEffect(data);
         
-        // Remove slow effect
         EnemyPathFinding pathfinding = enemy.GetComponent<EnemyPathFinding>();
         if (pathfinding != null)
         {
             pathfinding.SetSpeedMultiplier(1f);
         }
         
-        // Apply stun
         data.isStunned = true;
         data.stunCoroutine = StartCoroutine(StunRoutine(enemy, data));
-        
-        // Spawn stun glow (different color)
+    
         if (stunGlowPrefab != null)
         {
             data.currentGlow = Instantiate(stunGlowPrefab, enemy.transform);
             Debug.Log($"Created stun glow for {enemy.name}");
         }
         
-        // Start cooldown
         data.cooldownTimer = cooldownTime;
     }
     
@@ -402,23 +361,17 @@ public class FlashlightEffect : MonoBehaviour
         
         Debug.Log($"Flashlight: KILLING {enemy.name} - PENALTY APPLIED!");
         
-        // Change to red glow warning (but destroy it quickly)
         RemoveVisualEffect(data);
-        
-        // Add kill penalty to score (shadow killed by flashlight)
+    
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.AddKillPoints();
         }
-        
-        // Record kill for score penalty
+
         RecordFlashlightKill(enemy);
         
-        // Clean up from dictionary first
         exposedShadows.Remove(enemy);
         
-        // Drop battery BEFORE destroying (flashlight kill still drops battery)
-        // Try Shadow-specific drop scripts first (preferred method)
         ShadowGhostDrops shadowDrops1 = enemy.GetComponent<ShadowGhostDrops>();
         ShadowGhost2Drops shadowDrops2 = enemy.GetComponent<ShadowGhost2Drops>();
         ShadowGhost3Drops shadowDrops3 = enemy.GetComponent<ShadowGhost3Drops>();
@@ -440,7 +393,6 @@ public class FlashlightEffect : MonoBehaviour
         }
         else
         {
-            // Fallback to PickUpSpawner (only drop battery)
             PickUpSpawner pickupSpawner = enemy.GetComponent<PickUpSpawner>();
             if (pickupSpawner != null)
             {
@@ -453,7 +405,6 @@ public class FlashlightEffect : MonoBehaviour
             }
         }
         
-        // Destroy the enemy
         Debug.Log($"Shadow destroyed by flashlight");
         Destroy(enemy.gameObject);
     }
@@ -462,20 +413,16 @@ public class FlashlightEffect : MonoBehaviour
     {
         if (enemy == null) yield break;
         
-        // Disable enemy AI
         EnemyPathFinding pathfinding = enemy.GetComponent<EnemyPathFinding>();
         if (pathfinding != null)
         {
             pathfinding.StopMoving();
         }
         
-        // Disable enemy attacks
         enemy.enabled = false;
         
-        // Wait for stun duration
         yield return new WaitForSeconds(stunDuration);
         
-        // Re-enable enemy
         if (enemy != null)
         {
             enemy.enabled = true;
@@ -498,16 +445,10 @@ public class FlashlightEffect : MonoBehaviour
         }
         
         Debug.Log($"[SLOW PERSIST] {enemy.name} slow effect persisting for {slowDuration} seconds (glow stays)");
-        
-        // Keep slow effect active (speed multiplier already applied)
-        // Keep glow active (visual feedback)
-        
-        // Wait for duration
         yield return new WaitForSeconds(slowDuration);
         
         Debug.Log($"[SLOW PERSIST] {slowDuration} seconds elapsed for {enemy.name}");
         
-        // Now actually remove everything
         if (enemy == null)
         {
             Debug.LogWarning($"[SLOW PERSIST] Enemy became null during wait!");
@@ -521,8 +462,7 @@ public class FlashlightEffect : MonoBehaviour
         }
         
         Debug.Log($"[SLOW PERSIST] {enemy.name} slow duration expired - REMOVING ALL EFFECTS NOW");
-        
-        // Remove visual effects FIRST
+    
         if (data.currentGlow != null)
         {
             Debug.Log($"[SLOW PERSIST] Destroying glow: {data.currentGlow.name}");
@@ -534,7 +474,6 @@ public class FlashlightEffect : MonoBehaviour
             Debug.LogWarning($"[SLOW PERSIST] No glow to remove for {enemy.name}!");
         }
         
-        // Reset speed to normal
         EnemyPathFinding pathfinding = enemy.GetComponent<EnemyPathFinding>();
         if (pathfinding != null)
         {
@@ -547,13 +486,11 @@ public class FlashlightEffect : MonoBehaviour
             Debug.LogError($"[SLOW PERSIST] {enemy.name} has no EnemyPathFinding component!");
         }
         
-        // Reset state
         data.exposureTime = 0f;
         data.currentState = ExposureState.None;
         data.isSlowPersisting = false;
         data.slowDurationCoroutine = null;
         
-        // Remove from dictionary
         exposedShadows.Remove(enemy);
         
         Debug.Log($"[SLOW PERSIST] ✅ {enemy.name} FULLY RECOVERED from slow - speed should be NORMAL now!");
@@ -567,34 +504,28 @@ public class FlashlightEffect : MonoBehaviour
         
         Debug.Log($"Removing effects from {enemy.name}, current state: {data.currentState}");
         
-        // NEW: Handle SLOW effect - persist for duration
         if (data.currentState == ExposureState.Slow && !data.isSlowPersisting)
         {
             Debug.Log($"{enemy.name} SLOW effect will persist for {slowDuration} seconds");
             data.isSlowPersisting = true;
             data.slowDurationCoroutine = StartCoroutine(SlowDurationRoutine(enemy, data));
-            // Don't reset state yet - let the coroutine handle it
             return;
         }
         
-        // Stop stun coroutine
         if (data.stunCoroutine != null)
         {
             StopCoroutine(data.stunCoroutine);
             data.stunCoroutine = null;
         }
         
-        // Stop slow duration coroutine if active
         if (data.slowDurationCoroutine != null)
         {
             StopCoroutine(data.slowDurationCoroutine);
             data.slowDurationCoroutine = null;
         }
         
-        // Remove visual effects
         RemoveVisualEffect(data);
         
-        // Reset enemy speed - ALWAYS reset to 1.0 (100% speed)
         EnemyPathFinding pathfinding = enemy.GetComponent<EnemyPathFinding>();
         if (pathfinding != null)
         {
@@ -607,14 +538,12 @@ public class FlashlightEffect : MonoBehaviour
             Debug.LogWarning($"{enemy.name} has no EnemyPathFinding component!");
         }
         
-        // Re-enable enemy AI if it was stunned
         if (data.isStunned && enemy != null)
         {
             enemy.enabled = true;
             data.isStunned = false;
         }
         
-        // NEW: Reset exposure time (KILL COUNTDOWN RESETS!)
         data.exposureTime = 0f;
         data.currentState = ExposureState.None;
         data.isSlowPersisting = false;
@@ -638,21 +567,18 @@ public class FlashlightEffect : MonoBehaviour
     
     private void ClearActiveEffects()
     {
-        // NEW: Only clear effects that are NOT in persisting slow state
         Debug.Log($"[CLEAR] Clearing ACTIVE effects (skipping persisting slows). Total shadows: {exposedShadows.Count}");
         
         List<EnemyAI> enemiesToClear = new List<EnemyAI>();
         
         foreach (var kvp in exposedShadows)
         {
-            // Skip enemies with persisting slow (let their coroutine finish)
             if (kvp.Value.isSlowPersisting)
             {
                 Debug.Log($"[CLEAR] SKIPPING {kvp.Key.name} - slow is persisting (coroutine active)");
                 continue;
             }
             
-            // Only clear non-persisting effects
             enemiesToClear.Add(kvp.Key);
         }
         
@@ -663,7 +589,6 @@ public class FlashlightEffect : MonoBehaviour
                 Debug.Log($"[CLEAR] Removing effects from {enemy.name}");
                 RemoveShadowEffects(enemy);
                 
-                // Only remove from dictionary if NOT persisting (RemoveShadowEffects may have started persist coroutine)
                 if (exposedShadows.ContainsKey(enemy) && !exposedShadows[enemy].isSlowPersisting)
                 {
                     Debug.Log($"[CLEAR] Removing {enemy.name} from dictionary");
@@ -677,8 +602,7 @@ public class FlashlightEffect : MonoBehaviour
         }
         
         Debug.Log($"[CLEAR] Active effects cleared. Remaining shadows (persisting): {exposedShadows.Count}");
-        
-        // Reset battery drain to normal
+
         if (BatteryManager.Instance != null)
         {
             BatteryManager.Instance.SetDrainRate(normalDrainRate);
@@ -687,7 +611,6 @@ public class FlashlightEffect : MonoBehaviour
     
     private void ClearAllEffects()
     {
-        // FORCED CLEAR: Remove everything (used on disable/destroy)
         Debug.Log($"[CLEAR ALL] FORCE clearing ALL effects. Total shadows: {exposedShadows.Count}");
         
         List<EnemyAI> enemiesToClear = new List<EnemyAI>(exposedShadows.Keys);
@@ -698,7 +621,6 @@ public class FlashlightEffect : MonoBehaviour
             {
                 ShadowExposureData data = exposedShadows[enemy];
                 
-                // Stop slow duration coroutine if active
                 if (data.slowDurationCoroutine != null)
                 {
                     StopCoroutine(data.slowDurationCoroutine);
@@ -713,7 +635,6 @@ public class FlashlightEffect : MonoBehaviour
         
         Debug.Log("[CLEAR ALL] All effects FORCE cleared");
         
-        // Reset battery drain to normal
         if (BatteryManager.Instance != null)
         {
             BatteryManager.Instance.SetDrainRate(normalDrainRate);
@@ -758,21 +679,14 @@ public class FlashlightEffect : MonoBehaviour
     
     private void RecordFlashlightKill(EnemyAI enemy)
     {
-        // TODO: Implement score penalty system
-        // For now, just log it
         Debug.LogWarning($"FLASHLIGHT KILL RECORDED: {enemy.name} - Player will receive score penalty!");
-        
-        // You can add a static counter here for end-game scoring
-        // Example: GameManager.Instance.RecordViolentKill();
     }
     
     private void OnDrawGizmosSelected()
     {
-        // Draw detection range
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
         
-        // Draw cone angle
         Vector3 forward = transform.right;
         Vector3 cone1 = Quaternion.Euler(0, 0, detectionAngle) * forward * detectionRange;
         Vector3 cone2 = Quaternion.Euler(0, 0, -detectionAngle) * forward * detectionRange;

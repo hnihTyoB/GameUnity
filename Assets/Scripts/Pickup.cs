@@ -90,29 +90,29 @@ public class Pickup : MonoBehaviour
                 break;
             case PickUpType.StaminaGlobe:
                 Stamina.Instance.RefreshStamina();
-                // Play stamina pickup sound
+    
                 if (SFXManager.Instance != null)
                 {
                     SFXManager.Instance.PlayStaminaSound();
                 }
                 break;
             case PickUpType.LightFragment:
-                // Restore stamina (represents mental energy)
+
                 Stamina.Instance.RefreshStamina();
-                // Play stamina pickup sound
+             
                 if (SFXManager.Instance != null)
                 {
                     SFXManager.Instance.PlayStaminaSound();
                 }
-                // Could also give bonus effect in future
+              
                 break;
             case PickUpType.Battery:
-                // Add battery to BatteryManager
+               
                 if (BatteryManager.Instance != null)
                 {
                     BatteryManager.Instance.AddBattery(1f);
                     Debug.Log("Battery picked up (via Pickup.cs) - added to BatteryManager");
-                    // Play battery pickup sound
+                   
                     if (SFXManager.Instance != null)
                     {
                         SFXManager.Instance.PlayBatterySound();
@@ -121,24 +121,23 @@ public class Pickup : MonoBehaviour
                 else
                 {
                     Debug.LogWarning("BatteryManager not found! Battery pickup failed.");
-                    // Fallback to stamina
+                 
                     Stamina.Instance.RefreshStamina();
                 }
                 break;
             case PickUpType.CourageFragment:
-                // Give courage to face bullying
-                Stamina.Instance.RefreshStamina(); // Restore mental energy
-                // Play stamina pickup sound
+  
+                Stamina.Instance.RefreshStamina(); 
+               
                 if (SFXManager.Instance != null)
                 {
                     SFXManager.Instance.PlayStaminaSound();
                 }
-                // TODO: Could add temporary courage buff
+   
                 break;
             case PickUpType.ShieldFragment:
-                // Give protection against bullying
-                PlayerHealth.Instance.HealPlayer(); // Restore health
-                // TODO: Could add temporary shield buff
+      
+                PlayerHealth.Instance.HealPlayer(); 
                 break;
         }
     }

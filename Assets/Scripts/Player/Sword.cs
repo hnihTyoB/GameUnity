@@ -25,7 +25,6 @@ public class Sword : MonoBehaviour, IWeapon
     }
     private void Update()
     {
-        // Don't rotate if game is paused
         if (Time.timeScale == 0f) return;
         
         MouseFollowWithOffset();

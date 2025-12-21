@@ -21,14 +21,12 @@ public class PlayerController : Singleton<PlayerController>
     private bool facingLeft = false;
     private bool isDashing = false;
     
-    // Slow effect variables
     private bool isSlowedByDebuff = false;
     private float slowMultiplier = 1f;
     
-    // Stun effect variables
     private bool isStunned = false;
     private Coroutine stunCoroutine;
-    [SerializeField] private Color stunColor = new Color(0.8f, 0f, 1f, 1f); // Bright purple for stun
+    [SerializeField] private Color stunColor = new Color(0.8f, 0f, 1f, 1f); 
     private Color originalColor;
 
     protected override void Awake()
@@ -41,7 +39,6 @@ public class PlayerController : Singleton<PlayerController>
         mySpriteRender = GetComponent<SpriteRenderer>();
         knockback = GetComponent<Knockback>();
         
-        // Save original sprite color
         originalColor = mySpriteRender.color;
     }
     private void Start()
@@ -59,9 +56,6 @@ public class PlayerController : Singleton<PlayerController>
         playerControls.Disable();
     }
     
-    /// <summary>
-    /// Disable player input (called when game is paused, e.g., EndLevelUI)
-    /// </summary>
     public void DisableInput()
     {
         if (playerControls != null)
@@ -70,9 +64,6 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
     
-    /// <summary>
-    /// Enable player input (called when game is resumed)
-    /// </summary>
     public void EnableInput()
     {
         if (playerControls != null)
@@ -135,7 +126,6 @@ public class PlayerController : Singleton<PlayerController>
             moveSpeed *= dashSpeed;
             myTrailRenderer.emitting = true;
             
-            // Play dash sound
             if (SFXManager.Instance != null)
             {
                 SFXManager.Instance.PlayDashSound();
@@ -155,11 +145,10 @@ public class PlayerController : Singleton<PlayerController>
         isDashing = false;
     }
 
-    // Slow Effect Methods
     public void ApplySlowEffect(float slowPercentage)
     {
         isSlowedByDebuff = true;
-        slowMultiplier = 1f - slowPercentage; // 40% slow = 0.6 multiplier
+        slowMultiplier = 1f - slowPercentage; 
     }
 
     public void RemoveSlowEffect()
@@ -173,13 +162,10 @@ public class PlayerController : Singleton<PlayerController>
         return isSlowedByDebuff;
     }
 
-    // Stun Effect Methods
     public void ApplyStun(float stunDuration)
     {
-        // If already stunned, don't re-apply (prevents spam)
         if (isStunned) { return; }
         
-        // Stop any existing stun coroutine
         if (stunCoroutine != null)
         {
             StopCoroutine(stunCoroutine);
@@ -192,14 +178,12 @@ public class PlayerController : Singleton<PlayerController>
     {
         isStunned = true;
         
-        // Blinking effect during stun - faster and more visible
         float elapsed = 0f;
-        float blinkInterval = 0.12f; // Faster blink for more noticeable effect
+        float blinkInterval = 0.12f; 
         bool isStunColorActive = true;
         
         while (elapsed < duration)
         {
-            // Toggle between bright stun color and white for maximum visibility
             mySpriteRender.color = isStunColorActive ? stunColor : Color.white;
             isStunColorActive = !isStunColorActive;
             
@@ -207,7 +191,6 @@ public class PlayerController : Singleton<PlayerController>
             elapsed += blinkInterval;
         }
         
-        // Restore original color at the end
         mySpriteRender.color = originalColor;
         
         isStunned = false;
