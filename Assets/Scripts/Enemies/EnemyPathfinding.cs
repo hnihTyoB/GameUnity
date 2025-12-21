@@ -12,9 +12,9 @@ public class EnemyPathFinding : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private float currentSpeed;
     private float baseSpeed;
-    private float baseMoveSpeed; // Lưu giá trị gốc từ Inspector
-    private float speedMultiplier = 1f; // For flashlight slow effect
-    private bool isMovementEnabled = true; // For flashlight stun effect
+    private float baseMoveSpeed; 
+    private float speedMultiplier = 1f; 
+    private bool isMovementEnabled = true; 
     
     private void Awake()
     {
@@ -22,16 +22,14 @@ public class EnemyPathFinding : MonoBehaviour
         knockback = GetComponent<Knockback>();
         rb = GetComponent<Rigidbody2D>();
         
-        // Lưu giá trị gốc
+
         baseMoveSpeed = moveSpeed;
         
-        // Áp dụng difficulty multiplier vào speed
+        
         ApplyDifficultySettings();
     }
     
-    /// <summary>
-    /// Áp dụng difficulty multiplier vào enemy speed (private method cho Awake)
-    /// </summary>
+
     private void ApplyDifficultySettings()
     {
         float multiplier = DifficultyManager.GetDifficultyMultiplier();
@@ -41,13 +39,11 @@ public class EnemyPathFinding : MonoBehaviour
         Debug.Log($"EnemyPathFinding: Difficulty applied - Speed: {baseSpeed:F2} (base: {baseMoveSpeed:F2}, multiplier: {multiplier:F2}x)");
     }
     
-    /// <summary>
-    /// Public method để cập nhật difficulty trong runtime
-    /// </summary>
+
     public void ApplyDifficultyMultiplier(float multiplier)
     {
         baseSpeed = baseMoveSpeed * multiplier;
-        // Nếu đang dùng base speed (không bị slow), cập nhật currentSpeed
+      
         if (speedMultiplier == 1f)
         {
             currentSpeed = baseSpeed;
@@ -77,42 +73,32 @@ public class EnemyPathFinding : MonoBehaviour
         currentSpeed = baseSpeed;
     }
     
-    /// <summary>
-    /// Set speed multiplier for effects like flashlight slow
-    /// </summary>
+
     public void SetSpeedMultiplier(float multiplier)
     {
         speedMultiplier = multiplier;
     }
     
-    /// <summary>
-    /// Stop enemy movement completely (for stun)
-    /// </summary>
+   
     public void StopMoving()
     {
         isMovementEnabled = false;
         moveDir = Vector2.zero;
     }
     
-    /// <summary>
-    /// Resume enemy movement (after stun)
-    /// </summary>
+    
     public void ResumeMoving()
     {
         isMovementEnabled = true;
     }
     
-    /// <summary>
-    /// Get current move speed
-    /// </summary>
+ 
     public float GetMoveSpeed()
     {
         return currentSpeed;
     }
     
-    /// <summary>
-    /// Get base move speed
-    /// </summary>
+  
     public float GetBaseSpeed()
     {
         return baseSpeed;

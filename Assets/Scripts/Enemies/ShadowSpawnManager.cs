@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Quản lý việc spawn Shadow Ghosts từ các spawn points cố định
-/// </summary>
+
 public class ShadowSpawnManager : MonoBehaviour
 {
     [Header("Shadow Prefabs")]
@@ -30,19 +28,19 @@ public class ShadowSpawnManager : MonoBehaviour
     private bool isSpawning = false;
     private Coroutine spawnCoroutine;
     
-    // Lưu giá trị gốc
+  
     private int baseMaxShadows;
     private float baseSpawnInterval;
     private float baseInitialDelay;
     
     private void Start()
     {
-        // Lưu giá trị gốc
+
         baseMaxShadows = maxShadowsInScene;
         baseSpawnInterval = spawnInterval;
         baseInitialDelay = initialSpawnDelay;
         
-        // Áp dụng difficulty settings
+  
         ApplyDifficultySettings();
         
         if (spawnZones == null || spawnZones.Length == 0)
@@ -58,50 +56,40 @@ public class ShadowSpawnManager : MonoBehaviour
     
     private void OnEnable()
     {
-        // Subscribe vào event khi difficulty thay đổi
+       
         DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
     }
     
     private void OnDisable()
     {
-        // Unsubscribe
+    
         DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
     }
     
-    /// <summary>
-    /// Áp dụng difficulty vào spawn settings
-    /// </summary>
+  
     private void ApplyDifficultySettings()
     {
         float multiplier = DifficultyManager.GetDifficultyMultiplier();
         
-        // Điều chỉnh maxShadowsInScene
-        // Easy (0.7x): Ít enemy hơn (7 shadows)
-        // Hard (1.5x): Nhiều enemy hơn (15 shadows)
+  
         maxShadowsInScene = Mathf.RoundToInt(baseMaxShadows * multiplier);
         
-        // Điều chỉnh spawnInterval
-        // Easy (0.7x): Spawn chậm hơn (interval = 15 / 0.7 = 21.4 giây)
-        // Hard (1.5x): Spawn nhanh hơn (interval = 15 / 1.5 = 10 giây)
+   
         spawnInterval = baseSpawnInterval / multiplier;
         
-        // Điều chỉnh initialDelay (tùy chọn)
-        // Easy: Đợi lâu hơn trước khi spawn lần đầu
-        // Hard: Spawn ngay hơn
+
         initialSpawnDelay = baseInitialDelay / multiplier;
         
         Debug.Log($"ShadowSpawnManager: Difficulty applied - Max: {maxShadowsInScene}, Interval: {spawnInterval:F1}s, Delay: {initialSpawnDelay:F1}s");
     }
     
-    /// <summary>
-    /// Callback khi difficulty thay đổi
-    /// </summary>
+
     private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
     {
-        // Khi difficulty thay đổi, cập nhật lại settings
+        
         ApplyDifficultySettings();
         
-        // Nếu đang spawn, restart coroutine để áp dụng settings mới
+      
         if (isSpawning)
         {
             StopSpawning();
@@ -149,10 +137,10 @@ public class ShadowSpawnManager : MonoBehaviour
         if (spawnZones == null || spawnZones.Length == 0) return null;
         if (activeShadows.Count >= maxShadowsInScene) return null;
         
-        // Chọn random spawn zone
+
         ShadowSpawnZone randomZone = spawnZones[Random.Range(0, spawnZones.Length)];
         
-        // Lấy vị trí spawn từ zone
+  
         Vector2 spawnPosition = randomZone.GetRandomValidPosition();
         
         if (spawnPosition == Vector2.zero)
@@ -160,12 +148,12 @@ public class ShadowSpawnManager : MonoBehaviour
             return null;
         }
         
-        // Chọn loại shadow dựa trên weights
+
         GameObject shadowPrefab = GetRandomShadowPrefab();
         
         if (shadowPrefab == null) return null;
         
-        // Spawn shadow
+   
         GameObject spawnedShadow = Instantiate(shadowPrefab, spawnPosition, Quaternion.identity);
         spawnedShadow.name = $"{shadowPrefab.name} (Spawned)";
         

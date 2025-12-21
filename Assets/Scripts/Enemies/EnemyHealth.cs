@@ -9,7 +9,7 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float knockBackThrust = 15f;
 
     private int currentHealth;
-    private int baseStartingHealth; // Lưu giá trị gốc
+    private int baseStartingHealth; 
     private Knockback knockback;
     private Flash flash;
     
@@ -18,34 +18,30 @@ public class EnemyHealth : MonoBehaviour
         flash = GetComponent<Flash>();
         knockback = GetComponent<Knockback>();
         
-        // Lưu giá trị gốc
+    
         baseStartingHealth = startingHealth;
     }
 
     private void Start()
     {
-        // Áp dụng difficulty multiplier vào health
+
         ApplyDifficultyMultiplier();
     }
     
-    /// <summary>
-    /// Áp dụng difficulty multiplier vào enemy health
-    /// </summary>
+
     private void ApplyDifficultyMultiplier()
     {
         float multiplier = DifficultyManager.GetDifficultyMultiplier();
         int adjustedHealth = Mathf.RoundToInt(baseStartingHealth * multiplier);
         currentHealth = adjustedHealth;
         
-        Debug.Log($"EnemyHealth: Difficulty applied - Health: {currentHealth} (base: {baseStartingHealth}, multiplier: {multiplier:F2}x)");
+    
     }
     
-    /// <summary>
-    /// Public method để cập nhật difficulty trong runtime (nếu enemy chưa bị damage)
-    /// </summary>
+ 
     public void UpdateDifficultyMultiplier()
     {
-        // Chỉ áp dụng nếu enemy còn full health (chưa bị damage)
+        
         if (currentHealth >= baseStartingHealth || currentHealth == Mathf.RoundToInt(baseStartingHealth * DifficultyManager.GetDifficultyMultiplier()))
         {
             ApplyDifficultyMultiplier();
@@ -58,8 +54,8 @@ public class EnemyHealth : MonoBehaviour
         knockback.GetKnockedBack(PlayerController.Instance.transform, knockBackThrust);
         StartCoroutine(flash.FlashRoutine());
         
-        // Add hit penalty to score
-        Debug.Log($"EnemyHealth: TakeDamage called on {gameObject.name}, ScoreManager.Instance = {(ScoreManager.Instance != null ? "EXISTS" : "NULL")}");
+  
+        
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.AddHitPoints();
@@ -80,8 +76,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void DetectDeath() {
         if (currentHealth <= 0) {
-            // Add kill penalty to score (before destroying)
-            Debug.Log($"EnemyHealth: Enemy {gameObject.name} died, ScoreManager.Instance = {(ScoreManager.Instance != null ? "EXISTS" : "NULL")}");
+          
             if (ScoreManager.Instance != null)
             {
                 ScoreManager.Instance.AddKillPoints();

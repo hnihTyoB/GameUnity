@@ -16,7 +16,7 @@ public class ShadowGhostDrops : MonoBehaviour
     {
         Vector3 dropPosition = transform.position;
         
-        // Shadow now ONLY drops battery (100% chance)
+
         if (batteryPrefab != null)
         {
             Instantiate(batteryPrefab, dropPosition, Quaternion.identity);

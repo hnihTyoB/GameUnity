@@ -21,11 +21,11 @@ public class ShadowGhost : MonoBehaviour, IEnemy
     private bool isDashing = false;
     private Vector2 dashDirection;
     private Collider2D myCollider;
-    private ParticleSystem spawnedSmoke; // Track spawned smoke
-    private Transform lockedTarget; // Store target at start of attack
-    private LightFearBehavior lightFear; // Fear of light behavior
+    private ParticleSystem spawnedSmoke; 
+    private Transform lockedTarget; 
+    private LightFearBehavior lightFear; 
     
-    // Lưu giá trị gốc
+
     private float baseNormalSpeed;
     private float baseDashSpeed;
 
@@ -37,26 +37,23 @@ public class ShadowGhost : MonoBehaviour, IEnemy
         myCollider = GetComponent<Collider2D>();
         lightFear = GetComponent<LightFearBehavior>();
         
-        // Apply shadow color
+
         if (spriteRenderer != null)
         {
             spriteRenderer.color = shadowColor;
         }
         
-        // Keep collider normal (not trigger) so it collides with walls/tileset
-        // NonDamagingEnemy component prevents damage/knockback to player
-        
-        // Lưu giá trị gốc
+      
         baseNormalSpeed = normalSpeed;
         baseDashSpeed = dashSpeed;
         
-        // Áp dụng difficulty
+    
         ApplyDifficultySettings();
     }
     
     private void OnEnable()
     {
-        // Subscribe vào event khi difficulty thay đổi
+        
         DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
     }
     

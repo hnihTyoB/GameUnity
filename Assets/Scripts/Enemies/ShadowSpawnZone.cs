@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Định nghĩa các điểm spawn cố định cho Shadow Ghosts
-/// User tự đặt các spawn points, system sẽ random chọn từ list
-/// </summary>
+
 public class ShadowSpawnZone : MonoBehaviour
 {
     [Header("Spawn Points")]
@@ -18,9 +15,7 @@ public class ShadowSpawnZone : MonoBehaviour
     [SerializeField] private Color gizmoColor = new Color(0.5f, 0f, 0.5f, 0.8f);
     [SerializeField] private bool showGizmos = true;
     
-    /// <summary>
-    /// Lấy một vị trí spawn ngẫu nhiên từ danh sách spawn points
-    /// </summary>
+
     public Vector2 GetRandomValidPosition()
     {
         if (spawnPoints == null || spawnPoints.Length == 0)
@@ -47,13 +42,10 @@ public class ShadowSpawnZone : MonoBehaviour
         return Vector2.zero;
     }
     
-    /// <summary>
-    /// Kiểm tra xem vị trí có hợp lệ để spawn không
-    /// Chỉ check khoảng cách với player và victim
-    /// </summary>
+
     private bool IsPositionValid(Vector2 position)
     {
-        // Check khoảng cách từ player
+        
         if (PlayerController.Instance != null)
         {
             float distanceToPlayer = Vector2.Distance(position, PlayerController.Instance.transform.position);
@@ -63,7 +55,7 @@ public class ShadowSpawnZone : MonoBehaviour
             }
         }
         
-        // Check khoảng cách từ victims
+  
         Victim[] victims = FindObjectsOfType<Victim>();
         foreach (Victim victim in victims)
         {
@@ -84,11 +76,11 @@ public class ShadowSpawnZone : MonoBehaviour
     {
         if (!showGizmos || spawnPoints == null) return;
         
-        // Vẽ zone center
+
         Gizmos.color = gizmoColor;
         Gizmos.DrawWireSphere(transform.position, 0.5f);
         
-        // Vẽ từng spawn point
+
         foreach (Transform point in spawnPoints)
         {
             if (point == null) continue;
@@ -105,7 +97,7 @@ public class ShadowSpawnZone : MonoBehaviour
     {
         if (spawnPoints == null) return;
         
-        // Vẽ min distance cho từng spawn point
+  
         Gizmos.color = new Color(1f, 1f, 0f, 0.1f);
         foreach (Transform point in spawnPoints)
         {
