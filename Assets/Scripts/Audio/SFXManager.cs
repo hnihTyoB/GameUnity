@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Manages Sound Effects (SFX) for the game
-/// Handles playing, stopping, and volume control for SFX
-/// </summary>
 public class SFXManager : Singleton<SFXManager>
 {
     [Header("SFX Clips")]
@@ -15,43 +11,38 @@ public class SFXManager : Singleton<SFXManager>
     [SerializeField] private AudioClip batterySound; // battery sound
     [SerializeField] private AudioClip staminaSound; // stamina sound
     [SerializeField] private AudioClip dashSound; // dash sound
-    [SerializeField] private AudioClip ghostSound; // ghost sound (shadow attack)
-    [SerializeField] private AudioClip shootSound; // shoot sound (enemy projectile)
-    [SerializeField] private AudioClip damageTakenSound; // damage_taken sound (player knockback/grape hit)
+    [SerializeField] private AudioClip ghostSound; // ghost sound
+    [SerializeField] private AudioClip shootSound; // shoot sound
+    [SerializeField] private AudioClip damageTakenSound; // damage_taken sound
     
     [Header("Audio Sources")]
-    [SerializeField] private AudioSource flashLightSource; // For looping flashlight sound
-    [SerializeField] private AudioSource shieldSource; // For looping shield sound
-    [SerializeField] private AudioSource oneShotSource; // For one-shot sounds like hit
+    [SerializeField] private AudioSource flashLightSource;
+    [SerializeField] private AudioSource shieldSource;
+    [SerializeField] private AudioSource oneShotSource;
     
-    private float sfxVolume = 0.7f; // Default volume
+    private float sfxVolume = 0.7f;
     
     protected override void Awake()
     {
         base.Awake();
         
-        // Create audio sources if they don't exist
+      
         CreateAudioSources();
         
-        // Try to load audio clips from Resources if not assigned
+      
         LoadAudioClipsFromResources();
         
-        // Load volume from PlayerPrefs
+       
         LoadVolumeFromSettings();
     }
     
     private void Start()
     {
-        // Configure audio sources
         ConfigureAudioSources();
     }
     
-    /// <summary>
-    /// Try to load audio clips from Resources if not assigned in Inspector
-    /// </summary>
     private void LoadAudioClipsFromResources()
     {
-        // Try to load flash_light.ogg
         if (flashLightSound == null)
         {
             flashLightSound = Resources.Load<AudioClip>("Audio/flash_light");
@@ -61,7 +52,6 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load shield.wav
         if (shieldSound == null)
         {
             shieldSound = Resources.Load<AudioClip>("Audio/shield");
@@ -71,7 +61,6 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load hit.wav
         if (hitSound == null)
         {
             hitSound = Resources.Load<AudioClip>("Audio/hit");
@@ -81,7 +70,6 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load battery sound
         if (batterySound == null)
         {
             batterySound = Resources.Load<AudioClip>("Audio/battery");
@@ -91,7 +79,6 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load stamina sound
         if (staminaSound == null)
         {
             staminaSound = Resources.Load<AudioClip>("Audio/stamina");
@@ -101,7 +88,6 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load dash sound
         if (dashSound == null)
         {
             dashSound = Resources.Load<AudioClip>("Audio/dash");
@@ -111,7 +97,6 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load ghost sound
         if (ghostSound == null)
         {
             ghostSound = Resources.Load<AudioClip>("Audio/ghost");
@@ -121,7 +106,7 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load shoot sound
+    
         if (shootSound == null)
         {
             shootSound = Resources.Load<AudioClip>("Audio/shoot");
@@ -131,7 +116,7 @@ public class SFXManager : Singleton<SFXManager>
             }
         }
         
-        // Try to load damage taken sound
+   
         if (damageTakenSound == null)
         {
             damageTakenSound = Resources.Load<AudioClip>("Audio/damage_taken");
@@ -142,12 +127,9 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Create audio sources if they don't exist
-    /// </summary>
+
     private void CreateAudioSources()
     {
-        // Create flashlight audio source
         if (flashLightSource == null)
         {
             GameObject flashLightObj = new GameObject("FlashlightAudioSource");
@@ -155,7 +137,6 @@ public class SFXManager : Singleton<SFXManager>
             flashLightSource = flashLightObj.AddComponent<AudioSource>();
         }
         
-        // Create shield audio source
         if (shieldSource == null)
         {
             GameObject shieldObj = new GameObject("ShieldAudioSource");
@@ -163,7 +144,6 @@ public class SFXManager : Singleton<SFXManager>
             shieldSource = shieldObj.AddComponent<AudioSource>();
         }
         
-        // Create one-shot audio source
         if (oneShotSource == null)
         {
             GameObject oneShotObj = new GameObject("OneShotAudioSource");
@@ -172,51 +152,39 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Configure audio sources
-    /// </summary>
     private void ConfigureAudioSources()
     {
-        // Configure flashlight source (loop)
         if (flashLightSource != null)
         {
             flashLightSource.loop = true;
             flashLightSource.playOnAwake = false;
             flashLightSource.volume = sfxVolume;
-            flashLightSource.spatialBlend = 0f; // 2D sound
+            flashLightSource.spatialBlend = 0f;
         }
         
-        // Configure shield source (loop)
         if (shieldSource != null)
         {
             shieldSource.loop = true;
             shieldSource.playOnAwake = false;
             shieldSource.volume = sfxVolume;
-            shieldSource.spatialBlend = 0f; // 2D sound
+            shieldSource.spatialBlend = 0f;
         }
         
-        // Configure one-shot source
         if (oneShotSource != null)
         {
             oneShotSource.loop = false;
             oneShotSource.playOnAwake = false;
             oneShotSource.volume = sfxVolume;
-            oneShotSource.spatialBlend = 0f; // 2D sound
+            oneShotSource.spatialBlend = 0f; 
         }
     }
     
-    /// <summary>
-    /// Load volume from SettingsManager or PlayerPrefs
-    /// </summary>
     private void LoadVolumeFromSettings()
     {
         sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.7f);
         UpdateAllVolumes();
     }
     
-    /// <summary>
-    /// Update all audio source volumes
-    /// </summary>
     private void UpdateAllVolumes()
     {
         if (flashLightSource != null)
@@ -235,9 +203,6 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play flashlight sound (loop)
-    /// </summary>
     public void PlayFlashlightSound()
     {
         if (flashLightSource != null && flashLightSound != null)
@@ -254,9 +219,7 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Stop flashlight sound
-    /// </summary>
+
     public void StopFlashlightSound()
     {
         if (flashLightSource != null && flashLightSource.isPlaying)
@@ -265,9 +228,7 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play shield sound (loop)
-    /// </summary>
+ 
     public void PlayShieldSound()
     {
         if (shieldSource != null && shieldSound != null)
@@ -284,9 +245,7 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Stop shield sound
-    /// </summary>
+  
     public void StopShieldSound()
     {
         if (shieldSource != null && shieldSource.isPlaying)
@@ -295,19 +254,17 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play hit sound (one-shot)
-    /// </summary>
+
     public void PlayHitSound()
     {
-        // Ensure audio source exists
+     
         if (oneShotSource == null)
         {
             CreateAudioSources();
             ConfigureAudioSources();
         }
         
-        // Double-check after creation
+      
         if (oneShotSource == null)
         {
             Debug.LogError("SFXManager: Failed to create OneShotSource!");
@@ -324,9 +281,7 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Set SFX volume (called by SettingsManager)
-    /// </summary>
+   
     public void SetVolume(float volume)
     {
         sfxVolume = Mathf.Clamp01(volume);
@@ -335,17 +290,13 @@ public class SFXManager : Singleton<SFXManager>
         PlayerPrefs.Save();
     }
     
-    /// <summary>
-    /// Get current SFX volume
-    /// </summary>
+ 
     public float GetVolume()
     {
         return sfxVolume;
     }
     
-    /// <summary>
-    /// Play a custom one-shot sound
-    /// </summary>
+   
     public void PlayOneShot(AudioClip clip, float volumeMultiplier = 1f)
     {
         if (oneShotSource != null && clip != null)
@@ -354,12 +305,10 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play battery pickup sound (one-shot)
-    /// </summary>
+  
     public void PlayBatterySound()
     {
-        // Ensure audio source exists
+     
         if (oneShotSource == null)
         {
             CreateAudioSources();
@@ -368,7 +317,7 @@ public class SFXManager : Singleton<SFXManager>
         
         if (oneShotSource == null)
         {
-            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+        
             return;
         }
         
@@ -382,12 +331,10 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play stamina pickup sound (one-shot)
-    /// </summary>
+
     public void PlayStaminaSound()
     {
-        // Ensure audio source exists
+        
         if (oneShotSource == null)
         {
             CreateAudioSources();
@@ -396,7 +343,7 @@ public class SFXManager : Singleton<SFXManager>
         
         if (oneShotSource == null)
         {
-            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+          
             return;
         }
         
@@ -410,12 +357,10 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play dash sound (one-shot)
-    /// </summary>
+  
     public void PlayDashSound()
     {
-        // Ensure audio source exists
+        
         if (oneShotSource == null)
         {
             CreateAudioSources();
@@ -438,12 +383,10 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play ghost sound (one-shot) - when shadow attacks
-    /// </summary>
+  
     public void PlayGhostSound()
     {
-        // Ensure audio source exists
+        
         if (oneShotSource == null)
         {
             CreateAudioSources();
@@ -466,12 +409,9 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play shoot sound (one-shot) - when enemy shoots projectile at player
-    /// </summary>
+  
     public void PlayShootSound()
-    {
-        // Ensure audio source exists
+    {  
         if (oneShotSource == null)
         {
             CreateAudioSources();
@@ -494,12 +434,10 @@ public class SFXManager : Singleton<SFXManager>
         }
     }
     
-    /// <summary>
-    /// Play damage taken sound (one-shot) - when player takes damage/knockback or Grape hits player
-    /// </summary>
+
     public void PlayDamageTakenSound()
     {
-        // Ensure audio source exists
+      
         if (oneShotSource == null)
         {
             CreateAudioSources();
@@ -508,7 +446,7 @@ public class SFXManager : Singleton<SFXManager>
         
         if (oneShotSource == null)
         {
-            Debug.LogError("SFXManager: Failed to create OneShotSource!");
+        
             return;
         }
         

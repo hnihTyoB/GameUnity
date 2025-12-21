@@ -1,12 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Manages scoring system for non-violence game
-/// - Adds points for rescuing victims
-/// - Subtracts points for hitting/killing enemies
-/// - Tracks high score per difficulty
-/// </summary>
 public class ScoreManager : Singleton<ScoreManager>
 {
     [Header("Score Settings")]
