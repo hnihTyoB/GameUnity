@@ -8,14 +8,12 @@ public class GrapeProjectile : MonoBehaviour
     [SerializeField] private float heightY = 3f;
     [SerializeField] private GameObject grapeProjectileShadow;
     [SerializeField] private GameObject splatterPrefab;
-    [SerializeField] private float targetOffsetY = -0.5f; // Adjust this to change where projectile aims
+    [SerializeField] private float targetOffsetY = -0.5f;
 
     private Vector3 targetPosition;
     private bool hasTarget = false;
 
-    /// <summary>
-    /// Set target position for the projectile (called by Grape.cs)
-    /// </summary>
+ 
     public void SetTarget(Vector3 target)
     {
         targetPosition = target;
@@ -27,7 +25,7 @@ public class GrapeProjectile : MonoBehaviour
         GameObject grapeShadow =
         Instantiate(grapeProjectileShadow, transform.position + new Vector3(0, -0.3f, 0), Quaternion.identity);
 
-        // Use set target position, or fallback to player position if not set
+   
         Vector3 targetPos;
         if (hasTarget)
         {
@@ -35,18 +33,18 @@ public class GrapeProjectile : MonoBehaviour
         }
         else if (PlayerController.Instance != null)
         {
-            // Fallback to player if no target was set (backward compatibility)
+          
             targetPos = PlayerController.Instance.transform.position;
         }
         else
         {
-            // No valid target, destroy projectile
+          
             Destroy(grapeShadow);
             Destroy(gameObject);
             return;
         }
         
-        // Apply Y offset to adjust where projectile aims (negative = lower, positive = higher)
+
         targetPos += new Vector3(0, targetOffsetY, 0);
         
         Vector3 grapeShadowStartPosition = grapeShadow.transform.position;

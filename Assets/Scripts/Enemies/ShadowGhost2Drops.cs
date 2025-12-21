@@ -1,8 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Custom item drops cho Shadow Ghost 2 - "Bóng đen bắt nạt"
-/// </summary>
+
 public class ShadowGhost2Drops : MonoBehaviour
 {
     [Header("Drop Prefabs")]
@@ -17,23 +15,22 @@ public class ShadowGhost2Drops : MonoBehaviour
     
     private void Start()
     {
-        // ShadowGhost2Drops sẽ được gọi từ PickUpSpawner
-        // Không cần subscribe event
+
     }
     
     public void SpawnDropsOnDeath()
     {
-        // Method này sẽ được gọi từ PickUpSpawner
+  
         SpawnDrops();
     }
     
     private void SpawnDrops()
     {
-        // Shadow Ghost 2 now ONLY drops battery (100% chance)
+      
         if (batteryPrefab != null)
         {
             SpawnItem(batteryPrefab);
-            Debug.Log($"Shadow Ghost 2 dropped battery");
+           
         }
         else
         {

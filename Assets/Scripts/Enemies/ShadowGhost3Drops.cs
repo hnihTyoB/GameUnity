@@ -1,8 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Custom item drops cho Shadow Ghost 3 - "Bóng đen cô lập"
-/// </summary>
+
 public class ShadowGhost3Drops : MonoBehaviour
 {
     [Header("Drop Prefabs")]
@@ -17,19 +15,18 @@ public class ShadowGhost3Drops : MonoBehaviour
     
     private void Start()
     {
-        // ShadowGhost3Drops sẽ được gọi từ PickUpSpawner
-        // Không cần subscribe event
+        
     }
     
     public void SpawnDropsOnDeath()
     {
-        // Method này sẽ được gọi từ PickUpSpawner
+      
         SpawnDrops();
     }
     
     private void SpawnDrops()
     {
-        // Shadow Ghost 3 now ONLY drops battery (100% chance)
+     
         if (batteryPrefab != null)
         {
             SpawnItem(batteryPrefab);

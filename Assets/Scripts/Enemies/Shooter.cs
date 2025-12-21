@@ -96,10 +96,10 @@ public class Shooter : MonoBehaviour, IEnemy
     }
     private void TargetConeOfInfluence(out float startAngle, out float currentAngle, out float angleStep, out float endAngle)
     {
-        // Get current target from EnemyAI (can be Player or Victim)
+ 
         Transform currentTarget = enemyAI != null ? enemyAI.GetCurrentTarget() : null;
         
-        // Fallback to Player if no target is set
+     
         if (currentTarget == null && PlayerController.Instance != null)
         {
             currentTarget = PlayerController.Instance.transform;

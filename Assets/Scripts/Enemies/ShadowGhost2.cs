@@ -1,10 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Shadow Ghost 2 - "Bóng đen bắt nạt"
-/// Cản trở nhân vật bằng cách block đường đi
-/// </summary>
+
 public class ShadowGhost2 : MonoBehaviour, IEnemy
 {
     [Header("Blocking Settings")]
@@ -37,10 +34,10 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     private Coroutine blockCoroutine;
     private Coroutine dashCoroutine;
     private ParticleSystem spawnedSmoke;
-    private Transform lockedTarget; // Store target at start of attack
-    private LightFearBehavior lightFear; // Fear of light behavior
+    private Transform lockedTarget; 
+    private LightFearBehavior lightFear; 
     
-    // Lưu giá trị gốc
+
     private float baseNormalSpeed;
     private float baseBlockSpeed;
     private float baseDashSpeed;
@@ -52,7 +49,7 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
         spriteRenderer = GetComponent<SpriteRenderer>();
         lightFear = GetComponent<LightFearBehavior>();
         
-        // Apply shadow color
+       
         if (spriteRenderer != null)
         {
             spriteRenderer.color = shadowColor;
@@ -69,19 +66,17 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     
     private void OnEnable()
     {
-        // Subscribe vào event khi difficulty thay đổi
+       
         DifficultyManager.OnDifficultyChanged += OnDifficultyChanged;
     }
     
     private void OnDisable()
     {
-        // Unsubscribe
+       
         DifficultyManager.OnDifficultyChanged -= OnDifficultyChanged;
     }
     
-    /// <summary>
-    /// Áp dụng difficulty vào ShadowGhost2 speed settings
-    /// </summary>
+ 
     private void ApplyDifficultySettings()
     {
         float multiplier = DifficultyManager.GetDifficultyMultiplier();
@@ -94,9 +89,7 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
         Debug.Log($"ShadowGhost2: Difficulty applied - Normal: {normalSpeed:F2}, Block: {blockSpeed:F2}, Dash: {dashSpeed:F2}");
     }
     
-    /// <summary>
-    /// Callback khi difficulty thay đổi
-    /// </summary>
+   
     private void OnDifficultyChanged(DifficultyManager.Difficulty newDifficulty)
     {
         ApplyDifficultySettings();
@@ -115,20 +108,20 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     
     private void Start()
     {
-        // SET NORMAL SPEED vào EnemyPathFinding (CRITICAL!)
+    
         if (enemyPathfinding != null)
         {
             enemyPathfinding.SetSpeed(normalSpeed);
         }
         
-        // Spawn smoke effect
+    
         if (smokeEffect != null && spawnedSmoke == null)
         {
             spawnedSmoke = Instantiate(smokeEffect, transform);
             spawnedSmoke.transform.localPosition = Vector3.zero;
             spawnedSmoke.transform.localRotation = Quaternion.Euler(-90, 0, 0);
             
-            // Configure smoke
+        
             var main = spawnedSmoke.main;
             main.loop = true;
             main.startSize = 0.4f; // Lớn hơn Shadow Ghost 1
@@ -144,8 +137,7 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     
     private void Update()
     {
-        // ShadowGhost2 blocking is handled by EnemyAI calling Attack()
-        // No need for separate Update logic
+   
     }
     
     private void StartBlocking()
@@ -155,40 +147,37 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
         isBlocking = true;
         canBlock = false;
         
-        // Store current position as block position
+     
         blockPosition = transform.position;
         
-        // Change color to indicate blocking
+       
         if (spriteRenderer != null)
         {
             spriteRenderer.color = blockColor;
         }
         
-        // Slow down movement
+
         if (enemyPathfinding != null)
         {
             enemyPathfinding.SetSpeed(blockSpeed);
         }
         
-        // Flash effect sẽ được trigger bởi PushBackEnemy khi chạm player
-        // Không cần gọi ở đây vì chưa chạm player
-        
-        // Start blocking coroutine
+
         blockCoroutine = StartCoroutine(BlockingRoutine());
     }
     
     private IEnumerator BlockingRoutine()
     {
-        // Block for duration
+     
         yield return new WaitForSeconds(blockDuration);
         
-        // Stop blocking
+    
         StopBlocking();
         
-        // Wait for cooldown
+ 
         yield return new WaitForSeconds(blockCooldown);
         
-        // Can block again
+      
         canBlock = true;
     }
     
@@ -196,40 +185,39 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     {
         isBlocking = false;
         
-        // Restore normal color
+     
         if (spriteRenderer != null)
         {
             spriteRenderer.color = shadowColor;
         }
         
-        // Restore normal speed
+   
         if (enemyPathfinding != null)
         {
             enemyPathfinding.ResetSpeed();
         }
         
-        // Blocking effect on player will auto-hide after duration
-        // No need to manually hide it here
+  
     }
     
     public void Attack()
     {
-        // Cannot attack if fleeing from light
+    
         if (lightFear != null && lightFear.IsFleeing())
         {
             return;
         }
         
-        // Shadow Ghost 2 dashes towards target first, then blocks
+
         if (!isDashing && !isBlocking)
         {
-            // Lock target at the start of attack
+    
             if (enemyAI != null)
             {
                 lockedTarget = enemyAI.GetCurrentTarget();
             }
             
-            // Play ghost attack sound only when attacking Player
+      
             if (lockedTarget != null && lockedTarget.CompareTag("Player"))
             {
                 if (SFXManager.Instance != null)
@@ -246,29 +234,28 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     {
         isDashing = true;
         
-        // Validate target exists
+ 
         if (lockedTarget == null)
         {
             isDashing = false;
             yield break;
         }
-        
-        // Set dash speed
+   
         if (enemyPathfinding != null)
         {
             enemyPathfinding.SetSpeed(dashSpeed);
         }
         
-        // Perform dash towards locked target
+ 
         float elapsedTime = 0f;
         
         while (elapsedTime < dashDuration && lockedTarget != null)
         {
-            // Move towards locked target
+
             Vector2 targetPosition = lockedTarget.position;
             Vector2 dashDirection = (targetPosition - (Vector2)transform.position).normalized;
             
-            // Flip sprite based on direction
+      
             if (spriteRenderer != null)
             {
                 if (dashDirection.x < 0)
@@ -281,7 +268,7 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
                 }
             }
             
-            // Move towards target
+    
             if (enemyPathfinding != null)
             {
                 enemyPathfinding.MoveTo(dashDirection);
@@ -291,37 +278,36 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
             yield return null;
         }
         
-    // After dash, start blocking if target is close and is Player
+
     if (lockedTarget != null)
     {
         float distanceToTarget = Vector2.Distance(transform.position, lockedTarget.position);
-        // Only block if target is Player (don't block for Victim)
+
         if (distanceToTarget <= blockRange && canBlock && lockedTarget.CompareTag("Player"))
         {
             StartBlocking();
         }
     }
     
-    // Reset speed after dash
-    // Don't call StopMoving() - let EnemyAI handle movement
+   
     if (enemyPathfinding != null)
     {
         enemyPathfinding.ResetSpeed();
     }
     
     isDashing = false;
-    lockedTarget = null; // Clear locked target
+    lockedTarget = null;
 }
     
     private void OnDestroy()
     {
-        // Clean up smoke
+    
         if (spawnedSmoke != null)
         {
             Destroy(spawnedSmoke.gameObject);
         }
         
-        // Stop coroutines
+
         if (blockCoroutine != null)
         {
             StopCoroutine(blockCoroutine);
@@ -335,18 +321,15 @@ public class ShadowGhost2 : MonoBehaviour, IEnemy
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Shadow Ghost 2 ONLY pushes back, does NOT apply slow
-        // Push back effect is handled by physics (rigidbody collision)
-        // No additional debuff needed
+  
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        // Shadow Ghost 2 ONLY pushes back, does NOT apply slow
-        // No debuff on continuous contact
+  
     }
     
-    // Public methods for other systems
+  
     public bool IsBlocking()
     {
         return isBlocking;
